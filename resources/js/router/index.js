@@ -1,13 +1,13 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../Views/HomeView.vue'
-import axios from 'axios'
+import axios from '../main'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: () => import('@/components/LandingPage.vue')
   },
   {
     path: '/login',
@@ -113,7 +113,7 @@ router.beforeEach(async (to, from, next) => {
           }
         }
         
-        const response = await axios.get('/api/user')
+        const response = await axios.get('/user')
         if (response.data.success && response.data.data.is_admin) {
           localStorage.setItem('user', JSON.stringify(response.data.data))
           next()
