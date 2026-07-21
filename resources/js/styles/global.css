@@ -1,0 +1,264 @@
+/* src/styles/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-brown: #996600;
+  --secondary-brown: #b37400;
+  --accent-brown: #cc9900;
+  --dark-brown: #7a5200;
+  --light-brown: #fff9e6;
+  --light-bg: #f4f6f9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--light-bg);
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.text-primary-brown {
+  color: var(--primary-brown) !important;
+}
+
+.bg-primary-brown {
+  background: var(--primary-brown) !important;
+}
+
+.text-dark-brown {
+  color: var(--dark-brown) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-brown);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-brown);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* ===== CARD STYLES ===== */
+.card-modern {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.card-modern:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn-primary-brown {
+  background: linear-gradient(135deg, var(--secondary-brown), var(--primary-brown));
+  border: none;
+  color: white;
+  padding: 10px 28px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(153, 102, 0, 0.3);
+}
+
+.btn-primary-brown:hover {
+  background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(153, 102, 0, 0.4);
+  color: white;
+}
+
+.btn-outline-brown {
+  background: transparent;
+  border: 2px solid var(--primary-brown);
+  color: var(--primary-brown);
+  padding: 8px 24px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-brown:hover {
+  background: var(--primary-brown);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(153, 102, 0, 0.3);
+}
+
+/* ===== TABLE STYLES ===== */
+.table-modern {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.table-modern thead th {
+  border: none;
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+}
+
+.table-modern tbody td {
+  background: white;
+  border: none;
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.table-modern tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table-modern tbody tr:hover td {
+  background: #faf9f5;
+  transform: scale(1.01);
+}
+
+/* ===== BADGE STYLES ===== */
+.badge-brown {
+  background: var(--light-brown);
+  color: var(--primary-brown);
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.72rem;
+}
+
+.badge-success-custom {
+  background: #d4edda;
+  color: #155724;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.72rem;
+}
+
+.badge-warning-custom {
+  background: #fff3cd;
+  color: #856404;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.72rem;
+}
+
+/* ===== SECTION TITLES ===== */
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-title {
+    font-size: 1.3rem;
+  }
+}
