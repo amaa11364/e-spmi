@@ -1,12 +1,12 @@
 <!-- src/views/LandingPage.vue -->
-<template>
+<template> 
   <div id="app">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
           <img
-            src="/images/photos/logo-ikipsiliwangi.png"
+            :src="'/images/photos/logo-ikipsiliwangi.png'"
             alt="Logo E-SPMI"
             width="40"
             height="40"

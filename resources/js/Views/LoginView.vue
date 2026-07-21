@@ -9,7 +9,7 @@
             <div class="logo-section">
               <div class="logo-container">
                 <img
-                  src="/images/photos/logo-ikipsiliwangi.png"
+                  :src="'/images/photos/logo-ikipsiliwangi.png'"
                   alt="Logo SPMI"
                   class="logo-img"
                   @error="handleImageError"

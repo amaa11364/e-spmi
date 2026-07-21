@@ -6,7 +6,7 @@
         <div class="sidebar-logo-placeholder" :class="{ 'small': isCollapsed }">
           <!-- Logo dengan fallback sederhana -->
           <img 
-            src="/images/photos/logo-ikipsiliwangi.png"
+            :src="'/images/photos/logo-ikipsiliwangi.png'"
             alt="Logo SPMI" 
             class="brand-logo"
             v-if="!isCollapsed"

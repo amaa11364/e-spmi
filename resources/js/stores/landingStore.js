@@ -1,5 +1,6 @@
 // src/stores/landingStore.js
 import { defineStore } from 'pinia'
+import axios from '../main'
 
 export const useLandingStore = defineStore('landing', {
   state: () => ({
@@ -12,61 +13,52 @@ export const useLandingStore = defineStore('landing', {
       cta_link: '#features',
       background_image: null
     },
-    beritas: [
-      {
-        id: 1,
-        judul: 'SPMI Luncurkan Aplikasi Mobile untuk Monitoring Mutu',
-        link: '#',
-        gambar_url: '/images/berita-1.jpg',
-        created_at: '2024-01-15T10:30:00'
-      },
-      {
-        id: 2,
-        judul: 'Audit Internal SPMI Semester Ganjil 2024/2025',
-        link: '#',
-        gambar_url: '/images/berita-2.jpg',
-        created_at: '2024-01-10T14:20:00'
-      }
-    ],
-    jadwals: [
-      {
-        id: 1,
-        hari: '15',
-        bulanSingkat: 'Jan',
-        kegiatan: 'Rapat Koordinasi SPMI',
-        waktu: '2024-01-15T09:00:00',
-        tempat: 'Ruang Rapat Utama'
-      },
-      {
-        id: 2,
-        hari: '20',
-        bulanSingkat: 'Jan',
-        kegiatan: 'Workshop Penyusunan Dokumen Mutu',
-        waktu: '2024-01-20T13:00:00',
-        tempat: 'Aula Kampus'
-      }
-    ]
+    beritas: [],
+    jadwals: [],
+    loading: false,
+    error: null
   }),
   actions: {
     async fetchHeroContent() {
-      // API call untuk mengambil data hero
-      // const response = await axios.get('/api/hero')
-      // this.heroContent = response.data
+      try {
+        const response = await axios.get('/hero')
+        if (response.data.success) {
+          this.heroContent = response.data.data
+        }
+      } catch (error) {
+        console.error('Failed to fetch hero content:', error)
+      }
     },
     async fetchBeritas() {
-      // API call untuk mengambil data berita
-      // const response = await axios.get('/api/beritas')
-      // this.beritas = response.data
+      try {
+        const response = await axios.get('/beritas/latest')
+        if (response.data.success) {
+          this.beritas = response.data.data
+        }
+      } catch (error) {
+        console.error('Failed to fetch beritas:', error)
+      }
     },
     async fetchJadwals() {
-      // API call untuk mengambil data jadwal
-      // const response = await axios.get('/api/jadwals')
-      // this.jadwals = response.data
+      try {
+        const response = await axios.get('/jadwals/upcoming')
+        if (response.data.success) {
+          this.jadwals = response.data.data
+        }
+      } catch (error) {
+        console.error('Failed to fetch jadwals:', error)
+      }
     },
     async updateHeroContent(data) {
-      // API call untuk update hero content
-      // const response = await axios.put('/api/hero', data)
-      // this.heroContent = response.data
+      try {
+        const response = await axios.put('/hero', data)
+        if (response.data.success) {
+          this.heroContent = response.data.data
+        }
+      } catch (error) {
+        console.error('Failed to update hero content:', error)
+        throw error
+      }
     }
   },
   getters: {

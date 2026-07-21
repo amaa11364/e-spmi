@@ -9,17 +9,6 @@ use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-// Vue SPA - All routes go to Vue
-Route::get('/{any}', function () {
-    return view('app');
-})->where('any', '.*');
-
-/*
-|--------------------------------------------------------------------------
 | API Routes (for Vue.js)
 |--------------------------------------------------------------------------
 */
@@ -32,9 +21,9 @@ Route::prefix('api')->group(function () {
     Route::get('/beritas', [BeritaController::class, 'index']);
     Route::get('/beritas/{id}', [BeritaController::class, 'show']);
     Route::get('/jadwals/upcoming', [JadwalController::class, 'upcoming']);
+    Route::get('/jadwals/date-range', [JadwalController::class, 'getByDateRange']);
     Route::get('/jadwals', [JadwalController::class, 'index']);
     Route::get('/jadwals/{id}', [JadwalController::class, 'show']);
-    Route::get('/jadwals/date-range', [JadwalController::class, 'getByDateRange']);
     
     // Auth routes
     Route::post('/register', [AuthController::class, 'register']);
@@ -75,3 +64,14 @@ Route::prefix('api')->group(function () {
         });
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Vue SPA Catch-All Route
+|--------------------------------------------------------------------------
+| This MUST be the last route to avoid blocking API routes.
+*/
+
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
