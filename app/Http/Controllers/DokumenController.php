@@ -1,0 +1,360 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DokumenFolder;
+use App\Models\DokumenFile;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
+class DokumenController extends Controller
+{
+    public function index(Request $request)
+    {
+        $search = $request->get('search');
+        
+        $query = DokumenFolder::withCount('files')->with('files');
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'LIKE', "%{$search}%")
+                  ->orWhere('deskripsi', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        $folders = $query->orderBy('created_at', 'desc')->paginate(10);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $folders
+        ]);
+    }
+
+    public function storeFolder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'is_public' => 'boolean',
+            'parent_id' => 'nullable|exists:dokumen_folders,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $folder = DokumenFolder::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Folder berhasil dibuat',
+            'data' => $folder
+        ], 201);
+    }
+
+    public function updateFolder(Request $request, $id)
+    {
+        $folder = DokumenFolder::find($id);
+        
+        if (!$folder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'is_public' => 'boolean',
+            'parent_id' => 'nullable|exists:dokumen_folders,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $folder->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Folder berhasil diperbarui',
+            'data' => $folder
+        ]);
+    }
+
+    public function destroyFolder($id)
+    {
+        $folder = DokumenFolder::with('files')->find($id);
+        
+        if (!$folder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder not found'
+            ], 404);
+        }
+
+        foreach ($folder->files as $file) {
+            if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
+                Storage::disk('public')->delete($file->file_path);
+            }
+        }
+
+        $folder->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Folder deleted successfully'
+        ]);
+    }
+
+    public function toggleFolderPublic($id)
+    {
+        $folder = DokumenFolder::find($id);
+        
+        if (!$folder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder not found'
+            ], 404);
+        }
+
+        $folder->is_public = !$folder->is_public;
+        $folder->save();
+
+        // Update semua file di dalamnya agar menyesuaikan status folder
+        DokumenFile::where('dokumen_folder_id', $folder->id)->update(['is_public' => $folder->is_public]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Folder publish status toggled',
+            'data' => $folder
+        ]);
+    }
+
+    // Mendukung upload single maupun massal (batch upload)
+    public function storeFile(Request $request, $folderId)
+    {
+        $folder = DokumenFolder::find($folderId);
+        
+        if (!$folder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder not found'
+            ], 404);
+        }
+
+        // Jika request berisi array files[] (Input Massal)
+        if ($request->hasFile('files')) {
+            $validator = Validator::make($request->all(), [
+                'files' => 'required|array',
+                'files.*' => 'required|file|max:51200', // Ukuran dinaikkan hingga 50 MB per file
+                'is_public' => 'boolean'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $createdFiles = [];
+            $isPublic = $request->boolean('is_public', $folder->is_public);
+
+            foreach ($request->file('files') as $file) {
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $filename = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('dokumen/' . $folderId, $filename, 'public');
+
+                $createdFiles[] = DokumenFile::create([
+                    'dokumen_folder_id' => $folderId,
+                    'nama' => $originalName,
+                    'file_path' => $path,
+                    'file_type' => $file->getMimeType(),
+                    'file_size' => $file->getSize(),
+                    'is_public' => $isPublic
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => count($createdFiles) . ' file berhasil diupload',
+                'data' => $createdFiles
+            ], 201);
+        }
+
+        // Upload single file
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|max:51200', // Maksimal 50 MB
+            'nama' => 'required|string|max:255',
+            'is_public' => 'boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('dokumen/' . $folderId, $filename, 'public');
+
+        $dokumenFile = DokumenFile::create([
+            'dokumen_folder_id' => $folderId,
+            'nama' => $request->nama,
+            'file_path' => $path,
+            'file_type' => $file->getMimeType(),
+            'file_size' => $file->getSize(),
+            'is_public' => $request->boolean('is_public')
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File berhasil diupload',
+            'data' => $dokumenFile
+        ], 201);
+    }
+
+    public function updateFile(Request $request, $id)
+    {
+        $file = DokumenFile::find($id);
+        
+        if (!$file) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'is_public' => 'boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $file->update([
+            'nama' => $request->nama,
+            'is_public' => $request->boolean('is_public')
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File berhasil diperbarui',
+            'data' => $file
+        ]);
+    }
+
+    public function destroyFile($id)
+    {
+        $file = DokumenFile::find($id);
+        
+        if (!$file) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
+            Storage::disk('public')->delete($file->file_path);
+        }
+
+        $file->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File deleted successfully'
+        ]);
+    }
+
+    public function toggleFilePublic($id)
+    {
+        $file = DokumenFile::find($id);
+        
+        if (!$file) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        $file->is_public = !$file->is_public;
+        $file->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File publish status toggled',
+            'data' => $file
+        ]);
+    }
+
+    // Mengambil semua folder publik atau folder yang memiliki file publik
+    public function publicFolders()
+    {
+        $folders = DokumenFolder::where(function($query) {
+            $query->where('is_public', true)
+                  ->orWhereHas('files', function($q) {
+                      $q->where('is_public', true);
+                  });
+        })
+        ->with(['publicFiles' => function($q) {
+            $q->orderBy('created_at', 'desc');
+        }])
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $folders
+        ]);
+    }
+
+    public function downloadFile($id)
+    {
+        $file = DokumenFile::find($id);
+        
+        if (!$file) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        if (!$file->is_public) {
+            if (!auth('sanctum')->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 401);
+            }
+        }
+
+        if (!$file->file_path || !Storage::disk('public')->exists($file->file_path)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found in storage'
+            ], 404);
+        }
+
+        return Storage::disk('public')->download(
+            $file->file_path, 
+            $file->nama . '.' . pathinfo($file->file_path, PATHINFO_EXTENSION)
+        );
+    }
+}

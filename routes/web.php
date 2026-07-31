@@ -6,6 +6,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokumenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,10 @@ Route::prefix('api')->group(function () {
     Route::get('/jadwals/date-range', [JadwalController::class, 'getByDateRange']);
     Route::get('/jadwals', [JadwalController::class, 'index']);
     Route::get('/jadwals/{id}', [JadwalController::class, 'show']);
+    
+    // Dokumen publik routes
+    Route::get('/dokumen/public', [DokumenController::class, 'publicFolders']);
+    Route::get('/dokumen/files/{id}/download', [DokumenController::class, 'downloadFile']);
     
     // Auth routes
     Route::post('/register', [AuthController::class, 'register']);
@@ -61,6 +66,17 @@ Route::prefix('api')->group(function () {
             
             // Users
             Route::get('/users', [AuthController::class, 'getUsers']);
+            
+            // Dokumen Management
+            Route::get('/dokumen/folders', [DokumenController::class, 'index']);
+            Route::post('/dokumen/folders', [DokumenController::class, 'storeFolder']);
+            Route::put('/dokumen/folders/{id}', [DokumenController::class, 'updateFolder']);
+            Route::delete('/dokumen/folders/{id}', [DokumenController::class, 'destroyFolder']);
+            Route::patch('/dokumen/folders/{id}/toggle-public', [DokumenController::class, 'toggleFolderPublic']);
+            Route::post('/dokumen/folders/{folderId}/files', [DokumenController::class, 'storeFile']);
+            Route::put('/dokumen/files/{id}', [DokumenController::class, 'updateFile']);
+            Route::delete('/dokumen/files/{id}', [DokumenController::class, 'destroyFile']);
+            Route::patch('/dokumen/files/{id}/toggle-public', [DokumenController::class, 'toggleFilePublic']);
         });
     });
 });

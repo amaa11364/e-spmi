@@ -83,6 +83,12 @@ const routes = [
     name: 'admin.settings.unit-kerja.create',
     component: () => import('@/Views/Admin/UnitKerjaCreate.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/dokumen',
+    name: 'admin.dokumen',
+    component: () => import('@/Views/Admin/DokumenIndex.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
   }
 ]
 
