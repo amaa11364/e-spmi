@@ -1,0 +1,23 @@
+name: Auto Deploy to CloudPanel
+
+on:
+  push:
+    branches:
+      - main  # Ubah ke 'master' jika nama branch utama GitHub Anda adalah master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Sync Files to Server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: 153.92.5.200
+          username: e-spmii
+          password: ${{ secrets.SFTP_PASSWORD }}
+          protocol: sftp
+          port: 22
+          server-dir: /home/ikipsiliwangi-e-spmi/htdocs/e-spmi.ikipsiliwangi.ac.id/
