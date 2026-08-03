@@ -20,4 +20,4 @@ jobs:
           port: 4096
           password: ${{ secrets.SFTP_PASSWORD }}
           local_path: './*'
-          remote_path: '/home/ikipsiliwangi-e-spmi/htdocs/e-spmi.ikipsiliwangi.ac.id/public'
+          remote_path: '/home/ikipsiliwangi-e-spmi/htdocs/e-spmi.ikipsiliwangi.ac.id/public/'
