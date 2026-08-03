@@ -18,6 +18,5 @@ jobs:
           server: 153.92.5.200
           username: e-spmii
           password: ${{ secrets.SFTP_PASSWORD }}
-          protocol: sftp
-          port: 22
+          port: 4096
           server-dir: /home/ikipsiliwangi-e-spmi/htdocs/e-spmi.ikipsiliwangi.ac.id/
