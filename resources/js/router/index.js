@@ -30,7 +30,7 @@ const routes = [
     component: () => import('@/Views/DokumenPublikView.vue')
   },
   {
-    path: '/dashboard',
+    path: '/admin/dashboard',
     name: 'dashboard',
     component: () => import('@/Views/DashboardView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
@@ -89,6 +89,12 @@ const routes = [
     name: 'admin.dokumen',
     component: () => import('@/Views/Admin/DokumenIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/landing-settings',
+    name: 'admin.landing',
+    component: () => import('@/Views/Admin/LandingPageSettings.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
   }
 ]
 
@@ -141,7 +147,7 @@ router.beforeEach(async (to, from, next) => {
     }
   } 
   else if ((to.path === '/login' || to.path === '/pengelola/login') && token) {
-    next('/dashboard')
+    next('/admin/dashboard')
   } 
   else {
     next()

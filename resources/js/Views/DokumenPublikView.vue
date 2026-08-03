@@ -1,9 +1,9 @@
 <template>
-  <div class="dokumen-publik-page">
-    <!-- Navbar -->
-    <nav class="navbar">
-      <div class="nav-container">
-         <a class="navbar-brand d-flex align-items-center" href="#">
+  <div id="app">
+    <!-- Navbar (same as LandingPage) -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
           <img
             :src="'/images/photos/logo-ikipsiliwangi.png'"
             alt="Logo E-SPMI"
@@ -12,187 +12,212 @@
             class="me-2"
             @error="handleImageError"
           >
-          <div class="brand-text">
-            <span class="brand-title">E-SPMI</span>
-            <span class="brand-subtitle">IKIP SILIWANGI</span>
-          </div>
+          <span>E-SPMI</span>
         </a>
-        <div class="nav-links">
-          <router-link to="/" class="nav-link">Beranda</router-link>
-          <router-link to="/berita" class="nav-link">Berita</router-link>
-          <router-link to="/dokumen-publik" class="nav-link active">Dokumen</router-link>
-          <router-link to="/pengelola/login" class="nav-link btn-login">
-            <i class="fas fa-sign-in-alt"></i> Login
-          </router-link>
-        </div>
-        <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen">
-          <i :class="mobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
+        <button 
+          class="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
-      </div>
-      <!-- Mobile Menu -->
-      <div class="mobile-menu" :class="{ open: mobileMenuOpen }">
-        <router-link to="/" class="mobile-link" @click="mobileMenuOpen = false">Beranda</router-link>
-        <router-link to="/berita" class="mobile-link" @click="mobileMenuOpen = false">Berita</router-link>
-        <router-link to="/dokumen-publik" class="mobile-link active" @click="mobileMenuOpen = false">Dokumen</router-link>
-        <router-link to="/pengelola/login" class="mobile-link" @click="mobileMenuOpen = false">
-          <i class="fas fa-sign-in-alt"></i> Login
-        </router-link>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/">Beranda</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/berita">Berita</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link active" to="/dokumen-publik">Dokumen</router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-bg-pattern"></div>
-      <div class="hero-content">
-        <span class="hero-badge">
-          <i class="fas fa-folder-open"></i> Dokumen Publik
-        </span>
-        <h1>Dokumen Publik SPMI</h1>
-        <p>Akses dokumen-dokumen resmi terkait Sistem Penjaminan Mutu Internal yang tersedia untuk publik.</p>
-        <!-- Search -->
-        <div class="hero-search">
-          <i class="fas fa-search"></i>
-          <input 
-            type="text" 
-            v-model="searchQuery" 
-            placeholder="Cari dokumen atau folder..."
-            @input="handleSearch"
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- Stats Bar -->
-    <section class="stats-bar">
-      <div class="stats-container">
-        <div class="stat-item">
-          <i class="fas fa-folder"></i>
-          <div>
-            <span class="stat-number">{{ folders.length }}</span>
-            <span class="stat-label">Folder</span>
-          </div>
-        </div>
-        <div class="stat-item">
-          <i class="fas fa-file-alt"></i>
-          <div>
-            <span class="stat-number">{{ totalFiles }}</span>
-            <span class="stat-label">Dokumen</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Main Content -->
-    <section class="content-section">
-      <div class="content-container">
-        <!-- Loading -->
-        <div v-if="loading" class="loading-state">
-          <div class="spinner"></div>
-          <p>Memuat dokumen...</p>
-        </div>
-
-        <!-- Empty State -->
-        <div v-else-if="filteredFolders.length === 0" class="empty-state">
-          <div class="empty-icon">
-            <i class="fas fa-folder-open"></i>
-          </div>
-          <h3>Belum Ada Dokumen Publik</h3>
-          <p v-if="searchQuery">Tidak ditemukan dokumen yang sesuai dengan pencarian "{{ searchQuery }}"</p>
-          <p v-else>Dokumen publik belum tersedia saat ini. Silakan cek kembali nanti.</p>
-        </div>
-
-        <!-- Folder Grid -->
-        <div v-else class="folders-grid">
-          <div 
-            v-for="folder in filteredFolders" 
-            :key="folder.id" 
-            class="folder-card"
-            :class="{ expanded: expandedFolder === folder.id }"
-          >
-            <!-- Folder Header -->
-            <div class="folder-header" @click="toggleFolder(folder.id)">
-              <div class="folder-icon-wrapper">
-                <i class="fas fa-folder" :class="{ 'fa-folder-open': expandedFolder === folder.id }"></i>
+    <main style="padding-top: 0px;">
+      <!-- Hero Section (same brown gradient as LandingPage) -->
+      <section class="hero-section">
+        <div class="container">
+          <router-link to="/" class="btn btn-outline-light btn-sm mb-3" style="opacity: 0.9;">
+            <i class="fas fa-arrow-left me-1"></i>Kembali ke Beranda
+          </router-link>
+          <div class="row align-items-center">
+            <div class="col-lg-8 col-md-12 position-relative text-center text-lg-start">
+              <span class="hero-badge">
+                <i class="fas fa-folder-open"></i> Dokumen Publik
+              </span>
+              <h1 class="display-4 fw-bold mb-3 text-white">Dokumen Publik SPMI</h1>
+              <div class="lead mb-4 text-white opacity-90 fw-medium">
+                Akses dokumen-dokumen resmi terkait Sistem Penjaminan Mutu Internal yang tersedia untuk publik.
               </div>
-              <div class="folder-info">
-                <h3>{{ folder.nama }}</h3>
-                <p v-if="folder.deskripsi">{{ folder.deskripsi }}</p>
-                <span class="file-count">
-                  <i class="fas fa-file"></i>
-                  {{ folder.public_files ? folder.public_files.length : 0 }} Dokumen
-                </span>
-              </div>
-              <div class="expand-icon">
-                <i class="fas fa-chevron-down" :class="{ rotated: expandedFolder === folder.id }"></i>
+              <!-- Search -->
+              <div class="hero-search">
+                <i class="fas fa-search"></i>
+                <input 
+                  type="text" 
+                  v-model="searchQuery" 
+                  placeholder="Cari dokumen atau folder..."
+                  @input="handleSearch"
+                >
               </div>
             </div>
+            <div class="col-lg-4 col-md-12 text-center position-relative d-none d-lg-block">
+              <i class="fas fa-folder-open hero-icon-big"></i>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <!-- Folder Content (Files) -->
-            <transition name="slide">
-              <div v-if="expandedFolder === folder.id" class="folder-content">
-                <div v-if="!folder.public_files || folder.public_files.length === 0" class="no-files">
-                  <i class="fas fa-inbox"></i>
-                  <p>Belum ada dokumen di folder ini</p>
+      <!-- Stats Bar -->
+      <section class="stats-bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-auto">
+              <div class="stat-item">
+                <div class="stat-icon-box">
+                  <i class="fas fa-folder"></i>
                 </div>
-                <div v-else class="files-list">
-                  <div 
-                    v-for="file in folder.public_files" 
-                    :key="file.id"
-                    class="file-item"
-                  >
-                    <div class="file-icon" :class="getFileIconClass(file.file_type)">
-                      <i :class="getFileIcon(file.file_type)"></i>
-                    </div>
-                    <div class="file-details">
-                      <span class="file-name">{{ file.nama }}</span>
-                      <span class="file-meta">
-                        {{ formatFileSize(file.file_size) }} • {{ formatDate(file.created_at) }}
-                      </span>
-                    </div>
-                    <a 
-                      :href="'/api/dokumen/files/' + file.id + '/download'" 
-                      class="btn-download"
-                      target="_blank"
-                    >
-                      <i class="fas fa-download"></i>
-                      <span>Unduh</span>
-                    </a>
-                  </div>
+                <div>
+                  <span class="stat-number">{{ folders.length }}</span>
+                  <span class="stat-label">Folder</span>
                 </div>
               </div>
-            </transition>
+            </div>
+            <div class="col-auto">
+              <div class="stat-item">
+                <div class="stat-icon-box">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div>
+                  <span class="stat-number">{{ totalFiles }}</span>
+                  <span class="stat-label">Dokumen</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-brand">
-         <a class="footer-brand d-flex align-items-center" href="#">
-          <img
-            :src="'/images/photos/logo-ikipsiliwangi.png'"
-            alt="Logo E-SPMI"
-            width="40"
-            height="40"
-            class="me-2"
-            @error="handleImageError"
-          >
-          <div>
-            <h4>E-SPMI</h4>
-            <p>Sistem Penjaminan Mutu Internal</p>
+      <!-- Content Section -->
+      <section class="content-section">
+        <div class="container">
+          <!-- Toolbar (Back & View Toggle) -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <router-link to="/" class="btn btn-outline-secondary btn-sm" style="border-radius: 8px;">
+              <i class="fas fa-arrow-left me-2"></i> Kembali ke Beranda
+            </router-link>
+            <div class="btn-group shadow-sm">
+              <button 
+                class="btn btn-sm" 
+                :class="viewMode === 'card' ? 'btn-primary' : 'btn-light'" 
+                @click="viewMode = 'card'"
+              >
+                <i class="fas fa-th-large me-1"></i> Grid
+              </button>
+              <button 
+                class="btn btn-sm" 
+                :class="viewMode === 'list' ? 'btn-primary' : 'btn-light'" 
+                @click="viewMode = 'list'"
+              >
+                <i class="fas fa-list me-1"></i> List
+              </button>
+            </div>
           </div>
-          </a>
+
+          <!-- Loading -->
+          <div v-if="loading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Memuat dokumen...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else-if="filteredFolders.length === 0" class="empty-state">
+            <div class="empty-icon">
+              <i class="fas fa-folder-open"></i>
+            </div>
+            <h3>Belum Ada Dokumen Publik</h3>
+            <p v-if="searchQuery">Tidak ditemukan dokumen yang sesuai dengan pencarian "{{ searchQuery }}"</p>
+            <p v-else>Dokumen publik belum tersedia saat ini. Silakan cek kembali nanti.</p>
+          </div>
+
+          <!-- Folder Grid -->
+          <div v-else :class="viewMode === 'card' ? 'folders-grid-card' : 'folders-list'">
+            <div 
+              v-for="folder in filteredFolders" 
+              :key="folder.id" 
+              class="folder-card"
+              :class="{ 'expanded': expandedFolder === folder.id, 'card-layout': viewMode === 'card' }"
+            >
+              <!-- Folder Header -->
+              <div class="folder-header" @click="toggleFolder(folder.id)">
+                <div class="folder-icon-wrapper">
+                  <i class="fas fa-folder" :class="{ 'fa-folder-open': expandedFolder === folder.id }"></i>
+                </div>
+                <div class="folder-info">
+                  <h3>{{ folder.nama }}</h3>
+                  <p v-if="folder.deskripsi">{{ folder.deskripsi }}</p>
+                  <span class="file-count">
+                    <i class="fas fa-file"></i>
+                    {{ folder.public_files ? folder.public_files.length : 0 }} Dokumen
+                  </span>
+                </div>
+                <div class="expand-icon">
+                  <i class="fas fa-chevron-down" :class="{ rotated: expandedFolder === folder.id }"></i>
+                </div>
+              </div>
+
+              <!-- Folder Content (Files) -->
+              <transition name="slide">
+                <div v-if="expandedFolder === folder.id" class="folder-content">
+                  <div v-if="!folder.public_files || folder.public_files.length === 0" class="no-files">
+                    <i class="fas fa-inbox"></i>
+                    <p>Belum ada dokumen di folder ini</p>
+                  </div>
+                  <div v-else class="files-list">
+                    <div 
+                      v-for="file in folder.public_files" 
+                      :key="file.id"
+                      class="file-item"
+                    >
+                      <div class="file-icon" :class="getFileIconClass(file.file_type)">
+                        <i :class="getFileIcon(file.file_type)"></i>
+                      </div>
+                      <div class="file-details">
+                        <span class="file-name">{{ file.nama }}</span>
+                        <span class="file-meta">
+                          {{ formatFileSize(file.file_size) }} • {{ formatDate(file.created_at) }}
+                        </span>
+                      </div>
+                      <a 
+                        :href="'/api/dokumen/files/' + file.id + '/download'" 
+                        class="btn-download"
+                        target="_blank"
+                      >
+                        <i class="fas fa-download"></i>
+                        <span>Unduh</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
         </div>
-        <div class="footer-links">
-          <router-link to="/">Beranda</router-link>
-          <router-link to="/berita">Berita</router-link>
-          <router-link to="/dokumen-publik">Dokumen</router-link>
-        </div>
-        <div class="footer-copy">
-          <p>&copy; {{ currentYear }} E-SPMI. All rights reserved.</p>
-        </div>
+      </section>
+    </main>
+
+    <!-- Footer (same as LandingPage) -->
+    <footer class="py-4">
+      <div class="container text-center">
+        <p class="mb-0">&copy; 2024 E-SPMI Digital. All rights reserved.</p>
       </div>
     </footer>
   </div>
@@ -209,8 +234,8 @@ export default {
       loading: true,
       searchQuery: '',
       expandedFolder: null,
-      mobileMenuOpen: false,
-      searchTimeout: null
+      searchTimeout: null,
+      viewMode: 'list'
     }
   },
   computed: {
@@ -235,8 +260,18 @@ export default {
   },
   mounted() {
     this.fetchDokumen()
+
+    // Load Bootstrap JS (same as LandingPage)
+    if (typeof window !== 'undefined') {
+      import('bootstrap/dist/js/bootstrap.bundle.min.js').catch(() => {
+        console.warn('Bootstrap JS not loaded')
+      })
+    }
   },
   methods: {
+    handleImageError(event) {
+      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Cpath d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"%3E%3C/path%3E%3C/svg%3E'
+    },
     async fetchDokumen() {
       this.loading = true
       try {
@@ -303,170 +338,74 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ===== CSS Variables (same as LandingPage) ===== */
+:root {
+  --primary-brown: #996600;
+  --secondary-brown: #b37400;
+  --accent-brown: #cc9900;
+  --dark-brown: #7a5200;
+  --light-brown: #fff9e6;
 }
 
-.dokumen-publik-page {
-  font-family: 'Inter', sans-serif;
-  color: #1e293b;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR (identical to LandingPage) ===== */
 .navbar {
-  background: white;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
-
-.brand-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #996600, #cc9900);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.1rem;
-}
-
-.brand-title {
-  font-size: 1.2rem;
+.navbar-brand {
   font-weight: 700;
-  color: #1e293b;
-  display: block;
-  line-height: 1.2;
-}
-
-.brand-subtitle {
-  font-size: 0.7rem;
-  color: #94a3b8;
-  display: block;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  color: var(--primary-brown) !important;
+  font-size: 1.5rem;
 }
 
 .nav-link {
-  padding: 8px 16px;
-  color: #64748b;
-  text-decoration: none;
-  font-size: 0.9rem;
   font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.2s;
+  color: #374151 !important;
+  margin: 0 10px;
 }
 
 .nav-link:hover,
 .nav-link.active {
-  color: #996600;
-  background: rgba(153, 102, 0, 0.06);
+  color: var(--primary-brown) !important;
 }
 
-.btn-login {
-  background: linear-gradient(135deg, #996600, #b37700) !important;
-  color: white !important;
-  padding: 8px 20px !important;
-}
-
-.btn-login:hover {
-  background: linear-gradient(135deg, #7a5200, #996600) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(153, 102, 0, 0.3);
-}
-
-.mobile-toggle {
-  display: none;
-  background: none;
+.btn-primary {
+  background: linear-gradient(135deg, var(--secondary-brown), var(--primary-brown));
   border: none;
-  font-size: 1.3rem;
-  color: #64748b;
-  cursor: pointer;
-}
-
-.mobile-menu {
-  display: none;
-  flex-direction: column;
-  padding: 0 24px 16px;
-  gap: 4px;
-}
-
-.mobile-menu.open {
-  display: flex;
-}
-
-.mobile-link {
-  padding: 12px 16px;
-  color: #475569;
-  text-decoration: none;
+  padding: 10px 25px;
+  font-weight: 600;
   border-radius: 8px;
-  font-size: 0.9rem;
-  transition: all 0.2s;
 }
 
-.mobile-link:hover,
-.mobile-link.active {
-  background: rgba(153, 102, 0, 0.06);
-  color: #996600;
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(153, 102, 0, 0.3);
 }
 
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-  .mobile-toggle { display: block; }
-}
-
-/* ===== HERO SECTION ===== */
+/* ===== HERO SECTION (same brown gradient as LandingPage) ===== */
 .hero-section {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
-  padding: 80px 24px 60px;
+  background: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
+  color: white;
+  padding: 140px 0 80px;
   position: relative;
   overflow: hidden;
 }
 
-.hero-bg-pattern {
+.hero-section::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: radial-gradient(circle at 20% 50%, rgba(153, 102, 0, 0.15) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(204, 153, 0, 0.1) 0%, transparent 50%);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpolygon fill='%23ffffff' fill-opacity='0.03' points='0,1000 1000,0 1000,1000'/%3E%3C/svg%3E");
+  background-size: cover;
 }
 
-.hero-content {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
+.hero-section .container {
   position: relative;
   z-index: 1;
 }
@@ -475,35 +414,27 @@ export default {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(153, 102, 0, 0.2);
-  color: #fbbf24;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
   padding: 8px 20px;
   border-radius: 24px;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 20px;
-  border: 1px solid rgba(153, 102, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(5px);
 }
 
-.hero-content h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 12px;
-  line-height: 1.2;
+.hero-icon-big {
+  font-size: 8rem;
+  color: rgba(255, 255, 255, 0.15);
 }
 
-.hero-content p {
-  font-size: 1.05rem;
-  color: #94a3b8;
-  margin-bottom: 32px;
-  line-height: 1.7;
-}
-
+/* Hero Search */
 .hero-search {
   max-width: 500px;
-  margin: 0 auto;
   position: relative;
+  margin-top: 1rem;
 }
 
 .hero-search i {
@@ -511,16 +442,16 @@ export default {
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 1rem;
 }
 
 .hero-search input {
   width: 100%;
   padding: 16px 20px 16px 50px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
   color: white;
   font-size: 0.95rem;
   transition: all 0.3s;
@@ -528,33 +459,21 @@ export default {
 }
 
 .hero-search input::placeholder {
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .hero-search input:focus {
   outline: none;
-  border-color: #cc9900;
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 0 4px rgba(204, 153, 0, 0.15);
-}
-
-@media (max-width: 768px) {
-  .hero-section { padding: 50px 16px 40px; }
-  .hero-content h1 { font-size: 1.8rem; }
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
 }
 
 /* ===== STATS BAR ===== */
 .stats-bar {
   background: white;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.stats-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 24px;
-  display: flex;
-  gap: 40px;
+  border-bottom: 2px solid var(--light-brown);
+  padding: 20px 0;
 }
 
 .stat-item {
@@ -563,12 +482,12 @@ export default {
   gap: 12px;
 }
 
-.stat-item i {
+.stat-icon-box {
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  background: rgba(153, 102, 0, 0.08);
-  color: #996600;
+  background: var(--light-brown);
+  color: var(--primary-brown);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -578,27 +497,22 @@ export default {
 .stat-number {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--dark-brown);
   display: block;
   line-height: 1.2;
 }
 
 .stat-label {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: #6c757d;
   display: block;
 }
 
-/* ===== CONTENT ===== */
+/* ===== CONTENT SECTION ===== */
 .content-section {
-  flex: 1;
   background: #f8fafc;
-  padding: 40px 24px;
-}
-
-.content-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 40px 0;
+  min-height: 400px;
 }
 
 /* Loading */
@@ -610,8 +524,8 @@ export default {
 .spinner {
   width: 44px;
   height: 44px;
-  border: 3px solid #e2e8f0;
-  border-top: 3px solid #996600;
+  border: 3px solid #e9ecef;
+  border-top: 3px solid var(--primary-brown);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 0 auto 16px;
@@ -622,7 +536,7 @@ export default {
 }
 
 .loading-state p {
-  color: #94a3b8;
+  color: #6c757d;
   font-size: 0.95rem;
 }
 
@@ -636,7 +550,7 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 20px;
-  background: rgba(153, 102, 0, 0.08);
+  background: var(--light-brown);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -645,46 +559,53 @@ export default {
 
 .empty-icon i {
   font-size: 2rem;
-  color: #cc9900;
+  color: var(--accent-brown);
 }
 
 .empty-state h3 {
   font-size: 1.3rem;
-  color: #334155;
+  color: var(--dark-brown);
   margin-bottom: 8px;
 }
 
 .empty-state p {
-  color: #94a3b8;
+  color: #6c757d;
   font-size: 0.95rem;
   max-width: 400px;
   margin: 0 auto;
 }
 
-/* Folder Grid */
-.folders-grid {
+/* ===== FOLDER LIST / GRID ===== */
+.folders-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+.folders-grid-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
 .folder-card {
   background: white;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  border: 1px solid #e9ecef;
   overflow: hidden;
   transition: all 0.3s ease;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .folder-card:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  border-color: #dee2e6;
 }
 
 .folder-card.expanded {
-  border-color: #cc9900;
-  box-shadow: 0 4px 20px rgba(153, 102, 0, 0.1);
+  border-color: var(--accent-brown);
+  box-shadow: 0 10px 25px rgba(153, 102, 0, 0.15);
 }
 
 .folder-header {
@@ -696,15 +617,20 @@ export default {
   transition: background 0.2s;
 }
 
+.card-layout .folder-header {
+  flex-direction: column;
+  text-align: center;
+}
+
 .folder-header:hover {
-  background: #fefce8;
+  background: var(--light-brown);
 }
 
 .folder-icon-wrapper {
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  background: linear-gradient(135deg, var(--light-brown), #fde68a);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -713,7 +639,7 @@ export default {
 
 .folder-icon-wrapper i {
   font-size: 1.3rem;
-  color: #92400e;
+  color: var(--dark-brown);
   transition: all 0.3s;
 }
 
@@ -725,13 +651,13 @@ export default {
 .folder-info h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #374151;
   margin-bottom: 4px;
 }
 
 .folder-info p {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #6c757d;
   margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -744,10 +670,11 @@ export default {
   align-items: center;
   gap: 6px;
   font-size: 0.78rem;
-  color: #94a3b8;
-  background: #f1f5f9;
+  color: var(--primary-brown);
+  background: var(--light-brown);
   padding: 3px 10px;
   border-radius: 6px;
+  font-weight: 500;
 }
 
 .expand-icon {
@@ -755,7 +682,7 @@ export default {
 }
 
 .expand-icon i {
-  color: #94a3b8;
+  color: #adb5bd;
   font-size: 0.85rem;
   transition: transform 0.3s;
 }
@@ -764,9 +691,9 @@ export default {
   transform: rotate(180deg);
 }
 
-/* Folder Content */
+/* ===== FOLDER CONTENT ===== */
 .folder-content {
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #e9ecef;
   background: #fafbfc;
   padding: 16px 24px;
 }
@@ -774,7 +701,7 @@ export default {
 .no-files {
   text-align: center;
   padding: 30px;
-  color: #94a3b8;
+  color: #6c757d;
 }
 
 .no-files i {
@@ -796,13 +723,13 @@ export default {
   padding: 12px 16px;
   background: white;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e9ecef;
   transition: all 0.2s;
 }
 
 .file-item:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-color: var(--secondary-brown);
+  box-shadow: 0 2px 8px rgba(153, 102, 0, 0.08);
 }
 
 .file-icon {
@@ -821,7 +748,7 @@ export default {
 .icon-excel { background: #f0fdf4; color: #16a34a; }
 .icon-ppt { background: #fff7ed; color: #ea580c; }
 .icon-image { background: #faf5ff; color: #9333ea; }
-.icon-archive { background: #fefce8; color: #ca8a04; }
+.icon-archive { background: var(--light-brown); color: var(--primary-brown); }
 .icon-default { background: #f1f5f9; color: #64748b; }
 
 .file-details {
@@ -833,7 +760,7 @@ export default {
   display: block;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #1e293b;
+  color: #374151;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -842,7 +769,7 @@ export default {
 .file-meta {
   display: block;
   font-size: 0.78rem;
-  color: #94a3b8;
+  color: #adb5bd;
   margin-top: 2px;
 }
 
@@ -851,7 +778,7 @@ export default {
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: linear-gradient(135deg, #996600, #b37700);
+  background: linear-gradient(135deg, var(--secondary-brown), var(--primary-brown));
   color: white;
   border: none;
   border-radius: 8px;
@@ -864,19 +791,13 @@ export default {
 }
 
 .btn-download:hover {
-  background: linear-gradient(135deg, #7a5200, #996600);
+  background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(153, 102, 0, 0.25);
+  box-shadow: 0 10px 20px rgba(153, 102, 0, 0.3);
   color: white;
 }
 
-@media (max-width: 640px) {
-  .btn-download span { display: none; }
-  .btn-download { padding: 8px 12px; }
-  .file-item { padding: 10px 12px; gap: 10px; }
-}
-
-/* Slide transition */
+/* ===== SLIDE TRANSITION ===== */
 .slide-enter-active, .slide-leave-active {
   transition: all 0.3s ease;
   max-height: 1000px;
@@ -890,76 +811,52 @@ export default {
   opacity: 0;
 }
 
-/* ===== FOOTER ===== */
-.footer {
-  background: #1e293b;
-  color: #94a3b8;
-  padding: 40px 24px;
-}
-
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.footer-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #996600, #cc9900);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ===== FOOTER (identical to LandingPage) ===== */
+footer {
+  background: #7a5200;
   color: white;
 }
 
-.footer-brand h4 {
-  color: white;
-  margin: 0;
-  font-size: 1rem;
-}
-
-.footer-brand p {
-  font-size: 0.75rem;
-  margin: 0;
-}
-
-.footer-links {
-  display: flex;
-  gap: 20px;
-}
-
-.footer-links a {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 0.85rem;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover {
-  color: #fbbf24;
-}
-
-.footer-copy p {
-  font-size: 0.8rem;
-  margin: 0;
-}
-
+/* ===== RESPONSIVE (same breakpoints as LandingPage) ===== */
 @media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column;
+  .hero-section {
+    padding: 100px 0 60px;
     text-align: center;
+  }
+
+  .hero-search {
+    max-width: 100%;
+  }
+
+  .hero-section .text-lg-start {
+    text-align: center !important;
+  }
+
+  .stat-item {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 80px 0 40px;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .btn-download span {
+    display: none;
+  }
+
+  .btn-download {
+    padding: 8px 12px;
+  }
+
+  .file-item {
+    padding: 10px 12px;
+    gap: 10px;
   }
 }
 </style>

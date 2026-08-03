@@ -40,7 +40,7 @@
       </div>
       
       <div v-if="isAuthenticated" class="text-center mt-3">
-        <router-link to="/dashboard" class="btn btn-outline-primary btn-sm">
+        <router-link to="/admin/dashboard" class="btn btn-outline-primary btn-sm">
           <i class="fas fa-cog me-1"></i>Kelola Jadwal
         </router-link>
       </div>

@@ -13,7 +13,7 @@
             class="me-2"
             @error="handleImageError"
           >
-          <span>E-SPMI ikip siliwangi</span>
+          <span>E-SPMI</span>
         </a>
         <button 
           class="navbar-toggler" 
@@ -39,11 +39,6 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#contact">Kontak</a>
-            </li>
-            <li class="nav-item">
-              <router-link to="/pengelola/login" class="btn btn-primary btn-sm ms-2">
-                <i class="fas fa-sign-in-alt me-1"></i>Login
-              </router-link>
             </li>
           </ul>
         </div>
@@ -157,7 +152,7 @@
       </div>
 
       <!-- Dokumen Publik Section -->
-      <section class="dokumen-section">
+      <section class="dokumen-section animate-on-scroll">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-md-8">
@@ -180,7 +175,7 @@
       </section>
 
       <!-- Features Section -->
-      <section id="features" class="py-5">
+      <section id="features" class="py-5 animate-on-scroll">
         <div class="container">
           <div class="text-center mb-5">
             <h2 class="section-title display-5 fw-bold">Fitur Unggulan SPMI</h2>
@@ -258,7 +253,7 @@
       </section>
 
       <!-- Program Studi Preview Section -->
-      <section id="programs" class="py-5 bg-light">
+      <section id="programs" class="py-5 bg-light animate-on-scroll">
         <div class="container">
           <div class="text-center mb-5">
             <h2 class="section-title display-5 fw-bold">Program Studi Tersedia</h2>
@@ -318,7 +313,7 @@
       </section>
 
       <!-- Stats Preview Section -->
-      <section class="py-5">
+      <section class="py-5 animate-on-scroll">
         <div class="container">
           <div class="row text-center">
             <div class="col-md-3 col-6 mb-4">
@@ -353,8 +348,68 @@
         </div>
       </section>
 
+      <!-- Team Section -->
+      <section id="team" class="py-5 animate-on-scroll">
+        <div class="container">
+          <div class="text-center mb-5">
+            <h2 class="section-title display-5 fw-bold">Tim SPMI</h2>
+            <p class="lead text-muted">Mengenal lebih dekat dengan tim penjaminan mutu internal kami</p>
+          </div>
+          <div v-if="team.length > 0" class="row g-4 justify-content-center">
+            <div v-for="member in team" :key="member.id" class="col-lg-3 col-md-4 col-sm-6">
+              <div class="team-card text-center p-4">
+                <div class="team-image-wrapper mx-auto mb-3">
+                  <img 
+                    :src="member.image_url || '/images/photos/default-avatar.png'" 
+                    :alt="member.name"
+                    class="team-image img-fluid rounded-circle"
+                    @error="handleAvatarError"
+                  >
+                </div>
+                <h5 class="fw-bold mb-1">{{ member.name }}</h5>
+                <p class="text-primary mb-0">{{ member.position }}</p>
+              </div>
+            </div>
+          </div>
+          <div v-else class="text-center text-muted">
+            <p>Data tim belum tersedia.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Documentation Section -->
+      <section id="documentation" class="py-5 bg-light animate-on-scroll">
+        <div class="container">
+          <div class="text-center mb-5">
+            <h2 class="section-title display-5 fw-bold">Dokumentasi Kegiatan</h2>
+            <p class="lead text-muted">Galeri kegiatan dan aktivitas terbaru dari SPMI</p>
+          </div>
+          <div v-if="documentations.length > 0" class="row g-4">
+            <div v-for="doc in documentations" :key="doc.id" class="col-lg-4 col-md-6">
+              <div class="doc-card">
+                <div class="doc-image-wrapper">
+                  <img :src="doc.image_url" :alt="doc.title" class="doc-image" @error="handleDocImageError">
+                  <div class="doc-overlay">
+                    <span class="doc-date" v-if="doc.activity_date">
+                      <i class="fas fa-calendar-alt me-1"></i> {{ formatDate(doc.activity_date) }}
+                    </span>
+                  </div>
+                </div>
+                <div class="doc-content p-4">
+                  <h5 class="fw-bold mb-2">{{ doc.title }}</h5>
+                  <p class="text-muted mb-0 small">{{ doc.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="text-center text-muted">
+            <p>Belum ada dokumentasi kegiatan.</p>
+          </div>
+        </div>
+      </section>
+
       <!-- CTA Section -->
-      <section class="py-5 cta-section">
+      <section class="py-5 cta-section animate-on-scroll">
         <div class="container text-center">
           <h2 class="display-6 fw-bold mb-4">Siap Transformasi Digital SPMI?</h2>
           <p class="lead mb-4 opacity-90">
@@ -370,7 +425,7 @@
       </section>
 
       <!-- Contact Section -->
-      <section id="contact" class="py-5 bg-light">
+      <section id="contact" class="py-5 bg-light animate-on-scroll">
         <div class="container">
           <div class="text-center mb-5">
             <h2 class="section-title display-5 fw-bold">Hubungi Kami</h2>
@@ -383,7 +438,7 @@
                   <div class="col-md-4 mb-4">
                     <i class="fas fa-envelope fa-2x text-primary mb-3"></i>
                     <h5>Email</h5>
-                    <p class="text-muted">info@qtrack-spmi.ac.id</p>
+                    <p class="text-muted">info@e-spmi.ac.id</p>
                   </div>
                   <div class="col-md-4 mb-4">
                     <i class="fas fa-phone fa-2x text-primary mb-3"></i>
@@ -406,7 +461,7 @@
     <!-- Footer -->
     <footer class="py-4">
       <div class="container text-center">
-        <p class="mb-0">&copy; 2024 Q-TRACK SPMI Digital. All rights reserved.</p>
+        <p class="mb-0">&copy; 2024 E-SPMI Digital. All rights reserved.</p>
       </div>
     </footer>
   </div>
@@ -422,20 +477,33 @@ export default {
     const store = useLandingStore()
     const logoError = ref(false)
 
-    const heroContent = computed(() => ({
-      title: 'Sistem Penjaminan Mutu Internal',
-      subtitle: 'Mewujudkan Budaya Mutu di Lingkungan Akademik',
-      description: 'Q-TRACK SPMI Digital membantu institusi pendidikan dalam mengelola, memantau, dan meningkatkan mutu secara berkelanjutan.',
-      ctaText: 'Mulai Sekarang',
-      ctaLink: '/pengelola/login'
-    }))
+    const heroContent = computed(() => {
+      const h = store.heroContent
+      return {
+        title: h.title || 'Sistem Penjaminan Mutu Internal',
+        subtitle: h.subtitle || 'Mewujudkan Budaya Mutu di Lingkungan Akademik',
+        description: h.description || 'E-SPMI Digital membantu institusi pendidikan dalam mengelola, memantau, dan meningkatkan mutu secara berkelanjutan.',
+        ctaText: h.cta_text || 'Mulai Sekarang',
+        ctaLink: h.cta_link || '#features'
+      }
+    })
 
-    const heroStyle = computed(() => ({
-      background: 'linear-gradient(135deg, #996600 0%, #7a5200 100%)'
-    }))
+    const heroStyle = computed(() => {
+      const bg = store.heroContent.background_image
+      if (bg) {
+        return {
+          background: `linear-gradient(135deg, rgba(153,102,0,0.85), rgba(122,82,0,0.9)), url('/storage/${bg}') center/cover no-repeat`
+        }
+      }
+      return {
+        background: 'linear-gradient(135deg, #996600 0%, #7a5200 100%)'
+      }
+    })
 
     const beritas = computed(() => store.beritas)
     const jadwals = computed(() => store.jadwals)
+    const team = computed(() => store.team)
+    const documentations = computed(() => store.documentations)
 
     const handleImageError = (event) => {
       event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Cpath d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"%3E%3C/path%3E%3C/svg%3E'
@@ -443,6 +511,14 @@ export default {
 
     const handleBeritaImageError = (event) => {
       event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Crect x="2" y="2" width="20" height="20" rx="2"%3E%3C/rect%3E%3Cpath d="M8 7h8M8 12h6M8 17h4"%3E%3C/path%3E%3C/svg%3E'
+    }
+
+    const handleAvatarError = (event) => {
+      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23cccccc" stroke-width="2"%3E%3Ccircle cx="12" cy="8" r="4"%3E%3C/circle%3E%3Cpath d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"%3E%3C/path%3E%3C/svg%3E'
+    }
+
+    const handleDocImageError = (event) => {
+      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Crect x="3" y="3" width="18" height="18" rx="2"%3E%3C/rect%3E%3Ccircle cx="8.5" cy="8.5" r="1.5"%3E%3C/circle%3E%3Cpath d="M21 15l-5-5L5 21"%3E%3C/path%3E%3C/svg%3E'
     }
 
     const truncateText = (text, length) => {
@@ -487,8 +563,37 @@ export default {
       }
 
       // Load data
+      store.fetchLandingContent()
       store.fetchBeritas()
       store.fetchJadwals()
+
+      // Scroll animation observer
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-visible')
+          }
+        })
+      }, { threshold: 0.1 })
+
+      // Observe all animated elements after next tick
+      setTimeout(() => {
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+          observer.observe(el)
+        })
+      }, 100)
+
+      // Navbar scroll effect
+      window.addEventListener('scroll', () => {
+        const navbar = document.querySelector('.navbar')
+        if (navbar) {
+          if (window.scrollY > 50) {
+            navbar.classList.add('scrolled')
+          } else {
+            navbar.classList.remove('scrolled')
+          }
+        }
+      })
     })
 
     return {
@@ -496,8 +601,12 @@ export default {
       heroStyle,
       beritas,
       jadwals,
+      team,
+      documentations,
       handleImageError,
       handleBeritaImageError,
+      handleAvatarError,
+      handleDocImageError,
       truncateText,
       formatDate,
       getDay,
@@ -856,6 +965,89 @@ export default {
   color: white;
 }
 
+/* ===== TEAM SECTION ===== */
+.team-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  height: 100%;
+  border: 1px solid #e9ecef;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-color: var(--primary-brown);
+}
+
+.team-image-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(135deg, var(--light-brown), var(--primary-brown));
+}
+
+.team-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid white;
+}
+
+/* ===== DOCUMENTATION SECTION ===== */
+.doc-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  border: 1px solid #e9ecef;
+}
+
+.doc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.doc-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.doc-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.doc-card:hover .doc-image {
+  transform: scale(1.05);
+}
+
+.doc-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+}
+
+.doc-date {
+  font-size: 0.85rem;
+  background: var(--primary-brown);
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
 /* ===== CTA SECTION ===== */
 .cta-section {
   background: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
@@ -929,5 +1121,98 @@ footer {
   .navbar-brand {
     font-size: 1.2rem;
   }
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-on-scroll.animate-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-delay-1 { transition-delay: 0.1s; }
+.animate-delay-2 { transition-delay: 0.2s; }
+.animate-delay-3 { transition-delay: 0.3s; }
+.animate-delay-4 { transition-delay: 0.4s; }
+.animate-delay-5 { transition-delay: 0.5s; }
+.animate-delay-6 { transition-delay: 0.6s; }
+
+/* Hero entrance animation */
+.hero-section .display-4,
+.hero-section .h4,
+.hero-section .lead,
+.hero-section .btn {
+  animation: heroFadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+.hero-section .display-4 { animation-delay: 0.2s; }
+.hero-section .h4 { animation-delay: 0.4s; }
+.hero-section .lead { animation-delay: 0.6s; }
+.hero-section .btn { animation-delay: 0.8s; }
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating animation for icons */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.program-icon {
+  transition: all 0.3s ease;
+}
+
+.program-card:hover .program-icon {
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Stats counter pulse */
+@keyframes countPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.animate-visible h3.fw-bold {
+  animation: countPulse 1.5s ease-in-out;
+}
+
+/* Team card stagger animation */
+.team-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Doc card zoom effect */
+.doc-card:hover .doc-overlay {
+  opacity: 1;
+}
+
+/* Navbar scroll effect */
+.navbar.scrolled {
+  padding: 0.3rem 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* Smooth section transitions */
+section {
+  transition: opacity 0.3s ease;
 }
 </style>

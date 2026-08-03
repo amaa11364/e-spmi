@@ -13,16 +13,32 @@ export const useLandingStore = defineStore('landing', {
       cta_link: '#features',
       background_image: null
     },
+    team: [],
+    documentations: [],
     beritas: [],
     jadwals: [],
     loading: false,
     error: null
   }),
   actions: {
+    async fetchLandingContent() {
+      try {
+        const response = await axios.get('/landing-content')
+        if (response.data.success) {
+          if (response.data.data.hero) {
+            this.heroContent = response.data.data.hero
+          }
+          this.team = response.data.data.team || []
+          this.documentations = response.data.data.documentations || []
+        }
+      } catch (error) {
+        console.error('Failed to fetch landing content:', error)
+      }
+    },
     async fetchHeroContent() {
       try {
         const response = await axios.get('/hero')
-        if (response.data.success) {
+        if (response.data.success && response.data.data) {
           this.heroContent = response.data.data
         }
       } catch (error) {

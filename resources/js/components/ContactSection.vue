@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       contacts: [
-        { icon: 'fas fa-envelope', title: 'Email', value: 'info@qtrack-spmi.ac.id' },
+        { icon: 'fas fa-envelope', title: 'Email', value: 'info@e-spmi.ac.id' },
         { icon: 'fas fa-phone', title: 'Telepon', value: '+62 21 1234 5678' },
         { icon: 'fas fa-clock', title: 'Jam Operasional', value: 'Senin - Jumat, 08:00 - 17:00' }
       ]

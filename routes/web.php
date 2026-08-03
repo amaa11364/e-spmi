@@ -7,6 +7,7 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\LandingPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ use App\Http\Controllers\DokumenController;
 Route::prefix('api')->group(function () {
     
     // Public routes
+    Route::get('/landing-content', [LandingPageController::class, 'index']);
     Route::get('/hero', [HeroController::class, 'index']);
     Route::get('/beritas/latest', [BeritaController::class, 'latest']);
     Route::get('/beritas', [BeritaController::class, 'index']);
@@ -52,6 +54,17 @@ Route::prefix('api')->group(function () {
             Route::put('/hero', [HeroController::class, 'update']);
             Route::post('/hero/image', [HeroController::class, 'uploadImage']);
             Route::delete('/hero/image', [HeroController::class, 'deleteImage']);
+            
+            // Landing Page Content (Team & Documentation)
+            Route::get('/landing/team', [LandingPageController::class, 'getTeam']);
+            Route::post('/landing/team', [LandingPageController::class, 'storeTeamMember']);
+            Route::put('/landing/team/{id}', [LandingPageController::class, 'updateTeamMember']);
+            Route::delete('/landing/team/{id}', [LandingPageController::class, 'destroyTeamMember']);
+            Route::post('/landing/image', [LandingPageController::class, 'uploadImage']);
+            Route::get('/landing/docs', [LandingPageController::class, 'getDocumentations']);
+            Route::post('/landing/docs', [LandingPageController::class, 'storeDocumentation']);
+            Route::put('/landing/docs/{id}', [LandingPageController::class, 'updateDocumentation']);
+            Route::delete('/landing/docs/{id}', [LandingPageController::class, 'destroyDocumentation']);
             
             // Berita
             Route::post('/beritas', [BeritaController::class, 'store']);

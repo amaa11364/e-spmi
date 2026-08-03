@@ -17,7 +17,7 @@
         </div>
         <div class="sidebar-brand-text" v-if="!isCollapsed">
           <h5>E-SPMI</h5>
-          <small>Q-TRACK Digital</small>
+          <small>E-SPMI Digital</small>
         </div>
       </div>
       <div class="sidebar-user-role" v-if="!isCollapsed">
@@ -32,8 +32,8 @@
       <ul class="nav flex-column">
         <!-- Dashboard -->
         <li class="nav-item">
-          <router-link to="/dashboard" class="nav-link" active-class="active">
-            <i class="fas fa-home"></i>
+          <router-link to="/admin/dashboard" class="nav-link" active-class="active">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
             <span v-if="!isCollapsed">Dashboard</span>
           </router-link>
         </li>
@@ -85,6 +85,13 @@
             <router-link to="/admin/jadwal" class="nav-link" active-class="active">
               <i class="fas fa-calendar-alt"></i>
               <span v-if="!isCollapsed">Kelola Jadwal</span>
+            </router-link>
+          </li>
+
+          <li class="nav-item">
+            <router-link to="/admin/landing-settings" class="nav-link" active-class="active">
+              <i class="fas fa-laptop-house"></i>
+              <span v-if="!isCollapsed">Landing Page</span>
             </router-link>
           </li>
         </template>
