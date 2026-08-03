@@ -13,7 +13,7 @@
             class="me-2"
             @error="handleImageError"
           >
-          <span>E-SPMI</span>
+          <span>E-SPMI ikip siliwangi</span>
         </a>
         <button 
           class="navbar-toggler" 
