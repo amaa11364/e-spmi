@@ -32,7 +32,7 @@
       <ul class="nav flex-column">
         <!-- Dashboard -->
         <li class="nav-item">
-          <router-link to="/admin/dashboard" class="nav-link" active-class="active">
+          <router-link to="/pengelola/dashboard" class="nav-link" active-class="active">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span v-if="!isCollapsed">Dashboard</span>
           </router-link>
@@ -43,14 +43,14 @@
           <li class="nav-section" v-if="!isCollapsed">MASTER DATA</li>
           
           <li class="nav-item">
-            <router-link to="/admin/unit-kerja" class="nav-link" active-class="active">
+            <router-link to="/pengelola/unit-kerja" class="nav-link" active-class="active">
               <i class="fas fa-building"></i>
               <span v-if="!isCollapsed">Unit Kerja</span>
             </router-link>
           </li>
 
           <li class="nav-item">
-            <router-link to="/admin/iku" class="nav-link" active-class="active">
+            <router-link to="/pengelola/iku" class="nav-link" active-class="active">
               <i class="fas fa-chart-line"></i>
               <span v-if="!isCollapsed">IKU</span>
             </router-link>
@@ -59,14 +59,14 @@
           <li class="nav-section" v-if="!isCollapsed">MANAJEMEN</li>
 
           <li class="nav-item">
-            <router-link to="/admin/users" class="nav-link" active-class="active">
+            <router-link to="/pengelola/users" class="nav-link" active-class="active">
               <i class="fas fa-users-cog"></i>
               <span v-if="!isCollapsed">Kelola Akun</span>
             </router-link>
           </li>
 
           <li class="nav-item">
-            <router-link to="/admin/dokumen" class="nav-link" active-class="active">
+            <router-link to="/pengelola/dokumen" class="nav-link" active-class="active">
               <i class="fas fa-file-alt"></i>
               <span v-if="!isCollapsed">Kelola Dokumen</span>
             </router-link>
@@ -75,21 +75,21 @@
           <li class="nav-section" v-if="!isCollapsed">KONTEN</li>
 
           <li class="nav-item">
-            <router-link to="/admin/berita" class="nav-link" active-class="active">
+            <router-link to="/pengelola/berita" class="nav-link" active-class="active">
               <i class="fas fa-newspaper"></i>
               <span v-if="!isCollapsed">Kelola Berita</span>
             </router-link>
           </li>
 
           <li class="nav-item">
-            <router-link to="/admin/jadwal" class="nav-link" active-class="active">
+            <router-link to="/pengelola/jadwal" class="nav-link" active-class="active">
               <i class="fas fa-calendar-alt"></i>
               <span v-if="!isCollapsed">Kelola Jadwal</span>
             </router-link>
           </li>
 
           <li class="nav-item">
-            <router-link to="/admin/landing-settings" class="nav-link" active-class="active">
+            <router-link to="/pengelola/landing-settings" class="nav-link" active-class="active">
               <i class="fas fa-laptop-house"></i>
               <span v-if="!isCollapsed">Landing Page</span>
             </router-link>

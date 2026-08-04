@@ -86,38 +86,46 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'judul' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'link' => 'nullable|url|max:255',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
-            'is_published' => 'boolean'
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'judul' => 'required|string|max:255',
+                'deskripsi' => 'required|string',
+                'link' => 'nullable|url|max:255',
+                'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+                'is_published' => 'boolean'
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $data = $request->except(['gambar']);
+
+            // Handle image upload
+            if ($request->hasFile('gambar')) {
+                $image = $request->file('gambar');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('berita-images', $imageName, 'public');
+                $data['gambar'] = $path;
+            }
+
+            $berita = Berita::create($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berita created successfully',
+                'data' => $berita
+            ], 201);
+            
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'Gagal di server: ' . $e->getMessage()
+            ], 500);
         }
-
-        $data = $request->except(['gambar']);
-
-        // Handle image upload
-        if ($request->hasFile('gambar')) {
-            $image = $request->file('gambar');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('berita-images', $imageName, 'public');
-            $data['gambar'] = $path;
-        }
-
-        $berita = Berita::create($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Berita created successfully',
-            'data' => $berita
-        ], 201);
     }
 
     /**
@@ -125,52 +133,60 @@ class BeritaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $berita = Berita::find($id);
-        
-        if (!$berita) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Berita not found'
-            ], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'judul' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'link' => 'nullable|url|max:255',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
-            'is_published' => 'boolean'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $data = $request->except(['gambar']);
-
-        // Handle image upload
-        if ($request->hasFile('gambar')) {
-            // Delete old image if exists
-            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
-                Storage::disk('public')->delete($berita->gambar);
-            }
+        try {
+            $berita = Berita::find($id);
             
-            $image = $request->file('gambar');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('berita-images', $imageName, 'public');
-            $data['gambar'] = $path;
+            if (!$berita) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Berita not found'
+                ], 404);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'judul' => 'required|string|max:255',
+                'deskripsi' => 'required|string',
+                'link' => 'nullable|url|max:255',
+                'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+                'is_published' => 'boolean'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $data = $request->except(['gambar']);
+
+            // Handle image upload
+            if ($request->hasFile('gambar')) {
+                // Delete old image if exists
+                if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+                    Storage::disk('public')->delete($berita->gambar);
+                }
+                
+                $image = $request->file('gambar');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('berita-images', $imageName, 'public');
+                $data['gambar'] = $path;
+            }
+
+            $berita->update($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berita updated successfully',
+                'data' => $berita
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal di server: ' . $e->getMessage()
+            ], 500);
         }
-
-        $berita->update($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Berita updated successfully',
-            'data' => $berita
-        ]);
     }
 
     /**
@@ -178,26 +194,34 @@ class BeritaController extends Controller
      */
     public function destroy($id)
     {
-        $berita = Berita::find($id);
-        
-        if (!$berita) {
+        try {
+            $berita = Berita::find($id);
+            
+            if (!$berita) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Berita not found'
+                ], 404);
+            }
+
+            // Delete image if exists
+            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+                Storage::disk('public')->delete($berita->gambar);
+            }
+
+            $berita->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berita deleted successfully'
+            ]);
+            
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Berita not found'
-            ], 404);
+                'message' => 'Gagal di server: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Delete image if exists
-        if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
-            Storage::disk('public')->delete($berita->gambar);
-        }
-
-        $berita->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Berita deleted successfully'
-        ]);
     }
 
     /**

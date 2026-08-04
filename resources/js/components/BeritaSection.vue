@@ -13,7 +13,12 @@
           <div v-for="berita in beritas" :key="berita.id" class="col-md-6">
             <a :href="berita.link" target="_blank" class="text-decoration-none">
               <div class="berita-card">
-                <img :src="berita.gambar_url || defaultImage" :alt="berita.judul" class="berita-image">
+                <img 
+                  :src="berita.gambar_url || defaultImage" 
+                  :alt="berita.judul" 
+                  class="berita-image"
+                  @error="handleImageError"
+                >
                 <div class="berita-content">
                   <h3 class="berita-title">{{ truncateText(berita.judul, 60) }}</h3>
                   <div class="berita-meta">
@@ -54,7 +59,8 @@ export default {
   },
   data() {
     return {
-      defaultImage: '/images/default-news.jpg'
+      // SVG Data URI sebagai fallback default placeholder
+      defaultImage: 'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22200%22%20viewBox%3D%220%200%20400%20200%22%3E%3Crect%20fill%3D%22%23f3f4f6%22%20width%3D%22400%22%20height%3D%22200%22%2F%3E%3Ctext%20fill%3D%22%239ca3af%22%20font-family%3D%22sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22bold%22%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.3em%22%3ENo%20Image%20Available%3C%2Ftext%3E%3C%2Fsvg%3E'
     }
   },
   methods: {
@@ -66,6 +72,9 @@ export default {
       if (!date) return ''
       const d = new Date(date)
       return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+    },
+    handleImageError(e) {
+      e.target.src = this.defaultImage
     }
   }
 }
@@ -95,6 +104,7 @@ export default {
   width: 100%;
   height: 200px;
   object-fit: cover;
+  background-color: #f1f5f9;
 }
 
 .berita-content {

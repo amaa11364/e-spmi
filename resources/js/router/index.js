@@ -1,4 +1,3 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../Views/HomeView.vue'
 import axios from '../main'
@@ -30,70 +29,70 @@ const routes = [
     component: () => import('@/Views/DokumenPublikView.vue')
   },
   {
-    path: '/admin/dashboard',
+    path: '/pengelola/dashboard',
     name: 'dashboard',
     component: () => import('@/Views/DashboardView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   // Admin routes
   {
-    path: '/admin/berita',
-    name: 'admin.berita',
-    component: () => import('@/Views/Admin/BeritaIndex.vue'),
+    path: '/pengelola/berita',
+    name: 'pengelola.berita',
+    component: () => import('@/Views/Pengelola/BeritaIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/berita/create',
-    name: 'admin.berita.create',
-    component: () => import('@/Views/Admin/BeritaCreate.vue'),
+    path: '/pengelola/berita/create',
+    name: 'pengelola.berita.create',
+    component: () => import('@/Views/Pengelola/BeritaCreate.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/jadwal',
-    name: 'admin.jadwal',
-    component: () => import('@/Views/Admin/JadwalIndex.vue'),
+    path: '/pengelola/jadwal',
+    name: 'pengelola.jadwal',
+    component: () => import('@/Views/Pengelola/JadwalIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/jadwal/create',
-    name: 'admin.jadwal.create',
-    component: () => import('@/Views/Admin/JadwalCreate.vue'),
+    path: '/pengelola/jadwal/create',
+    name: 'pengelola.jadwal.create',
+    component: () => import('@/Views/Pengelola/JadwalCreate.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/users',
-    name: 'admin.users',
-    component: () => import('@/Views/Admin/UsersIndex.vue'),
+    path: '/pengelola/users',
+    name: 'pengelola.users',
+    component: () => import('@/Views/Pengelola/UsersIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/settings/iku',
-    name: 'admin.settings.iku',
-    component: () => import('@/Views/Admin/SettingsIKU.vue'),
+    path: '/pengelola/settings/iku',
+    name: 'pengelola.settings.iku',
+    component: () => import('@/Views/Pengelola/SettingsIKU.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/settings/iku/create',
-    name: 'admin.settings.iku.create',
-    component: () => import('@/Views/Admin/SettingsIKUCreate.vue'),
+    path: '/pengelola/settings/iku/create',
+    name: 'pengelola.settings.iku.create',
+    component: () => import('@/Views/Pengelola/SettingsIKUCreate.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/settings/unit-kerja/create',
-    name: 'admin.settings.unit-kerja.create',
-    component: () => import('@/Views/Admin/UnitKerjaCreate.vue'),
+    path: '/pengelola/settings/unit-kerja/create',
+    name: 'pengelola.settings.unit-kerja.create',
+    component: () => import('@/Views/Pengelola/UnitKerjaCreate.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/dokumen',
-    name: 'admin.dokumen',
-    component: () => import('@/Views/Admin/DokumenIndex.vue'),
+    path: '/pengelola/dokumen',
+    name: 'pengelola.dokumen',
+    component: () => import('@/Views/Pengelola/DokumenIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/landing-settings',
-    name: 'admin.landing',
-    component: () => import('@/Views/Admin/LandingPageSettings.vue'),
+    path: '/pengelola/landing-settings',
+    name: 'pengelola.landing',
+    component: () => import('@/Views/Pengelola/LandingPageSettings.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   }
 ]
@@ -146,8 +145,9 @@ router.beforeEach(async (to, from, next) => {
       next()
     }
   } 
+  // PERBAIKAN DI SINI:
   else if ((to.path === '/login' || to.path === '/pengelola/login') && token) {
-    next('/admin/dashboard')
+    next('/pengelola/dashboard') // Ubah dari /admin/dashboard
   } 
   else {
     next()

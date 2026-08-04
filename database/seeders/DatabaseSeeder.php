@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\HeroContent;
-use App\Models\Berita;
 use App\Models\Jadwal;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,22 +37,7 @@ class DatabaseSeeder extends Seeder
             'cta_link' => '#features',
             'is_active' => true,
         ]);
-
-        // Create sample berita
-        Berita::create([
-            'judul' => 'SPMI Luncurkan Aplikasi Mobile untuk Monitoring Mutu',
-            'deskripsi' => 'Aplikasi mobile ini memudahkan monitoring dan evaluasi mutu pendidikan secara real-time.',
-            'link' => '#',
-            'is_published' => true,
-        ]);
-
-        Berita::create([
-            'judul' => 'Audit Internal SPMI Semester Ganjil 2024/2025',
-            'deskripsi' => 'Audit internal akan dilaksanakan pada bulan Januari 2024 untuk semua program studi.',
-            'link' => '#',
-            'is_published' => true,
-        ]);
-
+    
         // Create sample jadwal
         Jadwal::create([
             'kegiatan' => 'Rapat Koordinasi SPMI',

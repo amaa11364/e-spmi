@@ -204,28 +204,28 @@ export default {
         subtitle: 'Posting berita baru',
         icon: 'fas fa-plus-circle',
         btnClass: 'btn-primary',
-        route: '/admin/berita'
+        route: '/pengelola/berita'
       },
       {
         title: 'Buat Jadwal',
         subtitle: 'Jadwal kegiatan baru',
         icon: 'fas fa-calendar-plus',
         btnClass: 'btn-success',
-        route: '/admin/jadwal'
+        route: '/pengelola/jadwal'
       },
       {
         title: 'Atur IKU',
         subtitle: 'Kelola indikator',
         icon: 'fas fa-chart-line',
         btnClass: 'btn-warning',
-        route: '/admin/iku'
+        route: '/pengelola/iku'
       },
       {
         title: 'Kelola Unit',
         subtitle: 'Unit kerja',
         icon: 'fas fa-building',
         btnClass: 'btn-info',
-        route: '/admin/unit-kerja'
+        route: '/pengelola/unit-kerja'
       }
     ]
 
@@ -235,28 +235,28 @@ export default {
         subtitle: 'Edit, hapus, publikasi',
         icon: 'fas fa-newspaper',
         iconBg: 'bg-primary-light',
-        route: '/admin/berita'
-      },
+        route: '/pengelola/berita'
+      },  
       {
         title: 'Kelola Jadwal',
         subtitle: 'Jadwal kegiatan SPMI',
         icon: 'fas fa-calendar-alt',
         iconBg: 'bg-success-light',
-        route: '/admin/jadwal'
+        route: '/pengelola/jadwal'
       },
       {
         title: 'Manajemen User',
         subtitle: 'Atur hak akses user',
         icon: 'fas fa-users-cog',
         iconBg: 'bg-warning-light',
-        route: '/admin/users'
+        route: '/pengelola/users'
       },
       {
         title: 'Pengaturan IKU',
         subtitle: 'Indikator Kinerja Utama',
         icon: 'fas fa-chart-bar',
         iconBg: 'bg-info-light',
-        route: '/admin/iku'
+        route: '/pengelola/iku'
       }
     ]
 

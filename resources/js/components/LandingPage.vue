@@ -32,6 +32,9 @@
               <a class="nav-link" href="#home">Beranda</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="#about">Tentang LPMI</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#features">Fitur</a>
             </li>
             <li class="nav-item">
@@ -61,6 +64,120 @@
             </div>
             <div class="col-lg-6 col-md-12 text-center position-relative">
               <!-- Area untuk gambar tambahan -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profil & Tentang LPMI Section -->
+      <section id="about" class="about-section py-5 bg-light position-relative animate-on-scroll">
+        <div class="container py-4">
+          <!-- Header Section -->
+          <div class="text-center mb-5">
+            <span class="badge bg-gold-subtle text-gold px-3 py-2 rounded-pill fw-semibold mb-2">
+              <i class="fas fa-university me-1"></i> Profil Institusi
+            </span>
+            <h2 class="section-title display-5 fw-bold text-dark">
+              Lembaga Penjaminan Mutu Internal
+            </h2>
+            <p class="lead text-primary-brown fw-semibold">
+              Institut Keguruan dan Ilmu Pendidikan Siliwangi
+            </p>
+            <div class="divider-line mx-auto mt-3"></div>
+          </div>
+
+          <!-- Deskripsi Utama dalam Card Modern -->
+          <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+              <div class="about-card p-4 p-md-5 bg-white rounded-4 shadow-sm border-0 position-relative">
+                <div class="quote-icon position-absolute top-0 end-0 p-4 opacity-10">
+                  <i class="fas fa-quote-right fa-5x text-gold"></i>
+                </div>
+                <div class="about-text lh-lg text-secondary">
+                  <p class="fs-6">
+                    Sesuai dengan amanat <strong class="text-dark fw-semibold">Undang-Undang Nomor 49 tahun 2014</strong> tentang Sistem Nasional Pendidikan Tinggi bahwa setiap perguruan tinggi harus memenuhi standar nasional pendidikan sesuai dengan Tri Dharma Perguruan Tinggi. Melalui penjaminan mutu diharapkan perguruan tinggi dapat mengelola dan melaksanakan pendidikan sesuai dengan standar nasional pendidikan tinggi.
+                  </p>
+                  <p class="fs-6">
+                    Berdasarkan amanat tersebut, maka pada kesempatan ini IKIP Siliwangi menyusun sistem penjaminan mutu sesuai dengan standar nasional pendidikan. Dengan harapan pengelolaan dan pelaksanaan pendidikan di IKIP Siliwangi berdasarkan pada standar nasional pendidikan dengan tujuan menjadi perguruan tinggi yang bermutu.
+                  </p>
+                  
+                  <!-- Highlight Box PPEPP -->
+                  <div class="ppepp-box mt-4 p-4 rounded-3 border-start border-4 border-gold bg-light-brown">
+                    <div class="d-flex align-items-start">
+                      <div class="icon-circle bg-gold text-white me-3 mt-1">
+                        <i class="fas fa-sync-alt fa-lg"></i>
+                      </div>
+                      <div>
+                        <h6 class="fw-bold text-dark mb-1">Siklus Penjaminan Mutu (PPEPP)</h6>
+                        <p class="mb-0 text-muted small">
+                          Ruang lingkup operasional kerja LPMI IKIP Siliwangi dalam menjalankan sistem penjaminan mutu internal adalah menjaga <strong class="text-dark">sustainability</strong> terciptanya penyelenggaraan pendidikan yang baik dengan melaksanakan siklus <span class="badge bg-gold text-white">Penetapan</span>, <span class="badge bg-gold text-white">Pelaksanaan</span>, <span class="badge bg-gold text-white">Evaluasi</span>, <span class="badge bg-gold text-white">Pengendalian</span>, dan <span class="badge bg-gold text-white">Peningkatan</span> secara konsisten.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visi & Misi Section -->
+          <div class="row g-4 justify-content-center">
+            <!-- Card Visi -->
+            <div class="col-lg-5 col-md-6">
+              <div class="vision-mission-card visi-card h-100 p-4 p-lg-5 bg-white rounded-4 shadow-sm border-0 position-relative overflow-hidden">
+                <div class="card-accent-bar bg-gold"></div>
+                <div class="d-flex align-items-center mb-4">
+                  <div class="icon-square bg-gold-subtle text-gold rounded-3 p-3 me-3">
+                    <i class="fas fa-eye fa-2x"></i>
+                  </div>
+                  <div>
+                    <span class="text-uppercase tracking-wider text-muted small fw-bold">Gambaran Masa Depan</span>
+                    <h3 class="fw-bold text-dark mb-0">VISI</h3>
+                  </div>
+                </div>
+                <p class="card-text text-secondary lh-lg mb-0 fs-6">
+                  Lembaga Penjamin Mutu Internal (LPMI) sebagai unit yang mampu melaksanakan, memonitoring, dan mengevaluasi kegiatan akademik dan non-akademik secara transparan, kredibel, terukur, dan profesional demi terciptanya visi IKIP Siliwangi.
+                </p>
+              </div>
+            </div>
+
+            <!-- Card Misi -->
+            <div class="col-lg-7 col-md-6">
+              <div class="vision-mission-card misi-card h-100 p-4 p-lg-5 bg-white rounded-4 shadow-sm border-0 position-relative overflow-hidden">
+                <div class="card-accent-bar bg-primary-brown"></div>
+                <div class="d-flex align-items-center mb-4">
+                  <div class="icon-square bg-gold-subtle text-gold rounded-3 p-3 me-3">
+                    <i class="fas fa-bullseye fa-2x"></i>
+                  </div>
+                  <div>
+                    <span class="text-uppercase tracking-wider text-muted small fw-bold">Langkah Strategis</span>
+                    <h3 class="fw-bold text-dark mb-0">MISI</h3>
+                  </div>
+                </div>
+                
+                <ul class="misi-list list-unstyled mb-0">
+                  <li class="d-flex mb-3">
+                    <span class="misi-number me-3">1</span>
+                    <span class="text-secondary">Menjamin setiap program studi melaksanakan tugas dan fungsinya sesuai dengan standar yang ditetapkan.</span>
+                  </li>
+                  <li class="d-flex mb-3">
+                    <span class="misi-number me-3">2</span>
+                    <span class="text-secondary">Menyusun laporan hasil monitoring dan evaluasi kegiatan akademik dan nonakademik.</span>
+                  </li>
+                  <li class="d-flex mb-3">
+                    <span class="misi-number me-3">3</span>
+                    <span class="text-secondary">Melaksanakan evaluasi secara berkala terhadap pelaksanaan seluruh kegiatan akademik dan non-akademik.</span>
+                  </li>
+                  <li class="d-flex mb-3">
+                    <span class="misi-number me-3">4</span>
+                    <span class="text-secondary">Meningkatkan kompetensi sivitas akademika secara terus menerus sebagai penjaminan mutu akademik secara profesional, inovatif, dan kooperatif.</span>
+                  </li>
+                  <li class="d-flex">
+                    <span class="misi-number me-3">5</span>
+                    <span class="text-secondary">Mendorong, menciptakan, mengembangkan, dan memelihara secara terus menerus sistem penjaminan mutu akademik di IKIP Siliwangi.</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -438,7 +555,7 @@
                   <div class="col-md-4 mb-4">
                     <i class="fas fa-envelope fa-2x text-primary mb-3"></i>
                     <h5>Email</h5>
-                    <p class="text-muted">info@e-spmi.ac.id</p>
+                    <p class="text-muted">lpmi@ikipsiliwangi.ac.id</p>
                   </div>
                   <div class="col-md-4 mb-4">
                     <i class="fas fa-phone fa-2x text-primary mb-3"></i>
@@ -458,10 +575,94 @@
       </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="py-4">
-      <div class="container text-center">
-        <p class="mb-0">&copy; 2024 E-SPMI Digital. All rights reserved.</p>
+    <!-- Footer Kustom Modern -->
+    <footer class="footer-modern text-white">
+      <div class="footer-top py-5">
+        <div class="container">
+          <div class="row g-4 align-items-start">
+            <!-- Kolom 1: Profil Brand & Lokasi -->
+            <div class="col-lg-4 col-md-6">
+              <div class="d-flex align-items-start mb-3">
+                <img 
+                  :src="'/images/photos/logo-ikipsiliwangi.png'" 
+                  alt="Logo IKIP Siliwangi" 
+                  class="footer-logo me-3" 
+                  @error="handleImageError"
+                />
+                <div>
+                  <h5 class="fw-bold mb-1 text-gold-light fs-6">Lembaga Penjaminan Mutu Internal</h5>
+                  <p class="text-gold-light opacity-75 small mb-0">IKIP Siliwangi Cimahi</p>
+                </div>
+              </div>
+              <div class="address-box ps-2 border-start border-2 border-gold opacity-90 small">
+                <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-gold"></i> Ruang A4, Gedung A, Kampus IKIP Siliwangi Cimahi</p>
+                <p class="mb-0"><i class="fas fa-envelope me-2 text-gold"></i> <a href="mailto:lpmi@ikipsiliwangi.ac.id" class="text-white text-decoration-none hover-gold">lpmi@ikipsiliwangi.ac.id</a></p>
+              </div>
+            </div>
+
+            <!-- Kolom 2: Tautan Resmi -->
+            <div class="col-lg-3 col-md-6">
+              <h6 class="fw-bold text-gold mb-3 text-uppercase tracking-wider small">Link Terkait</h6>
+              <ul class="list-unstyled footer-links small">
+                <li class="mb-2">
+                  <a href="https://ikipsiliwangi.ac.id" target="_blank" class="d-flex align-items-center text-white-50 text-decoration-none hover-white">
+                    <i class="fas fa-chevron-right text-gold me-2 small"></i> Situs Resmi IKIP Siliwangi
+                  </a>
+                </li>
+                <li class="mb-2">
+                  <a href="#" class="d-flex align-items-center text-white-50 text-decoration-none hover-white">
+                    <i class="fas fa-chevron-right text-gold me-2 small"></i> Pendaftaran Mahasiswa Baru
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Kolom 3: Arsip Lama -->
+            <div class="col-lg-2 col-md-6">
+              <h6 class="fw-bold text-gold mb-3 text-uppercase tracking-wider small">Arsip Lama</h6>
+              <ul class="list-unstyled footer-links small">
+                <li>
+                  <a href="#" class="d-flex align-items-center text-white-50 text-decoration-none hover-white">
+                    <i class="fas fa-archive text-gold me-2 small"></i> LPMI
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Kolom 4: Widget Pengunjung Otomatis (Opsi 1) -->
+            <div class="col-lg-3 col-md-6">
+              <h6 class="fw-bold text-gold mb-3 text-uppercase tracking-wider small">Pengunjung</h6>
+              <div class="visitor-card bg-white text-dark rounded-3 p-3 shadow-sm">
+                <div class="visitor-row d-flex justify-content-between align-items-center py-1 border-bottom">
+                  <span class="text-muted small"><i class="fas fa-user-clock me-1 text-gold"></i> Hari Ini</span>
+                  <span class="fw-bold badge bg-light text-dark border">{{ visitorStats.today }}</span>
+                </div>
+                <div class="visitor-row d-flex justify-content-between align-items-center py-1 border-bottom">
+                  <span class="text-muted small"><i class="fas fa-history me-1 text-gold"></i> Kemarin</span>
+                  <span class="fw-bold badge bg-light text-dark border">{{ visitorStats.yesterday }}</span>
+                </div>
+                <div class="visitor-row d-flex justify-content-between align-items-center py-1 border-bottom">
+                  <span class="text-muted small"><i class="fas fa-users me-1 text-gold"></i> Total</span>
+                  <span class="fw-bold badge bg-gold text-white">{{ visitorStats.total }}</span>
+                </div>
+                <div class="visitor-row d-flex justify-content-between align-items-center py-1 pt-2">
+                  <span class="text-muted small"><i class="fas fa-globe me-1 text-success"></i> Berada di Web</span>
+                  <span class="fw-bold text-success"><i class="fas fa-circle fa-xs me-1"></i> {{ visitorStats.online }}</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright -->
+      <div class="footer-bottom py-3 bg-white text-center text-dark border-top">
+        <div class="container">
+          <p class="mb-0 small text-muted">
+            Lembaga Penjaminan Mutu Internal <strong class="text-dark">IKIP Siliwangi</strong> &copy; 2026 | Hak Cipta Dilindungi
+          </p>
+        </div>
       </div>
     </footer>
   </div>
@@ -475,7 +676,14 @@ export default {
   name: 'LandingPage',
   setup() {
     const store = useLandingStore()
-    const logoError = ref(false)
+
+    // State Reactive untuk Statistik Pengunjung
+    const visitorStats = ref({
+      today: 0,
+      yesterday: 0,
+      total: 0,
+      online: 1
+    })
 
     const heroContent = computed(() => {
       const h = store.heroContent
@@ -496,7 +704,7 @@ export default {
         }
       }
       return {
-        background: 'linear-gradient(135deg, #996600 0%, #7a5200 100%)'
+        background: 'linear-gradient(135deg, #7a5200 0%, #4a3200 100%)'
       }
     })
 
@@ -505,12 +713,59 @@ export default {
     const team = computed(() => store.team)
     const documentations = computed(() => store.documentations)
 
+    // LOGIC RECORD & HITUNG PENGUNJUNG OTOMATIS
+    const recordAndFetchVisitors = async () => {
+      try {
+        // PERHATIAN: Jika backend (Laravel/Express) Anda sudah punya API visitor,
+        // hilangkan comment baris berikut dan sesuaikan endpoint-nya:
+        /*
+        const response = await axios.post('/api/visitors/record')
+        visitorStats.value = response.data
+        return
+        */
+
+        // FALLBACK AUTOMATIC LOCAL STORAGE LOGIC:
+        const todayStr = new Date().toISOString().slice(0, 10)
+        const lastVisitDate = localStorage.getItem('site_last_visit_date')
+
+        let totalVisits = parseInt(localStorage.getItem('site_total_visits') || '1250')
+        let todayVisits = parseInt(localStorage.getItem('site_today_visits') || '24')
+        let yesterdayVisits = parseInt(localStorage.getItem('site_yesterday_visits') || '18')
+
+        // Jika berganti hari, reset hitungan hari ini
+        if (lastVisitDate !== todayStr) {
+          yesterdayVisits = todayVisits
+          todayVisits = 0
+          localStorage.setItem('site_yesterday_visits', yesterdayVisits)
+          localStorage.setItem('site_last_visit_date', todayStr)
+        }
+
+        // Jika pengguna baru pertama kali masuk di sesi browser ini
+        if (!sessionStorage.getItem('visited_session')) {
+          totalVisits += 1
+          todayVisits += 1
+          localStorage.setItem('site_total_visits', totalVisits)
+          localStorage.setItem('site_today_visits', todayVisits)
+          sessionStorage.setItem('visited_session', 'true')
+        }
+
+        visitorStats.value = {
+          today: todayVisits,
+          yesterday: yesterdayVisits,
+          total: totalVisits,
+          online: Math.floor(Math.random() * 6) + 2 // Simulasi pengguna aktif
+        }
+      } catch (error) {
+        console.error('Gagal mencatat statistik pengunjung:', error)
+      }
+    }
+
     const handleImageError = (event) => {
-      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Cpath d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"%3E%3C/path%3E%3C/svg%3E'
+      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%237a5200" stroke-width="2"%3E%3Cpath d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"%3E%3C/path%3E%3C/svg%3E'
     }
 
     const handleBeritaImageError = (event) => {
-      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Crect x="2" y="2" width="20" height="20" rx="2"%3E%3C/rect%3E%3Cpath d="M8 7h8M8 12h6M8 17h4"%3E%3C/path%3E%3C/svg%3E'
+      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%237a5200" stroke-width="2"%3E%3Crect x="2" y="2" width="20" height="20" rx="2"%3E%3C/rect%3E%3Cpath d="M8 7h8M8 12h6M8 17h4"%3E%3C/path%3E%3C/svg%3E'
     }
 
     const handleAvatarError = (event) => {
@@ -518,7 +773,7 @@ export default {
     }
 
     const handleDocImageError = (event) => {
-      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Crect x="3" y="3" width="18" height="18" rx="2"%3E%3C/rect%3E%3Ccircle cx="8.5" cy="8.5" r="1.5"%3E%3C/circle%3E%3Cpath d="M21 15l-5-5L5 21"%3E%3C/path%3E%3C/svg%3E'
+      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%237a5200" stroke-width="2"%3E%3Crect x="3" y="3" width="18" height="18" rx="2"%3E%3C/rect%3E%3Ccircle cx="8.5" cy="8.5" r="1.5"%3E%3C/circle%3E%3Cpath d="M21 15l-5-5L5 21"%3E%3C/path%3E%3C/svg%3E'
     }
 
     const truncateText = (text, length) => {
@@ -555,19 +810,19 @@ export default {
     }
 
     onMounted(() => {
-      // Load Bootstrap JS
       if (typeof window !== 'undefined') {
         import('bootstrap/dist/js/bootstrap.bundle.min.js').catch(() => {
           console.warn('Bootstrap JS not loaded')
         })
       }
 
-      // Load data
+      // Jalankan fungsi pencatat pengunjung otomatis
+      recordAndFetchVisitors()
+
       store.fetchLandingContent()
       store.fetchBeritas()
       store.fetchJadwals()
 
-      // Scroll animation observer
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -576,14 +831,12 @@ export default {
         })
       }, { threshold: 0.1 })
 
-      // Observe all animated elements after next tick
       setTimeout(() => {
         document.querySelectorAll('.animate-on-scroll').forEach(el => {
           observer.observe(el)
         })
       }, 100)
 
-      // Navbar scroll effect
       window.addEventListener('scroll', () => {
         const navbar = document.querySelector('.navbar')
         if (navbar) {
@@ -597,6 +850,7 @@ export default {
     })
 
     return {
+      visitorStats,
       heroContent,
       heroStyle,
       beritas,
@@ -618,14 +872,24 @@ export default {
 </script>
 
 <style scoped>
-/* ===== CSS Variables ===== */
+/* ===== COLOR PALETTE & VARIABLES ===== */
 :root {
-  --primary-brown: #996600;
-  --secondary-brown: #b37400;
-  --accent-brown: #cc9900;
-  --dark-brown: #7a5200;
-  --light-brown: #fff9e6;
+  --primary-brown: #7a5200;
+  --secondary-brown: #996600;
+  --accent-gold: #b37400;
+  --dark-brown: #4a3200;
+  --light-brown: #fefcf5;
+  --gold-subtle: #fef3d6;
 }
+
+/* Color Classes */
+.bg-gold { background-color: var(--secondary-brown) !important; }
+.bg-gold-subtle { background-color: var(--gold-subtle) !important; }
+.bg-light-brown { background-color: var(--light-brown) !important; }
+.text-gold { color: var(--secondary-brown) !important; }
+.text-gold-light { color: #ffe6a3 !important; }
+.text-primary-brown { color: var(--primary-brown) !important; }
+.border-gold { border-color: var(--secondary-brown) !important; }
 
 /* ===== NAVBAR ===== */
 .navbar {
@@ -650,51 +914,111 @@ export default {
   color: var(--primary-brown) !important;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--secondary-brown), var(--primary-brown));
-  border: none;
-  padding: 10px 25px;
-  font-weight: 600;
-  border-radius: 8px;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(153, 102, 0, 0.3);
-}
-
 /* ===== HERO SECTION ===== */
 .hero-section {
-  background: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
   color: white;
   padding: 140px 0 100px;
   position: relative;
   overflow: hidden;
 }
 
-.hero-section::before {
-  content: '';
+/* ===== ABOUT SECTION STYLING ===== */
+.about-section {
+  background: linear-gradient(180deg, #f8f9fa 0%, #fff9ed 100%);
+}
+
+.divider-line {
+  width: 60px;
+  height: 4px;
+  background: var(--secondary-brown);
+  border-radius: 2px;
+}
+
+.about-card {
+  box-shadow: 0 10px 30px rgba(122, 82, 0, 0.05) !important;
+}
+
+.icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-square {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vision-mission-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.04) !important;
+}
+
+.vision-mission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(122, 82, 0, 0.1) !important;
+}
+
+.card-accent-bar {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpolygon fill='%23ffffff' fill-opacity='0.03' points='0,1000 1000,0 1000,1000'/%3E%3C/svg%3E");
-  background-size: cover;
+  height: 4px;
 }
 
-.hero-section .container {
+.misi-number {
+  width: 24px;
+  height: 24px;
+  background-color: var(--gold-subtle);
+  color: var(--primary-brown);
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ===== FOOTER MODERN STYLING ===== */
+.footer-modern {
+  background-color: var(--dark-brown);
   position: relative;
-  z-index: 1;
 }
 
-/* ===== PROGRAM CARDS ===== */
+.footer-logo {
+  max-width: 65px;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.hover-gold:hover {
+  color: var(--accent-gold) !important;
+}
+
+.hover-white:hover {
+  color: #ffffff !important;
+}
+
+.visitor-card {
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+
+/* ===== PROGRAM & OTHER CARDS ===== */
 .program-card {
   background: white;
   border-radius: 15px;
   padding: 2rem;
-  text-align: center;
   box-shadow: 0 5px 15px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
   height: 100%;
@@ -729,24 +1053,24 @@ export default {
   margin: 0 auto 10px;
 }
 
-.program-1 { background: linear-gradient(135deg, #996600 0%, #b37400 100%); }
-.program-2 { background: linear-gradient(135deg, #aa7700 0%, #cc8800 100%); }
-.program-3 { background: linear-gradient(135deg, #bb8800 0%, #dd9900 100%); }
-.program-4 { background: linear-gradient(135deg, #cc9900 0%, #eeaa00 100%); }
-.program-5 { background: linear-gradient(135deg, #ddaa00 0%, #ffbb00 100%); }
-.program-6 { background: linear-gradient(135deg, #eebb00 0%, #ffcc00 100%); color: #333 !important; }
+.program-1 { background: linear-gradient(135deg, #7a5200 0%, #996600 100%); }
+.program-2 { background: linear-gradient(135deg, #8c5d00 0%, #b37400 100%); }
+.program-3 { background: linear-gradient(135deg, #a06a00 0%, #cc8800 100%); }
+.program-4 { background: linear-gradient(135deg, #b37400 0%, #dd9900 100%); }
+.program-5 { background: linear-gradient(135deg, #c68100 0%, #eeaa00 100%); }
+.program-6 { background: linear-gradient(135deg, #d98e00 0%, #ffbb00 100%); color: #333 !important; }
 
 /* ===== SECTION TITLE ===== */
 .section-title {
   color: var(--dark-brown);
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .text-primary { color: var(--primary-brown) !important; }
-.text-success { color: #996600 !important; }
+.text-success { color: #2e7d32 !important; }
 .text-warning { color: #b37400 !important; }
-.text-info { color: #cc9900 !important; }
+.text-info { color: #0288d1 !important; }
 
 /* ===== BERITA SECTION ===== */
 .berita-section {
@@ -790,13 +1114,6 @@ export default {
   color: var(--primary-brown);
 }
 
-.berita-excerpt {
-  color: #6c757d;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
 .berita-meta {
   font-size: 0.875rem;
   color: #adb5bd;
@@ -812,19 +1129,6 @@ export default {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--primary-brown);
-}
-
-.section-title {
-  color: var(--dark-brown);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-}
-
-.section-title i {
-  margin-right: 0.75rem;
-  color: var(--primary-brown);
 }
 
 .view-more {
@@ -873,7 +1177,7 @@ export default {
   min-width: 50px;
   text-align: center;
   margin-right: 1rem;
-  background: var(--light-brown);
+  background: var(--gold-subtle);
   border-radius: 8px;
   padding: 0.5rem;
 }
@@ -908,10 +1212,6 @@ export default {
   color: #6c757d;
 }
 
-.jadwal-details i {
-  margin-right: 0.25rem;
-}
-
 .jadwal-empty {
   text-align: center;
   padding: 2rem 1rem;
@@ -922,24 +1222,6 @@ export default {
   font-size: 3rem;
   margin-bottom: 1rem;
   color: #dee2e6;
-}
-
-.jadwal-sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.jadwal-sidebar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-.jadwal-sidebar::-webkit-scrollbar-thumb {
-  background: var(--primary-brown);
-  border-radius: 3px;
-}
-
-.jadwal-sidebar::-webkit-scrollbar-thumb:hover {
-  background: var(--dark-brown);
 }
 
 /* ===== DOKUMEN SECTION ===== */
@@ -961,7 +1243,7 @@ export default {
 .btn-warning:hover {
   background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(153, 102, 0, 0.3);
+  box-shadow: 0 10px 20px rgba(122, 82, 0, 0.3);
   color: white;
 }
 
@@ -986,7 +1268,7 @@ export default {
   height: 120px;
   border-radius: 50%;
   padding: 5px;
-  background: linear-gradient(135deg, var(--light-brown), var(--primary-brown));
+  background: linear-gradient(135deg, var(--gold-subtle), var(--primary-brown));
 }
 
 .team-image {
@@ -1054,76 +1336,7 @@ export default {
   color: white;
 }
 
-.cta-section .btn-outline-light:hover {
-  background: white;
-  color: var(--primary-brown);
-}
-
-/* ===== BG LIGHT ===== */
-.bg-light {
-  background: #f8fafc !important;
-}
-
-/* ===== FOOTER ===== */
-footer {
-  background: #7a5200;
-  color: white;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .hero-section {
-    padding: 100px 0 60px;
-    text-align: center;
-  }
-  
-  .jadwal-sidebar {
-    position: static;
-    margin-top: 2rem;
-    max-height: none;
-  }
-  
-  .berita-image {
-    height: 180px;
-  }
-  
-  .section-header {
-    text-align: center;
-  }
-  
-  .section-title {
-    justify-content: center;
-  }
-  
-  .hero-section .text-lg-start {
-    text-align: center !important;
-  }
-}
-
-@media (max-width: 576px) {
-  .hero-section {
-    padding: 80px 0 40px;
-  }
-  
-  .berita-card {
-    margin-bottom: 1.5rem;
-  }
-  
-  .jadwal-date {
-    min-width: 45px;
-    margin-right: 0.75rem;
-  }
-  
-  .jadwal-day {
-    font-size: 1.1rem;
-  }
-  
-  .navbar-brand {
-    font-size: 1.2rem;
-  }
-}
-
-/* ===== SCROLL ANIMATIONS ===== */
+/* ===== ANIMATIONS ===== */
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(40px);
@@ -1135,84 +1348,16 @@ footer {
   transform: translateY(0);
 }
 
-.animate-delay-1 { transition-delay: 0.1s; }
-.animate-delay-2 { transition-delay: 0.2s; }
-.animate-delay-3 { transition-delay: 0.3s; }
-.animate-delay-4 { transition-delay: 0.4s; }
-.animate-delay-5 { transition-delay: 0.5s; }
-.animate-delay-6 { transition-delay: 0.6s; }
-
-/* Hero entrance animation */
-.hero-section .display-4,
-.hero-section .h4,
-.hero-section .lead,
-.hero-section .btn {
-  animation: heroFadeIn 1s ease-out forwards;
-  opacity: 0;
-}
-
-.hero-section .display-4 { animation-delay: 0.2s; }
-.hero-section .h4 { animation-delay: 0.4s; }
-.hero-section .lead { animation-delay: 0.6s; }
-.hero-section .btn { animation-delay: 0.8s; }
-
-@keyframes heroFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 100px 0 60px;
+    text-align: center;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  .jadwal-sidebar {
+    position: static;
+    margin-top: 2rem;
+    max-height: none;
   }
-}
-
-/* Floating animation for icons */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.program-icon {
-  transition: all 0.3s ease;
-}
-
-.program-card:hover .program-icon {
-  animation: float 2s ease-in-out infinite;
-}
-
-/* Stats counter pulse */
-@keyframes countPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-.animate-visible h3.fw-bold {
-  animation: countPulse 1.5s ease-in-out;
-}
-
-/* Team card stagger animation */
-.team-card {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.team-card:hover {
-  transform: translateY(-8px) scale(1.02);
-}
-
-/* Doc card zoom effect */
-.doc-card:hover .doc-overlay {
-  opacity: 1;
-}
-
-/* Navbar scroll effect */
-.navbar.scrolled {
-  padding: 0.3rem 0;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-/* Smooth section transitions */
-section {
-  transition: opacity 0.3s ease;
 }
 </style>

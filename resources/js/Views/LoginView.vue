@@ -143,13 +143,13 @@ export default {
     const showPassword = ref(false)
 
     // Redirect URL dari query params atau sessionStorage
-    const redirectPath = ref('/admin/dashboard')
+    const redirectPath = ref('/pengelola/dashboard')
 
     onMounted(() => {
       // Cek apakah user sudah login
       const token = localStorage.getItem('token')
       if (token) {
-        router.push('/admin/dashboard')
+        router.push('/pengelola/dashboard')
         return
       }
 
