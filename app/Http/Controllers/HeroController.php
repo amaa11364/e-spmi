@@ -46,7 +46,6 @@ class HeroController extends Controller
             'description' => 'nullable|string',
             'cta_text' => 'required|string|max:100',
             'cta_link' => 'required|string|max:255',
-            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'is_active' => 'boolean'
         ]);
 
@@ -63,20 +62,7 @@ class HeroController extends Controller
             $hero = new HeroContent();
         }
 
-        $data = $request->except(['background_image']);
-
-        // Handle image upload
-        if ($request->hasFile('background_image')) {
-            // Delete old image if exists
-            if ($hero->background_image && Storage::disk('public')->exists($hero->background_image)) {
-                Storage::disk('public')->delete($hero->background_image);
-            }
-            
-            $image = $request->file('background_image');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('hero-images', $imageName, 'public');
-            $data['background_image'] = $path;
-        }
+        $data = $request->only(['title', 'subtitle', 'description', 'cta_text', 'cta_link', 'is_active']);
 
         $hero->fill($data);
         $hero->save();

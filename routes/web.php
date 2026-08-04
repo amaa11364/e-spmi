@@ -79,6 +79,9 @@ Route::prefix('api')->group(function () {
             
             // Users
             Route::get('/users', [AuthController::class, 'getUsers']);
+            Route::post('/users', [AuthController::class, 'storeUser']);
+            Route::put('/users/{id}', [AuthController::class, 'updateUser']);
+            Route::delete('/users/{id}', [AuthController::class, 'destroyUser']);
             
             // Dokumen Management
             Route::get('/dokumen/folders', [DokumenController::class, 'index']);

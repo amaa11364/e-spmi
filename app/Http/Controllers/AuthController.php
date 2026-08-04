@@ -20,7 +20,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'is_admin' => 'boolean'
+            'role' => 'in:admin,verifikator,user'
         ]);
 
         if ($validator->fails()) {
@@ -30,11 +30,14 @@ class AuthController extends Controller
             ], 422);
         }
 
+        $role = $request->role ?? 'user';
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'is_admin' => $request->is_admin ?? false
+            'role' => $role,
+            'is_admin' => $role === 'admin'
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -158,11 +161,146 @@ class AuthController extends Controller
             ], 403);
         }
 
-        $users = User::paginate(10);
+        $query = User::query();
+
+        // Search filter
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Role filter
+        if ($request->has('role') && $request->role) {
+            $query->where('role', $request->role);
+        }
+
+        $users = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return response()->json([
             'success' => true,
             'data' => $users
+        ]);
+    }
+
+    /**
+     * Store a new user (admin only)
+     */
+    public function storeUser(Request $request)
+    {
+        if (!$request->user()->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:admin,verifikator,user'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'is_admin' => $request->role === 'admin'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengguna berhasil ditambahkan',
+            'data' => $user
+        ], 201);
+    }
+
+    /**
+     * Update a user (admin only)
+     */
+    public function updateUser(Request $request, $id)
+    {
+        if (!$request->user()->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $user = User::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:8',
+            'role' => 'required|in:admin,verifikator,user'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'is_admin' => $request->role === 'admin'
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengguna berhasil diupdate',
+            'data' => $user
+        ]);
+    }
+
+    /**
+     * Delete a user (admin only)
+     */
+    public function destroyUser(Request $request, $id)
+    {
+        if (!$request->user()->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        // Prevent self-deletion
+        if ($request->user()->id == $id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak dapat menghapus akun sendiri'
+            ], 400);
+        }
+
+        $user = User::findOrFail($id);
+        $user->tokens()->delete();
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengguna berhasil dihapus'
         ]);
     }
 }

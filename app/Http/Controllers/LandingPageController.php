@@ -92,12 +92,14 @@ class LandingPageController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120'
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/landing');
-            $url = Storage::url($path);
+            $image = $request->file('image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('landing', $imageName, 'public');
+            $url = '/storage/' . $path;
 
             return response()->json([
                 'success' => true,

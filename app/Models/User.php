@@ -15,7 +15,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin'
+        'is_admin',
+        'role'
     ];
 
     protected $hidden = [
@@ -27,4 +28,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
     ];
+
+    /**
+     * Check if user is verifikator
+     */
+    public function getIsVerifikatorAttribute()
+    {
+        return $this->role === 'verifikator';
+    }
+
+    /**
+     * Append computed attributes
+     */
+    protected $appends = ['is_verifikator'];
 }
