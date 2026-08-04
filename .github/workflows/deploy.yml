@@ -20,6 +20,6 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           port: 4096
           local_path: './*'
-          remote_path: '/home/ikipsiliwangi-e-spmi/htdocs/e-spmi.ikipsiliwangi.ac.id/public/'
+          remote_path: '/home/ikipsiliwangi-e-spmi/htdocs/e-spmi.ikipsiliwangi.ac.id/'
           sftp_only: true    # <--- Tambahkan ini agar tidak minta ssh_private_key
           ssh_private_key: '' # <--- Kosongkan jika hanya pakai password
