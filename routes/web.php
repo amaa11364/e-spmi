@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\UnitKerjaController;
+use App\Http\Controllers\IkuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,18 @@ Route::prefix('api')->group(function () {
         
         // Admin only routes
         Route::middleware('admin')->group(function () {
+            // Unit Kerja
+            Route::get('/unit-kerjas', [UnitKerjaController::class, 'index']);
+            Route::post('/unit-kerjas', [UnitKerjaController::class, 'store']);
+            Route::put('/unit-kerjas/{id}', [UnitKerjaController::class, 'update']);
+            Route::delete('/unit-kerjas/{id}', [UnitKerjaController::class, 'destroy']);
+
+            // IKU
+            Route::get('/ikus', [IkuController::class, 'index']);
+            Route::post('/ikus', [IkuController::class, 'store']);
+            Route::put('/ikus/{id}', [IkuController::class, 'update']);
+            Route::delete('/ikus/{id}', [IkuController::class, 'destroy']);
+
             // Hero
             Route::put('/hero', [HeroController::class, 'update']);
             Route::post('/hero/image', [HeroController::class, 'uploadImage']);

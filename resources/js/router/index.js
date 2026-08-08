@@ -66,21 +66,15 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/pengelola/settings/iku',
-    name: 'pengelola.settings.iku',
-    component: () => import('@/Views/Pengelola/SettingsIKU.vue'),
+    path: '/pengelola/unit-kerja',
+    name: 'pengelola.unit-kerja',
+    component: () => import('@/Views/Pengelola/UnitKerjaIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/pengelola/settings/iku/create',
-    name: 'pengelola.settings.iku.create',
-    component: () => import('@/Views/Pengelola/SettingsIKUCreate.vue'),
-    meta: { requiresAuth: true, requiresAdmin: true }
-  },
-  {
-    path: '/pengelola/settings/unit-kerja/create',
-    name: 'pengelola.settings.unit-kerja.create',
-    component: () => import('@/Views/Pengelola/UnitKerjaCreate.vue'),
+    path: '/pengelola/iku',
+    name: 'pengelola.iku',
+    component: () => import('@/Views/Pengelola/IkuIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
