@@ -98,7 +98,9 @@ Route::prefix('api')->group(function () {
             Route::delete('/users/{id}', [AuthController::class, 'destroyUser']);
             
             // Dokumen Management
+            Route::get('/dokumen/search', [DokumenController::class, 'globalSearch']);
             Route::get('/dokumen/folders', [DokumenController::class, 'index']);
+            Route::get('/dokumen/folders/{id}', [DokumenController::class, 'showFolder']);
             Route::post('/dokumen/folders', [DokumenController::class, 'storeFolder']);
             Route::put('/dokumen/folders/{id}', [DokumenController::class, 'updateFolder']);
             Route::delete('/dokumen/folders/{id}', [DokumenController::class, 'destroyFolder']);

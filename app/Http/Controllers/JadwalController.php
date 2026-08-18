@@ -63,6 +63,7 @@ class JadwalController extends Controller
         $now = Carbon::now();
         
         $jadwals = Jadwal::where('tanggal', '>=', $now->toDateString())
+                         ->where('is_active', true)
                          ->orderBy('tanggal', 'asc')
                          ->orderBy('waktu_mulai', 'asc')
                          ->limit(5)
@@ -230,6 +231,7 @@ class JadwalController extends Controller
                 $request->start_date, 
                 $request->end_date
             ])
+            ->where('is_active', true)
             ->orderBy('tanggal', 'asc')
             ->orderBy('waktu_mulai', 'asc')
             ->get();

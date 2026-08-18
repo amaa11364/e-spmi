@@ -237,7 +237,7 @@
               </div>
               
               <div v-if="jadwals.length > 0" class="jadwal-list">
-                <div v-for="jadwal in jadwals" :key="jadwal.id" class="jadwal-item">
+                <div v-for="jadwal in jadwals" :key="jadwal.id" class="jadwal-item" @click="openJadwalModal(jadwal)">
                   <div class="jadwal-date">
                     <div class="jadwal-day">{{ getDay(jadwal.tanggal) }}</div>
                     <div class="jadwal-month">{{ getShortMonth(jadwal.tanggal) }}</div>
@@ -575,6 +575,65 @@
       </section>
     </main>
 
+    <!-- Modal Detail Jadwal -->
+    <div v-if="showJadwalModal" class="modal-backdrop fade show" style="background-color: rgba(0,0,0,0.5);"></div>
+    <div v-if="showJadwalModal" class="modal fade show d-block" tabindex="-1" role="dialog" @click.self="closeJadwalModal">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+          <div class="modal-header bg-light border-bottom-0 pb-3 pt-4 px-4 rounded-top-4">
+            <h5 class="modal-title fw-bold text-dark">Detail Kegiatan</h5>
+            <button type="button" class="btn-close" @click="closeJadwalModal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body px-4 py-4" v-if="selectedJadwal">
+            <h4 class="fw-bold mb-3 text-primary-brown">{{ selectedJadwal.kegiatan }}</h4>
+            <div class="d-flex flex-column gap-3">
+              <div class="d-flex align-items-start">
+                <i class="fas fa-calendar-alt text-gold mt-1 me-3" style="width: 20px;"></i>
+                <div>
+                  <div class="small text-muted mb-1">Tanggal</div>
+                  <div class="fw-medium">{{ formatDate(selectedJadwal.tanggal) }}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-start">
+                <i class="fas fa-clock text-gold mt-1 me-3" style="width: 20px;"></i>
+                <div>
+                  <div class="small text-muted mb-1">Waktu</div>
+                  <div class="fw-medium">
+                    {{ formatTime(selectedJadwal.waktu_mulai) || '-' }} 
+                    <span v-if="selectedJadwal.waktu_selesai"> - {{ formatTime(selectedJadwal.waktu_selesai) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex align-items-start">
+                <i class="fas fa-map-marker-alt text-gold mt-1 me-3" style="width: 20px;"></i>
+                <div>
+                  <div class="small text-muted mb-1">Tempat</div>
+                  <div class="fw-medium">{{ selectedJadwal.tempat || 'Tidak ditentukan' }}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-start" v-if="selectedJadwal.penyelenggara">
+                <i class="fas fa-users text-gold mt-1 me-3" style="width: 20px;"></i>
+                <div>
+                  <div class="small text-muted mb-1">Penyelenggara</div>
+                  <div class="fw-medium">{{ selectedJadwal.penyelenggara }}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-start mt-2 pt-3 border-top" v-if="selectedJadwal.deskripsi">
+                <i class="fas fa-align-left text-gold mt-1 me-3" style="width: 20px;"></i>
+                <div>
+                  <div class="small text-muted mb-1">Deskripsi</div>
+                  <div class="text-secondary" style="white-space: pre-line;">{{ selectedJadwal.deskripsi }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+            <button type="button" class="btn btn-primary" @click="closeJadwalModal" style="background-color: var(--primary-brown); border-color: var(--primary-brown);">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer Kustom Modern -->
     <footer class="footer-modern text-white">
       <div class="footer-top py-5">
@@ -676,6 +735,24 @@ export default {
   name: 'LandingPage',
   setup() {
     const store = useLandingStore()
+
+    // State Reactive untuk Modal Jadwal
+    const showJadwalModal = ref(false)
+    const selectedJadwal = ref(null)
+
+    const openJadwalModal = (jadwal) => {
+      selectedJadwal.value = jadwal
+      showJadwalModal.value = true
+      document.body.classList.add('modal-open')
+    }
+
+    const closeJadwalModal = () => {
+      showJadwalModal.value = false
+      setTimeout(() => {
+        selectedJadwal.value = null
+      }, 300) // wait for animation
+      document.body.classList.remove('modal-open')
+    }
 
     // State Reactive untuk Statistik Pengunjung
     const visitorStats = ref({
@@ -850,6 +927,10 @@ export default {
     })
 
     return {
+      showJadwalModal,
+      selectedJadwal,
+      openJadwalModal,
+      closeJadwalModal,
       visitorStats,
       heroContent,
       heroStyle,
@@ -1171,6 +1252,8 @@ export default {
 .jadwal-item:hover {
   background: #f8f9fa;
   border-color: var(--primary-brown);
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 .jadwal-date {

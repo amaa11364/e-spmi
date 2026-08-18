@@ -1,0 +1,513 @@
+{
+  "metadata": {
+    "judul": "Dokumen Akreditasi IKIP Siliwangi",
+    "deskripsi": "Dokumen AIPT Institut Keguruan dan Ilmu Pendidikan Siliwangi untuk keperluan migrasi ke sistem SPMI",
+    "sumber": "https://ikipsiliwangi.ac.id/kelembagaan/dokumen-akreditasi/",
+    "tanggal_backup": "2026-07-20",
+    "jumlah_dokumen": 200
+  },
+  "kriteria": [
+    {
+      "kode": "C1",
+      "nama": "Visi, Misi, Tujuan, dan Strategi",
+      "deskripsi": "Dokumen visi, misi, tujuan, dan strategi institusi berupa rumusan, sosialisasi dan implementasi untuk mencapai tujuan pendidikan tinggi",
+      "sub_kriteria": [
+        {
+          "kode": "C.1.1",
+          "nama": "Latar Belakang",
+          "dokumen": [
+            {
+              "judul": "Statuta IKIP Siliwangi",
+              "versi": [
+                {"tahun": "2017", "file": "Statuta-IKIP-Siliwangi-Watermark.pdf", "sumber": "old-lpmi"},
+                {"tahun": "2022", "file": "Statuta-IKIP-Siliwangi-2022-revisi.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {
+              "judul": "Rencana dan Strategi (Renstra) STKIP Siliwangi",
+              "versi": [
+                {"tahun": "2014-2019", "file": "Renstra.pdf", "sumber": "old-lpmi"}
+              ]
+            },
+            {
+              "judul": "Rencana dan Strategi (Renstra) IKIP Siliwangi",
+              "versi": [
+                {"tahun": "2017-2022", "file": "Renstra-IKIP-Siliwangi-30-Januari-2018.pdf", "sumber": "old-lpmi"},
+                {"tahun": "2022-2025", "file": "Renstra-IKIP-Siliwangi-2022-2025-rev1.pdf", "sumber": "2024-08"}
+              ]
+            }
+          ]
+        },
+        {
+          "kode": "C.1.2",
+          "nama": "Kebijakan",
+          "dokumen": [
+            {
+              "judul": "Kebijakan Mutu",
+              "versi": [
+                {"tahun": "2018", "file": "Dokumen-Kebijakan-Mutu-2018-untuk-di-print.pdf", "sumber": "old-lpmi"},
+                {"tahun": "2022", "file": "Dokumen-LPMI-Kebijakan-Mutu-2022.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {"judul": "Standar Operasional Prosedur (SOP) Visi dan Misi IKIP Siliwangi", "file": "Standar-Operasional-Prosedur-SOP-Visi-dan-Misi-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Standar Visi, Misi, Tujuan dan Strategi", "file": "Standar-Visi-Misi-Tujuan-dan-Strategi.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.1.3",
+          "nama": "Strategi Pencapaian Visi Misi Tujuan dan Sasaran (VMTS)",
+          "dokumen": [
+            {"judul": "Rencana Induk Pengembangan (RIP) IKIP Siliwangi 2018-2037", "file": "Rencana-Induk-Pengembangan-RIP-IKIP-Siliwangi-2018-2037.pdf", "sumber": "2024-08"},
+            {"judul": "SK Penetapan VTMS IKIP Siliwangi", "file": "SK-Penetapan-VTMS-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Rancangan Program Kerja dan Anggaran IKIP Siliwangi Tahun 2023", "file": "Rancangan-Program-Kerja-dan-Anggaran-IKIP-Siliwangi-Tahun-2023.pdf", "sumber": "2024-08"},
+            {"judul": "Kebijakan Perumusan Evaluasi Sosialisasi VTMS", "file": "Kebijakan-Perumusan-Evaluasi-Sosialisasi-VTMS.pdf", "sumber": "2024-08"},
+            {"judul": "SK Rektor tentang Kebijakan Perumusan Evaluasi Sosialisasi VTMS", "file": "SK-Rektor-tentang-Kebijakan-Perumusan-Evaluasi-Sosialisasi-VTMS-1.pdf", "sumber": "2024-08"},
+            {"judul": "SK Rektor tentang Pelatihan Keterampilan Bahasa Inggris dan ICT", "file": "SK-Rektor-tentang-Pelatihan-Keterampilan-Bahasa-Inggris-dan-ICT.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.1.4",
+          "nama": "Indikator Kinerja Utama",
+          "dokumen": [
+            {"judul": "Standar Mutu SPMI 2022", "file": "Dokumen-Standar-Mutu-SPMI-2022-rev1.pdf", "sumber": "2024-08"},
+            {
+              "judul": "Manual Mutu SPMI",
+              "versi": [
+                {"tahun": "2018", "file": "Dokumen-LPMI-Manual-Mutu-SPMI-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "Dokumen-LPMI-Manual-Mutu-SPMI-2022.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {"judul": "Formulir Mutu 2022", "file": "Dokumen-LPMI-Formulir-Mutu-2022.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.1.5",
+          "nama": "Renop",
+          "dokumen": [
+            {
+              "judul": "Rencana Operasional (Renop) IKIP Siliwangi",
+              "versi": [
+                {"tahun": "2017", "file": "Renop-IKIP-Siliwangi-30-Januari-2018.pdf", "sumber": "old-lpmi"},
+                {"tahun": "2022", "file": "Rencana-Operasional-IKIP-SIliwangi-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Rencana-Operasional-IKIP-SIliwangi-2023.pdf", "sumber": "2024-08"},
+                {"tahun": "2024", "file": "Rencana-Operasional-IKIP-SIliwangi-2024.pdf", "sumber": "2024-08"},
+                {"tahun": "2025", "file": "Rencana-Operasional-IKIP-SIliwangi-2025.pdf", "sumber": "2024-08"}
+              ]
+            }
+          ]
+        },
+        {
+          "kode": "C.1.6",
+          "nama": "Evaluasi Capaian Kinerja",
+          "dokumen": []
+        },
+        {
+          "kode": "C.1.7",
+          "nama": "Kesimpulan Hasil Evaluasi Ketercapaian VMTS dan Tindak Lanjut",
+          "dokumen": []
+        }
+      ]
+    },
+    {
+      "kode": "C2",
+      "nama": "Tata Pamong, Tata Kelola, dan Kerjasama",
+      "sub_kriteria": [
+        {
+          "kode": "C.2.1",
+          "nama": "Struktur Organisasi",
+          "dokumen": [
+            {"judul": "SK Pendirian Lembaga P2M STKIP Siliwangi", "file": "SK-Pendirian-Lembaga-P2M-STKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Struktur Organisasi dan Tata Kerja (SOTK) IKIP Siliwangi 2022", "file": "Struktur-Organisasi-dan-Tata-Kerja-SOTK-IKIP-Siliwangi-2022.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.2.2",
+          "nama": "Tata Kelola",
+          "dokumen": [
+            {"judul": "Permen No. 3 Tahun 2020", "file": "Permen-No.-3-Tahun-2020.pdf", "sumber": "2024-08"},
+            {"judul": "Permen No. 14 Tahun 2024", "file": "Permen-No.-14-Tahun-2024.pdf", "sumber": "2024-08"},
+            {"judul": "Permendikbud No. 14 Tahun 2014", "file": "Permendikbud-No.-14-Tahun-2014.pdf", "sumber": "2024-08"},
+            {"judul": "Permendikbud No. 50 Tahun 2014 SPMPT", "file": "Permendikbud-No.-50-Tahun-2014-SPMPT.pdf", "sumber": "2024-08"},
+            {"judul": "Permendikbudristek No. 53 Tahun 2023", "file": "Permendikbudristek-No.-53-Tahun-2023.pdf", "sumber": "2024-08"},
+            {"judul": "Permenristekdikti No. 62 Tahun 2016", "file": "Permenristekdikti-No.-62-Tahun-2016.pdf", "sumber": "2024-08"},
+            {"judul": "Permenristekdikti No. 93 Tahun 2016", "file": "Permenristekdikti-No.-93-Tahun-2016.pdf", "sumber": "2024-08"},
+            {"judul": "PP No. 4 Tahun 2014", "file": "PP-No.-4-Tahun-2014.pdf", "sumber": "2024-08"},
+            {"judul": "Rencana Induk Riset Nasional 2017-2045", "file": "Rencana-Induk-Riset-Nasional-2017-2045-Edisi-28-Februari-2017-2.pdf", "sumber": "2024-08"},
+            {"judul": "AIPT STKIP Siliwangi Bandung 2015", "file": "AIPT-STKIP-Siliwangi-Bandung-2015.pdf", "sumber": "2024-08"},
+            {"judul": "Pedoman Kepegawaian 2022-2025", "file": "Pedoman-Kepegawaian-2022-2025.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.2.3",
+          "nama": "Kepemimpinan",
+          "dokumen": []
+        },
+        {
+          "kode": "C.2.4",
+          "nama": "Kerjasama",
+          "dokumen": [
+            {"judul": "Pedoman Humas dan Kerja Sama Edisi 3 Tahun 2022", "file": "Pedoman-Humas-dan-Kerja-Sama-Edisi-3-Tahun-2022-1.pdf", "sumber": "2024-08"},
+            {"judul": "SK Pendirian UPT Humas STKIP Siliwangi", "file": "SK-Pendirian-UPT-Humas-STKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {
+              "judul": "SK Penetapan Panduan Humas dan Kerjasama",
+              "versi": [
+                {"tahun": "2017", "file": "SK-Penetapan-Panduan-Humas-dan-Kerjasama-2017.pdf", "sumber": "2024-08"},
+                {"tahun": "2021", "file": "SK-Penetapan-Panduan-Humas-dan-Kerjasama-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "SK-Penetapan-Pedoman-Humas-dan-Kerjasama-2022.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {"judul": "SK Penetapan SOP Kerja Sama UPT Humas dan Kerjasama 2022", "file": "SK-Penetapan-SOP-Kerja-Sama-UPT-Humas-dan-Kerjasama-2022.pdf", "sumber": "2024-08"},
+            {"judul": "SK Pengangkatan UPT Humas 2021", "file": "SK-Pengangkatan-UPT-Humas-2021.pdf", "sumber": "2024-08"},
+            {"judul": "SOP LPMI Kerjasama", "file": "SOP-LPMI-Kerjasama.pdf", "sumber": "2024-08"},
+            {"judul": "SOP LPMI Kerjasama Revisi", "file": "SOP-LPMI-Kerjasama-Revisi.pdf", "sumber": "2024-08"},
+            {"judul": "SOP LPMI Pameran Pendidikan", "file": "SOP-LPMI-Pameran-Pendidikan.pdf", "sumber": "2024-08"},
+            {"judul": "SOP LPMI Promosi Institusi", "file": "SOP-LPMI-Promosi-Institusi.pdf", "sumber": "2024-08"},
+            {"judul": "SOP LPMI Publikasi Media Cetak", "file": "SOP-LPMI-Publikasi-Media-Cetak.pdf", "sumber": "2024-08"},
+            {"judul": "SOP LPMI Publikasi Media Elektronik", "file": "SOP-LPMI-Publikasi-Media-ELektronik.pdf", "sumber": "2024-08"},
+            {"judul": "Standard Operasional Prosedur (SOP) Kerjasama", "file": "Standard-Operasional-Prosedur-SOP-Kerjasama.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.2.5",
+          "nama": "Indikator Kinerja Tambahan",
+          "dokumen": [
+            {"judul": "Kalender Akademik 2024-2025", "file": "Kalender-Akademik-2024-2025.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.2.6",
+          "nama": "Evaluasi Capaian Kinerja",
+          "dokumen": [
+            {"judul": "SOP Lembaga Penelitian dan Pengabdian kepada Masyarakat 2019", "file": "SOP-Lembaga-Penelitian-dan-Pengabdian-kepada-Masyarakat-2019.pdf", "sumber": "2024-08"},
+            {"judul": "Instrumen AMI PS Sarjana 2023", "file": "Instrumen-AMI-PS-Sarjana-2023.pdf", "sumber": "2024-08"},
+            {"judul": "Instrumen AMI UPPS Fakultas 2023", "file": "Instrumen-AMI-UPPS-Fakultas-2023.pdf", "sumber": "2024-08"}
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C3",
+      "nama": "Mahasiswa",
+      "sub_kriteria": [
+        {
+          "kode": "C.3.1",
+          "nama": "Latar Belakang",
+          "dokumen": [
+            {
+              "judul": "Pedoman Kemahasiswaan",
+              "versi": [
+                {"tahun": "2022", "file": "Pedoman-Kemahasiswaan-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2022-2025", "file": "Pedoman-Kemahasiswaan-2022-2025.pdf", "sumber": "2024-08"}
+              ]
+            }
+          ]
+        },
+        {
+          "kode": "C.3.2",
+          "nama": "Kebijakan",
+          "dokumen": [
+            {"judul": "UU Nomor 20 Tahun 2003 tentang Sistem Pendidikan Nasional", "file": "UU-Nomor-20-Tahun-2003-tentang-Sistem-Pendidikan-Nasional.pdf", "sumber": "2024-08"},
+            {"judul": "UU Nomor 12 Tahun 2012 tentang Pendidikan Tinggi", "file": "UU-Nomor-12-Tahun-2012-tentang-Pendidikan-Tinggi.pdf", "sumber": "2024-08"},
+            {"judul": "UU atau PP Nomor 4 Tahun 2014 tentang Penyelenggaraan dan Pengelolaan Perguruan Tinggi", "file": "UU-atau-PP-Nomor-4-Tahun-2014-tentang-Penyelenggaraan-dan-Pengelolaan-Perguruan-Tinggi.pdf", "sumber": "2024-08"},
+            {"judul": "Permenristekdikti Nomor 44 Tahun 2015 tentang SNPT", "file": "Permenristekdikti-Nomor-44-Tahun-2015-tentang-SNPT.pdf", "sumber": "2024-08"},
+            {"judul": "Permendikbud RI Nomor 96 Tahun 2014 tentang Penyelenggaraan Bantuan Biaya Pendidikan Bidikmisi", "file": "Permendikbud-RI-Nomor-96-Tahun-2014-tentang-Penyelenggaraan-Bantuan-Biaya-Pendidikan-Bidikmisi.pdf", "sumber": "2024-08"},
+            {
+              "judul": "SK Daya Tampung Mahasiswa",
+              "versi": [
+                {"tahun": "2019", "file": "SK-Daya-Tampung-Mahasiswa-Tahun-2019.pdf", "sumber": "2024-08"},
+                {"tahun": "2020", "file": "SK-Daya-Tampung-Mahasiswa-Tahun-2020.pdf", "sumber": "2024-08"},
+                {"tahun": "2021", "file": "SK-Daya-Tampung-Mahasiswa-Tahun-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "SK-Daya-Tampung-Mahasiswa-Tahun-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "SK-Daya-Tampung-Mahasiswa-Tahun-2023pdf.pdf", "sumber": "2024-08"}
+              ]
+            }
+          ]
+        },
+        {
+          "kode": "C.3.3",
+          "nama": "Standar Perguruan Tinggi dan Strategi Pencapaian Standar",
+          "dokumen": [
+            {"judul": "SOP Bidang Kemahasiswaan 2022", "file": "SOP-Bidang-Kemahasiswaan-2022.pdf", "sumber": "2024-08"},
+            {"judul": "SK Layanan Bimbingan dan Konseling 2021-2024", "file": "SK-Layanan-Bimbingan-dan-Konseling-2021-2024.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.3.7",
+          "nama": "Penjaminan Mutu Mahasiswa",
+          "dokumen": [
+            {"judul": "SK Unit Pengelola Layanan CDC 2021-2024", "file": "SK-Unit-Pengelola-Layanan-CDC-2021-2024.pdf", "sumber": "2024-08"}
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C4",
+      "nama": "Sumber Daya Manusia",
+      "file_utama": "C.4-Sumber-Daya.pdf",
+      "sub_kriteria": [
+        {
+          "kode": "C.4.2",
+          "nama": "Kebijakan",
+          "dokumen": [
+            {"judul": "Pedoman Pengelolaan Keuangan IKIP Siliwangi (Revisi 31 Maret 2023)", "file": "Pedoman-Pengelolaan-Keuangan-IKIP-Siliwangi-Revisi-31-Maret-2023.pdf", "sumber": "2024-08"},
+            {"judul": "Pedoman Kepegawaian", "file": "Pedoman-Kepegawaian.pdf", "sumber": "2024-08"},
+            {"judul": "SOP Bagian Kepegawaian IKIP Siliwangi", "file": "SOP-Bagian-Kepegawaian-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Struktur Organisasi dan Tata Kerja (SOTK) IKIP Siliwangi", "file": "Struktur-Organisasi-dan-Tata-Kerja-SOTK-IKIP-Siliwangi.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.4.4",
+          "nama": "Indikator Kinerja Utama",
+          "dokumen": [
+            {"judul": "Data Dosen Studi Lanjut", "file": "Data-Dosen-Studi-Lanjut.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.4.6",
+          "nama": "Evaluasi Capaian Kinerja",
+          "dokumen": [
+            {"judul": "Data Dosen Tersertifikasi Dosen", "file": "Data-Dosen-Tersertifikasi-Dosen.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.4.7",
+          "nama": "Penjaminan Mutu SDM",
+          "dokumen": [
+            {
+              "judul": "Data Sertifikat Pendidik",
+              "versi": [
+                {"unit": "Fakultas Pendidikan Bahasa", "file": "Data-Sertifikat-Pendidik-Fakultas-Pendidikan-Bahasa.pdf", "sumber": "2024-08"},
+                {"unit": "Fakultas Ilmu Pendidikan", "file": "Data-Sertifikat-Pendidik-Fakultas-Ilmu-Pendidikan.pdf", "sumber": "2024-08"},
+                {"unit": "Fakultas Pendidikan Matematika dan Sains", "file": "Data-Sertifikat-Pendidik-Fakultas-Pendidikan-Matematika-dan-Sains.pdf", "sumber": "2024-08"},
+                {"unit": "Pascasarjana", "file": "Data-Sertifikat-Pendidik-Pascasarjana.pdf", "sumber": "2024-08"},
+                {"unit": "PPG", "file": "Data-Sertifikat-Pendidik-PPG.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {"judul": "Data SK JAD Lektor Kepala", "file": "Data-SK-JAD-Lektor-Kepala.pdf", "sumber": "2024-08"},
+            {"judul": "Data Dosen JAD Asisten Ahli", "file": "Data-Dosen-JAD-Asisten-Ahli.pdf", "sumber": "2024-08"},
+            {"judul": "Data SK JAD Guru Besar", "file": "Data-SK-JAD-Guru-Besar.pdf", "sumber": "2024-08"},
+            {"judul": "Kegiatan Kuliah Dosen Tamu", "file": "Kegiatan-Kuliah-Dosen-Tamu_Prof.Zulkardi.pdf", "sumber": "2024-08"},
+            {"judul": "MoU IKIP - TUn Husein Onn Malaysia", "file": "MoU-IKIP-TUn-Husein-Onn-Malaysia.pdf", "sumber": "2024-08"},
+            {"judul": "Kegiatan Keterampilan Bahasa Inggris", "file": "Kegiatan-Keterampilan-Bahasa-Inggris.pdf", "sumber": "2024-08"},
+            {"judul": "Kegiatan Keterampilan IT IKIP Siliwangi", "file": "Kegiatan-Ketermpilan-IT-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Sertifikasi Kompetensi BNSP", "file": "Sertitifikasi-Kompetensi-BNSP.pdf", "sumber": "2024-08"}
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C5",
+      "nama": "Keuangan, Sarana, dan Prasarana",
+      "sub_kriteria": [
+        {
+          "kode": "C.5.1",
+          "nama": "Keuangan",
+          "dokumen": [
+            {"judul": "Keputusan Menteri Keuangan No. 227/KM.6/2016", "file": "Keputusan-Menteri-Keuangan-No.-227KM6-2016.pdf", "sumber": "2024-08"},
+            {"judul": "PMK No. 87 Tahun 2021 Peraturan Menteri Keuangan", "file": "PMK-No.-87-Tahun-2021-Peraturan-Menteri-Keuangan.pdf", "sumber": "2024-08"},
+            {"judul": "Standard Operating Procedure (SOP) Keuangan", "file": "Standard-Operating-Procedure-SOP-Keuangan.pdf", "sumber": "2024-08"},
+            {"judul": "Renstra Bidang Keuangan IKIP Siliwangi", "file": "Renstra-Bidang-Keuangan-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "SM-08 Standar Pembiayaan Pembelajaran", "file": "SM-08-Standar-Pembiayaan-Pembelajaran.pdf", "sumber": "2024-08"},
+            {"judul": "SM-32 Standar Koperasi", "file": "SM-32-Standar-Koperasi.pdf", "sumber": "2024-08"},
+            {"judul": "SM-33 Standar BPPU", "file": "SM-33-Standar-BPPU.pdf", "sumber": "2024-08"},
+            {
+              "judul": "RAB Tahun",
+              "versi": [
+                {"tahun": "2021", "file": "RAB-TAHUN-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "RAB-TAHUN-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "RAB-TAHUN-2023.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {
+              "judul": "Laporan Keuangan IKIP Siliwangi",
+              "versi": [
+                {"tahun": "2021", "file": "Laporan-Keuangan-IKIP-Siliwangi-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "Laporan-Keuangan-IKIP-Siliwangi-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Laporan-Keuangan-IKIP-Siliwangi-2023.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {
+              "judul": "Laporan Hasil POA",
+              "versi": [
+                {"tahun": "2021", "file": "Laporan-Hasil-POA-Irjen-Tahun-2021-YKJ.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "Laporan-Hasil-POA-Tahun-2022-YKJ.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Laporan-Hasil-POA-Tahun-2023-YKJ.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {
+              "judul": "Laporan Hasil Survey Keuangan",
+              "versi": [
+                {"tahun": "2021", "file": "Laporan-Hasil-Survey-Keuangan-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "Laporan-Hasil-Survey-Keuangan-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Laporan-Hasil-Survey-Keuangan-2023.pdf", "sumber": "2024-08"}
+              ]
+            }
+          ]
+        },
+        {
+          "kode": "C.5.2",
+          "nama": "Sarana dan Prasarana",
+          "dokumen": [
+            {"judul": "Pedoman Pengelolaan Aset dan Sarana dan Prasarana", "file": "Pedoman-Pengelolaan-Aset-dan-Sarana-dan-Prasarana.pdf", "sumber": "2024-08"},
+            {"judul": "Standar Operasional Prosedur (SOP) Sarana Prasarana", "file": "Standar-Operasional-Prosedur-SOP-Sarana-Prasarana.pdf", "sumber": "2024-08"},
+            {"judul": "Renstra Sarana Prasarana IKIP", "file": "Renstra-Sarana-Prasarana-IKIP.pdf", "sumber": "2024-08"},
+            {"judul": "Sertifikat Tanah Milik IKIP Siliwangi", "file": "Sertifikat-Tanah-Milik-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Salinan Akta Pelepasan Hak No. 02 Tgl 04 Oktober 2023", "file": "Salinan-Akta-Pelepasan-Hak-No.-02-Tgl-04-Oktober-2023.pdf", "sumber": "2024-08"},
+            {"judul": "Perjanjian Pinjam Pakai Lahan Kampus 1 Th. 2021", "file": "Perjanjian-Pinjam-Pakai-Lahan-Kampus-1-Th.-2021.pdf", "sumber": "2024-08"},
+            {
+              "judul": "Laporan Monev Sarana dan Prasarana",
+              "versi": [
+                {"tahun": "2021", "file": "Laporan-Monev-Sarana-dan-Prasarana-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "Laporan-Monev-Sarana-dan-Prasarana-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Laporan-Monev-Sarana-dan-Prasarana-2023.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {
+              "judul": "Laporan Survei Sarana Prasarana IKIP",
+              "versi": [
+                {"tahun": "2021", "file": "Laporan-Survei-Sarana-Prasarana-IKIP-2021.pdf", "sumber": "2024-08"},
+                {"tahun": "2022", "file": "Laporan-Survei-Sarana-Prasarana-IKIP-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Laporan-Survei-Sarana-Prasarana-IKIP-2023.pdf", "sumber": "2024-08"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C6",
+      "nama": "Pendidikan",
+      "file_utama": "C.6-Pendidikan-IKIP-Siliwangi-2024.pdf",
+      "sub_kriteria": [
+        {
+          "kode": "C.6.1",
+          "nama": "Kurikulum",
+          "dokumen": [
+            {"judul": "Pedoman Pengembangan Kurikulum", "file": "Pedoman-Pengembangan-Kurikulum-.pdf", "sumber": "2024-08"},
+            {"judul": "SK Peninjauan Kurikulum IKIP Siliwangi", "file": "SK-Peninjauan-Kurikulum-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Laporan Monitoring dan Evaluasi Kurikulum IKIP Siliwangi Berbasis OBE", "file": "Laporan-Monitoring-dan-Evaluasi-Kurikulum-IKIP-Siliwangi-Berbasis-Outcome-Based-Education-OBE.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.6.2",
+          "nama": "Pembelajaran",
+          "dokumen": [
+            {"judul": "Pedoman Akademik 2022-2025", "file": "Pedoman-Akademik-2022-2025.pdf", "sumber": "2024-08"},
+            {"judul": "SK Pedoman Penyelenggaraan dan Pengelolaan Pendidikan Program Sarjana IKIP Siliwangi", "file": "SK-Pedoman-Penyelenggaraan-dan-Pengelolaan-Pendidikan-Program-Sarjana-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "SK Penyelenggaraan dan Pengelolaan Pendidikan Program Magister IKIP Siliwangi", "file": "SK-Penyelenggraan-dan-Pengelolan-pendidikan-Program-Magister-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Standard Operating Procedure (SOP) Bagian Akademik", "file": "Standard-Operating-Procedure-SOP-Bagian-Akademik.pdf", "sumber": "2024-08"},
+            {"judul": "SK Rektor Sistem Penilaian", "file": "SK-Rektor-Sistem-Penilaian.pdf", "sumber": "2024-08"},
+            {"judul": "Buku Pedoman Microteaching", "file": "Buku-Pedoman-Microteaching-1.pdf", "sumber": "2024-08"},
+            {"judul": "SOP Penggunaan Lab Microteaching", "file": "SOP-Penggunaan-Lab-Microteaching.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.6.3",
+          "nama": "MBKM",
+          "dokumen": [
+            {"judul": "Pedoman Implementasi MBKM IKIP Siliwangi", "file": "Pedoman-Implementasi-MBKM-IKIP-Siliwangi.pdf", "sumber": "2024-08"},
+            {"judul": "Pedoman Implementasi MBKM IKIP Siliwangi 2022", "file": "Pedoman-Implementasi-MBKM-IKIP-Siliwangi2022.pdf", "sumber": "2024-08"},
+            {"judul": "Pedoman RPL IKIP Siliwangi 2023", "file": "Pedoman-RPL-IKIP-Siliwangi-20233.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.6.4",
+          "nama": "IT",
+          "dokumen": [
+            {"judul": "Standard Operating Procedure (SOP) Bagian Pengembangan IT", "file": "Standard-Operating-Procedure-SOP-Bagian-Pengembangan-IT.pdf", "sumber": "2024-08"},
+            {"judul": "SOP Pembuatan Akun Email Institusi", "file": "SOP-Pembuatan-Akun-Email-Institusi.pdf", "sumber": "2024-08"},
+            {"judul": "Renstra Bagian Pengembangan IT IKIP Siliwangi Tahun 2022-2025", "file": "Renstra-Bagian-Pengembangan-IT-IKIP-SIliwangi-Tahun-2022-2025-Rev2.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.6.5",
+          "nama": "Kepuasan Pengguna",
+          "dokumen": [
+            {
+              "judul": "Laporan Kepuasan Pengguna IKIP Siliwangi",
+              "versi": [
+                {"tahun": "2022", "file": "Laporan-Kepuasan-Pengguna-IKIP-Siliwangi-2022.pdf", "sumber": "2024-08"},
+                {"tahun": "2023", "file": "Laporan-Kepuasan-Pengguna-IKIP-Siliwangi-2023.pdf", "sumber": "2024-08"}
+              ]
+            },
+            {"judul": "Laporan Tracer Study IKIP Siliwangi 2023", "file": "Laporan-Tracer-Study-IKIP-Siliwangi-2023.pdf", "sumber": "2024-08"}
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C7",
+      "nama": "Penelitian",
+      "file_utama": "C.7-Penelitian.pdf",
+      "sub_kriteria": [
+        {
+          "kode": "C.7.1",
+          "nama": "Kebijakan dan Strategi",
+          "dokumen": [
+            {"judul": "Peta Jalan Penelitian 2022-2025", "file": "Peta-Jalan-Penelitian-2022-2025.pdf", "sumber": "2024-08"},
+            {"judul": "Renstra Penelitian 2022-2025", "file": "Renstra-Penelitian-2022-2025_.pdf", "sumber": "2024-08"},
+            {"judul": "SK Kelompok Penelitian dan PkM IKIP Siliwangi 2021-2022", "file": "SK-Kelompok-Penelitian-dan-PkM-IKIP-Siliwangi_2021-2022.pdf", "sumber": "2024-08"},
+            {"judul": "Laporan Sosialisasi Kelompok Riset dan PkM", "file": "Laporan-Sosialisasi-Kelompok-Riset-dan-PkM.pdf", "sumber": "2024-08"},
+            {"judul": "Panduan Hibah Internal Penelitian dan PkM Edisi 2024", "file": "Panduan-Hibah-Internal-Penelitian-dan-PkM-Edisi-2024.pdf", "sumber": "2024-08"},
+            {"judul": "Panduan Hibah Internal IKIP Siliwangi 2024 Rev1", "file": "Panduan-Hibah-Internal-IKIP-Siliwangi-2024-Rev1.pdf", "sumber": "2024-08"},
+            {"judul": "Panduan Penelitian dan Pengabdian 2024", "file": "Panduan-Penelitian-dan-Pengabdian-2024.pdf", "sumber": "2024-08"},
+            {"judul": "Sosialiasi Pedoman Hibah Internal Penelitian dan PkM", "file": "Sosialiasi-Pedoman-Hibah-Internal-Penelitian-dan-PkM.pdf", "sumber": "2024-08"},
+            {"judul": "SM-16 Standar Pendanaan dan Pembiayaan Penelitian", "file": "SM-16-Standar-Pendanaan-dan-Pembiayaan-Penelitian.pdf", "sumber": "2024-08"},
+            {"judul": "Kebijakan tentang Layanan Artikel Ilmiah", "file": "Kebijakan-tentang-Layanan-Artikel-Ilmiah.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.7.2",
+          "nama": "Evaluasi",
+          "dokumen": [
+            {"judul": "Laporan Rapat Tinjauan Manajemen Standar Penelitian 2023", "file": "Laporan-Rapat-Tinjauan-Manajemen-Standar-Penelitian-2023.pdf", "sumber": "2024-08"},
+            {"judul": "Laporan Rencana Tindak Lanjut Standar Penelitian 2023", "file": "Laporan-Rencana-Tindak-Lanjut-Standar-Penelitian-2023.pdf", "sumber": "2024-08"}
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C8",
+      "nama": "Pengabdian kepada Masyarakat",
+      "file_utama": "C.8-Pengabdian-kepada-Masyarakat-2024.pdf",
+      "sub_kriteria": [
+        {
+          "kode": "C.8.1",
+          "nama": "Kebijakan dan Strategi",
+          "dokumen": [
+            {"judul": "Peta Jalan PkM IKIP Siliwangi 2022-2025", "file": "Peta-Jalan-PkM-IKIP-Siliwangi-2022-2025.pdf", "sumber": "2024-08"},
+            {"judul": "Renstra Pengabdian 2022-2025", "file": "Renstra-Pengabdian-2022-2025.pdf", "sumber": "2024-08"},
+            {"judul": "Pedoman Integrasi Tridharma 2020", "file": "Pedoman-Integrasi-Tridharma-2020.pdf", "sumber": "2024-08"},
+            {"judul": "Pedoman Integrasi Tridarma", "file": "Pedoman-Integrasi-Tridarma.pdf", "sumber": "2024-08"},
+            {"judul": "SM-24 Standar Pendanaan dan Pembiayaan Pengabdian kepada Masyarakat", "file": "SM-24-Standar-Pendanaan-dan-Pembiayaan-Pengabdian-kepada-Masyarakat.pdf", "sumber": "2024-08"},
+            {"judul": "SK Pengelola Jurnal Abdimas Siliwangi 2022-2025", "file": "SK-Pengelola-Jurnal-Abdimas-Siliwangi-2022-2025.pdf", "sumber": "2024-08"}
+          ]
+        },
+        {
+          "kode": "C.8.2",
+          "nama": "Evaluasi",
+          "dokumen": [
+            {"judul": "RTM Standar Pengabdian", "file": "RTM-Standar-Pengabdian.pdf", "sumber": "2024-08"},
+            {"judul": "RTL Pengabdian", "file": "RTL-Pengabdian.pdf", "sumber": "2024-08"}
+          ]
+        }
+      ]
+    },
+    {
+      "kode": "C9",
+      "nama": "Luaran dan Capaian Tridharma",
+      "sub_kriteria": []
+    }
+  ],
+  "dokumen_spmi_2025": [
+    {"judul": "Dokumen Formulir Mutu 2023", "file": "Dokumen_Formulir_Mutu_2023.pdf", "sumber": "2025-02"},
+    {"judul": "Dokumen Kebijakan Mutu SPMI IKIP SLW 2022", "file": "Dokumen_Kebijakan_Mutu_SPMI_IKIP_SLW_2022.pdf", "sumber": "2025-02"},
+    {"judul": "Dokumen Manual Mutu 2022", "file": "Dokumen_Manual_Mutu_2022.pdf", "sumber": "2025-02"},
+    {"judul": "Dokumen Standar Mutu SPMI IKIP SLW 2022", "file": "Dokumen_Standar_Mutu_SPMI_IKIP_SLW_2022.pdf", "sumber": "2025-02"}
+  ],
+  "lokasi_file": {
+    "2024-08": "dokumen-akreditasi/2024-08/",
+    "2025-02": "dokumen-akreditasi/2025-02/",
+    "old-lpmi": "https://old-lpmi.ikipsiliwangi.ac.id/wp-content/uploads/sites/7/2018/03/"
+  }
+}

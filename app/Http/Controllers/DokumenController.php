@@ -14,13 +14,17 @@ class DokumenController extends Controller
     {
         $search = $request->get('search');
         
-        $query = DokumenFolder::withCount('files')->with('files');
+        $query = DokumenFolder::with(['files', 'children.files', 'children' => function($q) {
+            $q->withCount('files');
+        }])->withCount('files');
         
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('nama', 'LIKE', "%{$search}%")
                   ->orWhere('deskripsi', 'LIKE', "%{$search}%");
             });
+        } else {
+            $query->whereNull('parent_id');
         }
         
         $folders = $query->orderBy('created_at', 'desc')->paginate(10);
@@ -29,6 +33,20 @@ class DokumenController extends Controller
             'success' => true,
             'data' => $folders
         ]);
+    }
+
+
+    public function showFolder($id)
+    {
+        $folder = DokumenFolder::with(['files', 'children.files', 'children' => function($q) {
+            $q->withCount('files');
+        }])->withCount('files')->find($id);
+
+        if (!$folder) {
+            return response()->json(['success' => false, 'message' => 'Folder not found'], 404);
+        }
+
+        return response()->json(['success' => true, 'data' => $folder]);
     }
 
     public function storeFolder(Request $request)
@@ -322,6 +340,32 @@ class DokumenController extends Controller
         return response()->json([
             'success' => true,
             'data' => $folders
+        ]);
+    }
+
+    public function globalSearch(Request $request)
+    {
+        $search = $request->get('q');
+        if (!$search) {
+            return response()->json(['success' => true, 'data' => ['folders' => [], 'files' => []]]);
+        }
+
+        $folders = DokumenFolder::where('nama', 'LIKE', "%{$search}%")
+            ->orWhere('deskripsi', 'LIKE', "%{$search}%")
+            ->take(5)
+            ->get();
+
+        $files = DokumenFile::with('folder')
+            ->where('nama', 'LIKE', "%{$search}%")
+            ->take(10)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'folders' => $folders,
+                'files' => $files
+            ]
         ]);
     }
 

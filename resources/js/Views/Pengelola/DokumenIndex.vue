@@ -4,8 +4,12 @@
       <!-- Header -->
       <div class="page-header">
         <div class="header-info">
-          <h2>Manajemen Dokumen</h2>
-          <p>Kelola folder dan file dokumen. Atur visibilitas publik untuk ditampilkan di halaman publik.</p>
+          <!-- Breadcrumb Global -->
+          <div class="global-breadcrumb">
+            <span><i class="fas fa-home"></i> Manajemen</span>
+            <i class="fas fa-chevron-right separator"></i>
+            <span class="active">Kelola Dokumen</span>
+          </div>
         </div>
         <div class="header-actions">
           <button class="btn-outline-gold" @click="printData" title="Cetak / Export ke PDF">
@@ -20,19 +24,19 @@
         </div>
       </div>
 
-      <!-- Stats Bar -->
+      <!-- Stats Bar (Compact) -->
       <div class="stats-row">
         <div class="stat-card">
           <div class="stat-icon folders"><i class="fas fa-folder"></i></div>
-          <div><span class="stat-num">{{ folders.length }}</span><span class="stat-lbl">Folder</span></div>
+          <div class="stat-info"><span class="stat-num">{{ folders.length }}</span><span class="stat-lbl">Folder</span></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon files"><i class="fas fa-file-alt"></i></div>
-          <div><span class="stat-num">{{ totalFiles }}</span><span class="stat-lbl">File</span></div>
+          <div class="stat-info"><span class="stat-num">{{ totalFiles }}</span><span class="stat-lbl">File</span></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon public"><i class="fas fa-globe"></i></div>
-          <div><span class="stat-num">{{ publicCount }}</span><span class="stat-lbl">Publik</span></div>
+          <div class="stat-info"><span class="stat-num">{{ publicCount }}</span><span class="stat-lbl">Publik</span></div>
         </div>
       </div>
 
@@ -43,14 +47,50 @@
           type="text" 
           v-model="searchQuery" 
           placeholder="Cari folder atau dokumen..."
-          @input="fetchFolders"
+          @input="handleSearchInput"
+          @focus="showSearchDropdown = true"
         >
-        <button v-if="searchQuery" class="btn-clear" @click="searchQuery = ''; fetchFolders()">
+        <button v-if="searchQuery" class="btn-clear" @click="clearSearch">
           <i class="fas fa-times"></i>
         </button>
+
+        <!-- Autocomplete Dropdown -->
+        <div v-if="showSearchDropdown && searchQuery && (isSearching || searchResults.folders.length > 0 || searchResults.files.length > 0)" class="search-dropdown-overlay" @click.stop>
+          
+          <div v-if="isSearching" class="search-loading">
+            <i class="fas fa-spinner fa-spin"></i> Mencari...
+          </div>
+          
+          <template v-else>
+            <div v-if="searchResults.folders.length > 0" class="search-group">
+              <div class="search-group-title">Folder</div>
+              <div class="search-item" v-for="folder in searchResults.folders" :key="'sf-'+folder.id" @click="openFolderFromSearch(folder)">
+                <div class="search-item-icon"><i class="fas fa-folder"></i></div>
+                <div class="search-item-info">
+                  <span class="search-item-name">{{ folder.nama }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div v-if="searchResults.files.length > 0" class="search-group">
+              <div class="search-group-title">File Dokumen</div>
+              <div class="search-item" v-for="file in searchResults.files" :key="'sfi-'+file.id" @click="downloadFileFromSearch(file)">
+                <div class="search-item-icon" :class="getFileClass(file.file_type)"><i :class="getFileIcon(file.file_type)"></i></div>
+                <div class="search-item-info">
+                  <span class="search-item-name">{{ file.nama }}</span>
+                  <span class="search-item-meta" v-if="file.folder">di dalam {{ file.folder.nama }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="searchResults.folders.length === 0 && searchResults.files.length === 0" class="search-empty">
+              Tidak ada hasil yang ditemukan untuk "{{ searchQuery }}"
+            </div>
+          </template>
+        </div>
       </div>
 
-      <!-- Breadcrumb -->
+      <!-- Folder Inner Breadcrumb -->
       <div v-if="currentFolder" class="breadcrumb-bar">
         <button class="breadcrumb-item" @click="backToFolders">
           <i class="fas fa-folder"></i> Semua Folder
@@ -62,6 +102,18 @@
         <button class="btn-upload-file" @click="openFileModal()">
           <i class="fas fa-cloud-upload-alt"></i> Tambah File
         </button>
+      </div>
+
+      <!-- View Controls (Toggle Table/Grid) -->
+      <div class="view-controls" v-if="!currentFolder && folders.length > 0">
+        <div class="view-toggle">
+          <button :class="{ active: viewMode === 'table' }" @click="viewMode = 'table'" title="Tampilan Tabel">
+            <i class="fas fa-list"></i>
+          </button>
+          <button :class="{ active: viewMode === 'grid' }" @click="viewMode = 'grid'" title="Tampilan Grid">
+            <i class="fas fa-th-large"></i>
+          </button>
+        </div>
       </div>
 
       <!-- Loading -->
@@ -81,45 +133,97 @@
           </button>
         </div>
 
-        <div v-else class="folder-grid">
-          <div 
-            v-for="folder in folders" 
-            :key="folder.id"
-            class="folder-card"
-          >
-            <div class="folder-card-header" @click="openFolder(folder)">
-              <div class="folder-icon-box">
-                <i class="fas fa-folder"></i>
-              </div>
-              <div class="folder-card-info">
-                <h4>{{ folder.nama }}</h4>
-                <p v-if="folder.deskripsi">{{ folder.deskripsi }}</p>
-                <div class="folder-meta">
-                  <span class="meta-badge">
-                    <i class="fas fa-file"></i> {{ folder.files_count || 0 }} File
-                  </span>
-                  <span class="status-badge" :class="folder.is_public ? 'public' : 'private'">
-                    <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
-                    {{ folder.is_public ? 'Publik' : 'Privat' }}
-                  </span>
+        <div v-else>
+          <!-- Table View -->
+          <div v-if="viewMode === 'table'" class="folders-table-wrapper">
+            <table class="folders-table">
+              <thead>
+                <tr>
+                  <th>Nama Folder</th>
+                  <th>Jumlah File</th>
+                  <th>Status Akses</th>
+                  <th>Tanggal Diubah</th>
+                  <th style="text-align:center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="folder in folders" :key="folder.id" @click="openFolder(folder)" class="clickable-row">
+                  <td>
+                    <div class="folder-cell">
+                      <div class="folder-icon-sm"><i class="fas fa-folder"></i></div>
+                      <div class="folder-info-sm">
+                        <span class="folder-name-sm">{{ folder.nama }}</span>
+                        <span class="folder-desc-sm" v-if="folder.deskripsi">{{ folder.deskripsi }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="text-muted">{{ folder.files_count || 0 }} File</span></td>
+                  <td>
+                    <span class="status-badge" :class="folder.is_public ? 'public' : 'private'">
+                      <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                      {{ folder.is_public ? 'Publik' : 'Privat' }}
+                    </span>
+                  </td>
+                  <td><span class="text-muted">{{ formatDate(folder.updated_at || folder.created_at) }}</span></td>
+                  <td @click.stop style="text-align:center;">
+                    <div class="table-actions">
+                      <button class="btn-action toggle" :class="{ active: folder.is_public }" @click.stop="toggleFolderPublic(folder)" :title="folder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'">
+                        <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                      </button>
+                      <button class="btn-action edit" @click.stop="openFolderModal(folder)" title="Edit Folder">
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <button class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Grid View -->
+          <div v-else class="folder-grid">
+            <div 
+              v-for="folder in folders" 
+              :key="folder.id"
+              class="folder-card"
+            >
+              <div class="folder-card-header" @click="openFolder(folder)">
+                <div class="folder-icon-box">
+                  <i class="fas fa-folder"></i>
+                </div>
+                <div class="folder-card-info">
+                  <h4>{{ folder.nama }}</h4>
+                  <p v-if="folder.deskripsi">{{ folder.deskripsi }}</p>
+                  <div class="folder-meta">
+                    <span class="meta-badge">
+                      <i class="fas fa-file"></i> {{ folder.files_count || 0 }} File
+                    </span>
+                    <span class="status-badge" :class="folder.is_public ? 'public' : 'private'">
+                      <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                      {{ folder.is_public ? 'Publik' : 'Privat' }}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="folder-card-actions">
-              <button 
-                class="btn-action toggle"
-                :class="{ active: folder.is_public }"
-                @click.stop="toggleFolderPublic(folder)"
-                :title="folder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'"
-              >
-                <i :class="folder.is_public ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
-              </button>
-              <button class="btn-action edit" @click.stop="openFolderModal(folder)" title="Edit Folder">
-                <i class="fas fa-pen"></i>
-              </button>
-              <button class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
-                <i class="fas fa-trash-alt"></i>
-              </button>
+              <div class="folder-card-actions">
+                <button 
+                  class="btn-action toggle"
+                  :class="{ active: folder.is_public }"
+                  @click.stop="toggleFolderPublic(folder)"
+                  :title="folder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'"
+                >
+                  <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                </button>
+                <button class="btn-action edit" @click.stop="openFolderModal(folder)" title="Edit Folder">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -127,24 +231,78 @@
 
       <!-- File List (when folder is selected) -->
       <template v-else>
-        <div v-if="currentFolder.files && currentFolder.files.length === 0" class="empty-state">
-          <div class="empty-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-          <h3>Folder Kosong</h3>
-          <p>Belum ada file di folder ini. Upload file pertama.</p>
-          <button class="btn-primary-gold" @click="openFileModal()">
-            <i class="fas fa-upload"></i> Upload File
-          </button>
+        
+        <!-- Sub-folders Section -->
+        <div v-if="currentFolder.children && currentFolder.children.length > 0" class="subfolders-section" style="margin-bottom: 24px;">
+          <h4 style="margin-bottom: 12px; color: #1e293b; font-size: 1.05rem;"><i class="fas fa-folder-open" style="color: #92400e; margin-right: 6px;"></i> Sub-Folder</h4>
+          <div class="folder-grid">
+            <div 
+              v-for="subFolder in currentFolder.children" 
+              :key="subFolder.id"
+              class="folder-card"
+            >
+              <div class="folder-card-header" @click="openFolder(subFolder)">
+                <div class="folder-icon-box">
+                  <i class="fas fa-folder"></i>
+                </div>
+                <div class="folder-card-info">
+                  <h4>{{ subFolder.nama }}</h4>
+                  <p v-if="subFolder.deskripsi">{{ subFolder.deskripsi }}</p>
+                  <div class="folder-meta">
+                    <span class="meta-badge">
+                      <i class="fas fa-file"></i> {{ subFolder.files_count || 0 }} File
+                    </span>
+                    <span class="status-badge" :class="subFolder.is_public ? 'public' : 'private'">
+                      <i :class="subFolder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                      {{ subFolder.is_public ? 'Publik' : 'Privat' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="folder-card-actions">
+                <button 
+                  class="btn-action toggle"
+                  :class="{ active: subFolder.is_public }"
+                  @click.stop="toggleFolderPublic(subFolder)"
+                  :title="subFolder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'"
+                >
+                  <i :class="subFolder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                </button>
+                <button class="btn-action edit" @click.stop="openFolderModal(subFolder)" title="Edit Folder">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button class="btn-action delete" @click.stop="confirmDeleteFolder(subFolder)" title="Hapus Folder">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div v-else class="files-table-wrapper">
+        <div v-if="(!currentFolder.files || currentFolder.files.length === 0) && (!currentFolder.children || currentFolder.children.length === 0)" class="empty-state">
+          <div class="empty-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <h3>Folder Kosong</h3>
+          <p>Belum ada sub-folder atau file di folder ini.</p>
+          <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="btn-primary-gold" @click="openFileModal()">
+              <i class="fas fa-upload"></i> Upload File
+            </button>
+            <button class="btn-outline-gold" @click="openFolderModal(null, currentFolder.id)">
+              <i class="fas fa-folder-plus"></i> Tambah Sub-Folder
+            </button>
+          </div>
+        </div>
+
+        <div v-if="currentFolder.files && currentFolder.files.length > 0" class="files-table-wrapper">
+          <h4 style="padding: 16px 24px 0; margin-bottom: 8px; color: #1e293b; font-size: 1.05rem;"><i class="fas fa-file-alt" style="color: #1d4ed8; margin-right: 6px;"></i> File</h4>
           <table class="files-table">
             <thead>
               <tr>
                 <th>File</th>
                 <th>Ukuran</th>
                 <th>Tanggal</th>
-                <th>Status</th>
-                <th>Aksi</th>
+                <th>Status Akses</th>
+                <th style="text-align:center;">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -155,7 +313,7 @@
                       <i :class="getFileIcon(file.file_type)"></i>
                     </div>
                     <div>
-                      <span class="file-name-text">{{ file.nama }}</span>
+                      <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="file-name-link">{{ file.nama }}</a>
                       <span class="file-ext">{{ getFileExt(file.file_path) }}</span>
                     </div>
                   </div>
@@ -168,28 +326,21 @@
                     {{ file.is_public ? 'Publik' : 'Privat' }}
                   </span>
                 </td>
-                <td>
-                  <div class="action-btns">
-                    <button 
-                      class="btn-action toggle" 
-                      :class="{ active: file.is_public }"
-                      @click="toggleFilePublic(file)"
-                      :title="file.is_public ? 'Jadikan Privat' : 'Jadikan Publik'"
-                    >
-                      <i :class="file.is_public ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                <td @click.stop style="text-align:center;">
+                  <div class="table-actions">
+                    <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="btn-action view" title="Lihat File">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <button class="btn-action toggle" :class="{ active: file.is_public }" @click.stop="toggleFilePublic(file)" :title="file.is_public ? 'Jadikan Privat' : 'Jadikan Publik'">
+                      <i :class="file.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
                     </button>
-                    <a 
-                      :href="'/api/dokumen/files/' + file.id + '/download'" 
-                      class="btn-action download" 
-                      target="_blank"
-                      title="Download"
-                    >
+                    <a :href="'/dokumen/files/' + file.id + '/download'" target="_blank" class="btn-action download" title="Download File">
                       <i class="fas fa-download"></i>
                     </a>
-                    <button class="btn-action edit" @click="openFileModal(file)" title="Edit File">
+                    <button class="btn-action edit" @click.stop="openFileModal(file)" title="Edit File">
                       <i class="fas fa-pen"></i>
                     </button>
-                    <button class="btn-action delete" @click="confirmDeleteFile(file)" title="Hapus File">
+                    <button class="btn-action delete" @click.stop="confirmDeleteFile(file)" title="Hapus File">
                       <i class="fas fa-trash-alt"></i>
                     </button>
                   </div>
@@ -374,8 +525,20 @@ export default {
     return {
       folders: [],
       currentFolder: null,
+      folderHistory: [],
       loading: true,
       searchQuery: '',
+      searchTimeout: null,
+      isSearching: false,
+      showSearchDropdown: false,
+      searchResults: {
+        folders: [],
+        files: []
+      },
+      
+      // New layout properties
+      viewMode: 'table',
+      activeDropdown: null,
 
       // Folder modal
       showFolderModal: false,
@@ -400,7 +563,10 @@ export default {
       deleting: false,
 
       // Toast
-      toast: { show: false, message: '', type: 'success' }
+      toast: { show: false, message: '', type: 'success' },
+      
+      // Keep track of event listener
+      clickListener: null
     }
   },
   computed: {
@@ -413,8 +579,87 @@ export default {
   },
   mounted() {
     this.fetchFolders()
+    // Setup global click listener for dropdowns
+    this.clickListener = (e) => {
+      if (!e.target.closest('.action-dropdown')) {
+        this.closeDropdown()
+      }
+      if (!e.target.closest('.search-bar')) {
+        this.showSearchDropdown = false
+      }
+    }
+    document.addEventListener('click', this.clickListener)
+  },
+  unmounted() { // or beforeDestroy for Vue 2
+    if (this.clickListener) {
+      document.removeEventListener('click', this.clickListener)
+    }
+  },
+  beforeDestroy() {
+    // For Vue 2 compatibility just in case
+    if (this.clickListener) {
+      document.removeEventListener('click', this.clickListener)
+    }
   },
   methods: {
+    // ===== Dropdown Methods =====
+    toggleDropdown(id) {
+      if (this.activeDropdown === id) {
+        this.activeDropdown = null;
+      } else {
+        this.activeDropdown = id;
+      }
+    },
+    closeDropdown() {
+      this.activeDropdown = null;
+    },
+
+    // ===== Search Autocomplete Methods =====
+    handleSearchInput() {
+      this.showSearchDropdown = true;
+      if (this.searchTimeout) clearTimeout(this.searchTimeout);
+      
+      if (!this.searchQuery.trim()) {
+        this.searchResults = { folders: [], files: [] };
+        this.fetchFolders();
+        return;
+      }
+
+      this.isSearching = true;
+      this.searchTimeout = setTimeout(async () => {
+        try {
+          const res = await axios.get('/dokumen/search', { params: { q: this.searchQuery } });
+          if (res.data.success) {
+            this.searchResults = res.data.data;
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          this.isSearching = false;
+        }
+      }, 300);
+    },
+    clearSearch() {
+      this.searchQuery = '';
+      this.showSearchDropdown = false;
+      this.searchResults = { folders: [], files: [] };
+      this.fetchFolders();
+    },
+    async openFolderFromSearch(folder) {
+      this.showSearchDropdown = false;
+      this.searchQuery = '';
+      try {
+         await this.fetchFolders();
+         const fullFolder = this.folders.find(f => f.id === folder.id);
+         if (fullFolder) this.currentFolder = fullFolder;
+      } catch (err) {}
+    },
+    downloadFileFromSearch(file) {
+      this.showSearchDropdown = false;
+      window.open('/dokumen/files/' + file.id + '/download', '_blank');
+    },
+
+
     // ===== Data Fetching =====
     async fetchFolders() {
       this.loading = true
@@ -433,20 +678,42 @@ export default {
     },
 
     // ===== Folder Operations =====
-    openFolder(folder) {
-      this.currentFolder = folder
+    async openFolder(folder) {
+      if (this.currentFolder) {
+        this.folderHistory.push(this.currentFolder)
+      }
+      this.closeDropdown()
+      await this.fetchSingleFolder(folder.id)
     },
-    backToFolders() {
-      this.currentFolder = null
-      this.fetchFolders()
+    async backToFolders() {
+      if (this.folderHistory.length > 0) {
+        const parent = this.folderHistory.pop()
+        await this.fetchSingleFolder(parent.id)
+      } else {
+        this.currentFolder = null
+        this.fetchFolders()
+      }
     },
-    openFolderModal(folder = null) {
+    async fetchSingleFolder(id) {
+      this.loading = true
+      try {
+        const res = await axios.get('/dokumen/folders/' + id)
+        if (res.data.success) {
+          this.currentFolder = res.data.data
+        }
+      } catch (err) {
+        this.showToast('Gagal memuat detail folder', 'error')
+      } finally {
+        this.loading = false
+      }
+    },
+    openFolderModal(folder = null, parentId = null) {
       this.editingFolder = folder
       this.folderErrors = {}
       if (folder) {
-        this.folderForm = { nama: folder.nama, deskripsi: folder.deskripsi || '', is_public: folder.is_public }
+        this.folderForm = { nama: folder.nama, deskripsi: folder.deskripsi || '', is_public: folder.is_public, parent_id: folder.parent_id }
       } else {
-        this.folderForm = { nama: '', deskripsi: '', is_public: false }
+        this.folderForm = { nama: '', deskripsi: '', is_public: false, parent_id: parentId }
       }
       this.showFolderModal = true
     },
@@ -544,58 +811,54 @@ export default {
       }
     },
     async saveFile() {
-  this.savingFile = true
-  this.fileErrors = {}
-  try {
-    if (this.editingFile) {
-      const data = { nama: this.fileForm.nama, is_public: this.fileForm.is_public ? 1 : 0 }
-      const res = await axios.put(`/dokumen/files/${this.editingFile.id}`, data)
-      if (res.data.success) {
-        this.showToast('File berhasil diperbarui!')
-        this.showFileModal = false
-        this.refreshCurrentFolder()
-      }
-    } else {
-      if (this.selectedFiles.length === 0) {
-        this.fileErrors = { file: ['Pilih setidaknya 1 file untuk diunggah'] }
+      this.savingFile = true
+      this.fileErrors = {}
+      try {
+        if (this.editingFile) {
+          const data = { nama: this.fileForm.nama, is_public: this.fileForm.is_public ? 1 : 0 }
+          const res = await axios.put(`/dokumen/files/${this.editingFile.id}`, data)
+          if (res.data.success) {
+            this.showToast('File berhasil diperbarui!')
+            this.showFileModal = false
+            this.refreshCurrentFolder()
+          }
+        } else {
+          if (this.selectedFiles.length === 0) {
+            this.fileErrors = { file: ['Pilih setidaknya 1 file untuk diunggah'] }
+            this.savingFile = false
+            return
+          }
+
+          const formData = new FormData()
+          formData.append('is_public', this.fileForm.is_public ? 1 : 0)
+
+          if (this.selectedFiles.length === 1) {
+            formData.append('file', this.selectedFiles[0])
+            formData.append('nama', this.fileForm.nama || this.selectedFiles[0].name)
+          } else {
+            this.selectedFiles.forEach((file) => {
+              formData.append('files[]', file)
+            })
+          }
+
+          const res = await axios.post(`/dokumen/folders/${this.currentFolder.id}/files`, formData)
+
+          if (res.data.success) {
+            this.showToast(res.data.message || 'File berhasil diunggah!')
+            this.showFileModal = false
+            this.refreshCurrentFolder()
+          }
+        }
+      } catch (err) {
+        if (err.response?.status === 422) {
+          this.fileErrors = err.response.data.errors || {}
+        } else {
+          this.showToast('Terjadi kesalahan saat mengunggah file', 'error')
+        }
+      } finally {
         this.savingFile = false
-        return
       }
-
-      const formData = new FormData()
-      formData.append('is_public', this.fileForm.is_public ? 1 : 0)
-
-      if (this.selectedFiles.length === 1) {
-        // Mode Single Upload
-        formData.append('file', this.selectedFiles[0])
-        formData.append('nama', this.fileForm.nama || this.selectedFiles[0].name)
-      } else {
-        // Mode Batch / Input Massal Upload
-        this.selectedFiles.forEach((file) => {
-          formData.append('files[]', file)
-        })
-      }
-
-      const res = await axios.post(`/dokumen/folders/${this.currentFolder.id}/files`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-
-      if (res.data.success) {
-        this.showToast(res.data.message || 'File berhasil diunggah!')
-        this.showFileModal = false
-        this.refreshCurrentFolder()
-      }
-    }
-  } catch (err) {
-    if (err.response?.status === 422) {
-      this.fileErrors = err.response.data.errors || {}
-    } else {
-      this.showToast('Terjadi kesalahan saat mengunggah file', 'error')
-    }
-  } finally {
-    this.savingFile = false
-  }
-},
+    },
     confirmDeleteFile(file) {
       this.deleteMessage = `Apakah Anda yakin ingin menghapus file "${file.nama}"?`
       this.deleteCallback = async () => {
@@ -623,18 +886,10 @@ export default {
       }
     },
     async refreshCurrentFolder() {
-      try {
-        const res = await axios.get('/dokumen/folders', { params: { search: '' } })
-        if (res.data.success) {
-          const allFolders = res.data.data.data || res.data.data
-          this.folders = allFolders
-          if (this.currentFolder) {
-            const updated = allFolders.find(f => f.id === this.currentFolder.id)
-            if (updated) this.currentFolder = updated
-          }
-        }
-      } catch (err) {
-        console.error(err)
+      if (this.currentFolder) {
+        await this.fetchSingleFolder(this.currentFolder.id)
+      } else {
+        await this.fetchFolders()
       }
     },
 
@@ -741,6 +996,24 @@ export default {
 <style scoped>
 .dokumen-admin { max-width: 100%; }
 
+/* ===== BREADCRUMB GLOBAL ===== */
+.global-breadcrumb {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.global-breadcrumb .active {
+  color: #996600;
+  font-weight: 600;
+}
+.global-breadcrumb .separator {
+  font-size: 0.7rem;
+  color: #cbd5e1;
+}
+
 /* ===== HEADER ===== */
 .page-header {
   display: flex;
@@ -807,35 +1080,45 @@ export default {
 }
 .btn-primary-gold:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* ===== STATS ===== */
+/* ===== STATS BAR COMPACT ===== */
 .stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  display: flex;
   gap: 16px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 .stat-card {
   background: white;
-  border-radius: 12px;
-  padding: 16px 20px;
+  border-radius: 10px;
+  padding: 10px 18px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  border: 1px solid #f1f5f9;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid #e2e8f0;
+  flex: 1;
+  min-width: 150px;
+  transition: all 0.2s;
+}
+.stat-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transform: translateY(-1px);
 }
 .stat-icon {
-  width: 44px; height: 44px;
-  border-radius: 10px;
+  width: 38px; height: 38px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 .stat-icon.folders { background: #fef3c7; color: #92400e; }
 .stat-icon.files { background: #dbeafe; color: #1d4ed8; }
 .stat-icon.public { background: #d1fae5; color: #059669; }
-.stat-num { font-size: 1.4rem; font-weight: 700; color: #1e293b; display: block; }
+.stat-info {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.stat-num { font-size: 1.25rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
 .stat-lbl { font-size: 0.78rem; color: #94a3b8; }
 
 /* ===== SEARCH ===== */
@@ -872,7 +1155,73 @@ export default {
   font-size: 0.9rem;
 }
 
-/* ===== BREADCRUMB ===== */
+/* Autocomplete Dropdown */
+.search-dropdown-overlay {
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border: 1px solid #e2e8f0;
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.search-loading, .search-empty {
+  padding: 24px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+.search-group {
+  padding: 8px 0;
+}
+.search-group:not(:last-child) {
+  border-bottom: 1px solid #f1f5f9;
+}
+.search-group-title {
+  padding: 8px 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-item:hover {
+  background: #f8fafc;
+}
+.search-item-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  background: #f1f5f9; color: #64748b;
+  flex-shrink: 0;
+}
+.search-item-info {
+  display: flex; flex-direction: column;
+}
+.search-item-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.9rem;
+}
+.search-item-meta {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* ===== INNER BREADCRUMB ===== */
 .breadcrumb-bar {
   display: flex;
   align-items: center;
@@ -915,7 +1264,7 @@ export default {
   transform: translateY(-1px);
 }
 
-/* ===== LOADING ===== */
+/* ===== LOADING & EMPTY ===== */
 .loading-state {
   text-align: center;
   padding: 60px 20px;
@@ -930,8 +1279,6 @@ export default {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-state p { color: #94a3b8; }
-
-/* ===== EMPTY ===== */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -950,7 +1297,83 @@ export default {
 .empty-state h3 { font-size: 1.15rem; color: #334155; margin-bottom: 6px; }
 .empty-state p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; }
 
-/* ===== FOLDER GRID ===== */
+/* ===== VIEW TOGGLE ===== */
+.view-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+.view-toggle {
+  display: flex;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.view-toggle button {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+.view-toggle button:hover { color: #64748b; background: #f8fafc; }
+.view-toggle button.active {
+  background: #fffbeb;
+  color: #996600;
+}
+
+/* ===== FOLDERS TABLE (NEW) ===== */
+.folders-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: visible; 
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.folders-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.folders-table th {
+  text-align: left;
+  padding: 16px 24px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.folders-table th:first-child { border-top-left-radius: 12px; }
+.folders-table th:last-child { border-top-right-radius: 12px; }
+.folders-table td {
+  padding: 18px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+.clickable-row { cursor: pointer; transition: background 0.2s; }
+.clickable-row:hover { background: #fefce8; }
+.clickable-row:last-child td { border-bottom: none; }
+.row-dropdown-open { position: relative; z-index: 100; }
+
+.folder-cell { display: flex; align-items: center; gap: 14px; }
+.folder-icon-sm {
+  width: 42px; height: 42px;
+  border-radius: 10px; background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e; display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem; flex-shrink: 0;
+}
+.folder-info-sm { display: flex; flex-direction: column; }
+.folder-name-sm { font-weight: 600; color: #1e293b; font-size: 0.95rem; }
+.folder-desc-sm { 
+  font-size: 0.78rem; color: #94a3b8; 
+  max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+  margin-top: 2px;
+}
+
+/* ===== FOLDER GRID (OLD) ===== */
 .folder-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -960,9 +1383,10 @@ export default {
   background: white;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
-  overflow: hidden;
+  overflow: visible;
   transition: all 0.25s;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  position: relative;
 }
 .folder-card:hover {
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
@@ -975,6 +1399,7 @@ export default {
   padding: 20px;
   cursor: pointer;
   transition: background 0.2s;
+  border-radius: 14px 14px 0 0;
 }
 .folder-card-header:hover { background: #fffbeb; }
 .folder-icon-box {
@@ -1007,12 +1432,16 @@ export default {
 .status-badge {
   font-size: 0.72rem; font-weight: 600;
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 10px; border-radius: 6px;
+  padding: 4px 10px; border-radius: 6px;
 }
 .status-badge.public { background: #d1fae5; color: #059669; }
 .status-badge.private { background: #f1f5f9; color: #64748b; }
 
-/* Folder Actions */
+.table-actions {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
 .folder-card-actions {
   display: flex;
   justify-content: flex-end;
@@ -1033,17 +1462,64 @@ export default {
 }
 .btn-action.toggle { color: #94a3b8; }
 .btn-action.toggle.active { color: #059669; background: #ecfdf5; border-color: #a7f3d0; }
-.btn-action.toggle:hover { color: #059669; background: #f0fdf4; }
+.btn-action.view:hover { color: #0891b2; background: #cffafe; border-color: #a5f3fc; }
+.btn-action.download:hover { color: #16a34a; background: #dcfce7; border-color: #86efac; }
 .btn-action.edit:hover { color: #2563eb; background: #eff6ff; border-color: #bfdbfe; }
 .btn-action.delete:hover { color: #dc2626; background: #fef2f2; border-color: #fecaca; }
-.btn-action.download:hover { color: #996600; background: #fffbeb; border-color: #fde68a; }
 
-/* ===== FILES TABLE ===== */
+/* ===== KEBAB DROPDOWN ===== */
+.action-dropdown { position: relative; display: inline-block; z-index: 10; }
+.action-dropdown.is-open { z-index: 1000; }
+.btn-kebab {
+  background: none; border: none;
+  color: #94a3b8; width: 34px; height: 34px;
+  border-radius: 8px; cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-kebab:hover, .action-dropdown.is-open .btn-kebab {
+  background: #f1f5f9; color: #1e293b;
+}
+.dropdown-menu {
+  position: absolute; right: 0; top: 100%;
+  background: white; border: 1px solid #e2e8f0;
+  border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  min-width: 190px; z-index: 9999;
+  padding: 8px 0; margin-top: 4px;
+  pointer-events: auto;
+}
+.dropdown-menu-right {
+  right: 0; left: auto;
+}
+.dropdown-menu button, .dropdown-item-link {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; text-align: left; padding: 10px 18px;
+  background: none; border: none; cursor: pointer;
+  font-size: 0.85rem; color: #475569; transition: all 0.2s;
+  text-decoration: none; box-sizing: border-box;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+.dropdown-menu button i, .dropdown-item-link i {
+  font-size: 0.9rem; color: #94a3b8; width: 16px; text-align: center;
+}
+.dropdown-menu button:hover, .dropdown-item-link:hover { 
+  background: #f8fafc; color: #1e293b; 
+}
+.dropdown-menu button:hover i, .dropdown-item-link:hover i {
+  color: #1e293b;
+}
+.dropdown-menu button.text-danger { color: #dc2626; }
+.dropdown-menu button.text-danger i { color: #dc2626; }
+.dropdown-menu button.text-danger:hover { background: #fef2f2; color: #b91c1c; }
+
+/* ===== FILES TABLE (UPDATED SPACING) ===== */
 .files-table-wrapper {
   background: white;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
-  overflow-x: auto;
+  overflow: visible; /* changed from auto to visible for dropdowns */
 }
 .files-table {
   width: 100%;
@@ -1051,7 +1527,7 @@ export default {
 }
 .files-table th {
   text-align: left;
-  padding: 14px 20px;
+  padding: 16px 24px; /* More padding */
   font-size: 0.78rem;
   font-weight: 600;
   color: #94a3b8;
@@ -1061,20 +1537,21 @@ export default {
   white-space: nowrap;
 }
 .files-table td {
-  padding: 14px 20px;
+  padding: 18px 24px; /* More padding */
   border-bottom: 1px solid #f8fafc;
   vertical-align: middle;
 }
 .files-table tr:hover td { background: #fefce8; }
 .files-table tr:last-child td { border-bottom: none; }
+.files-table tr.row-dropdown-open { position: relative; z-index: 100; }
 .file-cell {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 14px; /* increased gap */
 }
 .file-type-icon {
-  width: 38px; height: 38px;
-  border-radius: 8px;
+  width: 42px; height: 42px; /* slightly larger */
+  border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
+  font-size: 1.15rem;
   flex-shrink: 0;
 }
 .ft-pdf { background: #fef2f2; color: #dc2626; }
@@ -1085,16 +1562,26 @@ export default {
 .ft-archive { background: #fefce8; color: #ca8a04; }
 .ft-default { background: #f1f5f9; color: #64748b; }
 .file-name-text {
-  font-size: 0.9rem; font-weight: 500; color: #1e293b;
+  font-size: 0.95rem; font-weight: 500; color: #1e293b;
   display: block; max-width: 250px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.file-name-link {
+  font-size: 0.95rem; font-weight: 500; color: #1e293b;
+  display: block; max-width: 250px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.file-name-link:hover {
+  color: #92400e;
+  text-decoration: underline;
+}
 .file-ext {
-  font-size: 0.72rem; color: #94a3b8;
+  font-size: 0.75rem; color: #94a3b8;
   display: block; margin-top: 2px;
 }
 .text-muted { color: #94a3b8; font-size: 0.85rem; }
-.action-btns { display: flex; gap: 6px; }
 
 /* ===== TOAST ===== */
 .toast-msg {
@@ -1282,12 +1769,13 @@ export default {
 @media (max-width: 768px) {
   .page-header { flex-direction: column; }
   .folder-grid { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .stats-row { flex-direction: column; }
   .files-table th:nth-child(3),
   .files-table td:nth-child(3) { display: none; }
+  .folders-table th:nth-child(4),
+  .folders-table td:nth-child(4) { display: none; }
 }
 @media (max-width: 480px) {
-  .stats-row { grid-template-columns: 1fr; }
   .breadcrumb-bar { flex-direction: column; align-items: flex-start; }
   .btn-upload-file { margin-left: 0; width: 100%; justify-content: center; }
 }
@@ -1299,7 +1787,8 @@ export default {
   .header-actions,
   .btn-upload-file,
   .folder-card-actions,
-  .action-btns,
+  .action-dropdown,
+  .view-controls,
   .stats-row {
     display: none !important;
   }
@@ -1321,7 +1810,7 @@ export default {
     box-shadow: none !important;
   }
 
-  .files-table th, .files-table td {
+  .files-table th, .files-table td, .folders-table th, .folders-table td {
     border: 1px solid #ddd !important;
   }
 }
