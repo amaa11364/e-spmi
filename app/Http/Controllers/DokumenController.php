@@ -14,7 +14,7 @@ class DokumenController extends Controller
     {
         $search = $request->get('search');
         
-        $query = DokumenFolder::with(['files', 'children.files', 'children' => function($q) {
+        $query = DokumenFolder::with(['files.uploader', 'files.iku', 'children.files', 'children' => function($q) {
             $q->withCount('files');
         }])->withCount('files');
         
@@ -38,7 +38,7 @@ class DokumenController extends Controller
 
     public function showFolder($id)
     {
-        $folder = DokumenFolder::with(['files', 'children.files', 'children' => function($q) {
+        $folder = DokumenFolder::with(['files.uploader', 'files.iku', 'parent', 'children.files', 'children' => function($q) {
             $q->withCount('files');
         }])->withCount('files')->find($id);
 
@@ -47,6 +47,60 @@ class DokumenController extends Controller
         }
 
         return response()->json(['success' => true, 'data' => $folder]);
+    }
+
+    /**
+     * Resolve a folder by its slug path (e.g. "parent-slug/child-slug").
+     * Returns the folder data with children and files, plus ancestor chain for breadcrumb.
+     */
+    public function resolveBySlugPath(Request $request)
+    {
+        $slugPath = $request->get('path', '');
+        if (empty($slugPath)) {
+            return response()->json(['success' => false, 'message' => 'Path is required'], 400);
+        }
+
+        $slugs = array_filter(explode('/', $slugPath));
+        if (empty($slugs)) {
+            return response()->json(['success' => false, 'message' => 'Invalid path'], 400);
+        }
+
+        // Walk the slug hierarchy from root to target
+        $parentId = null;
+        $ancestors = [];
+        $folder = null;
+
+        foreach ($slugs as $slug) {
+            $query = DokumenFolder::where('slug', $slug);
+            if ($parentId === null) {
+                $query->whereNull('parent_id');
+            } else {
+                $query->where('parent_id', $parentId);
+            }
+            $folder = $query->first();
+
+            if (!$folder) {
+                return response()->json(['success' => false, 'message' => 'Folder not found'], 404);
+            }
+
+            // Add to ancestors (all except the last slug which is the target)
+            $ancestors[] = ['id' => $folder->id, 'nama' => $folder->nama, 'slug' => $folder->slug];
+            $parentId = $folder->id;
+        }
+
+        // Remove the last element from ancestors (that's the current folder, not an ancestor)
+        array_pop($ancestors);
+
+        // Load the target folder with full details
+        $folder = DokumenFolder::with(['files.uploader', 'files.iku', 'parent', 'children.files', 'children' => function($q) {
+            $q->withCount('files');
+        }])->withCount('files')->find($folder->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $folder,
+            'ancestors' => $ancestors
+        ]);
     }
 
     public function storeFolder(Request $request)
@@ -93,13 +147,22 @@ class DokumenController extends Controller
         ]);
 
         if ($validator->fails()) {
+            \Illuminate\Support\Facades\Log::error('Validation failed in updateFolder: ', $validator->errors()->toArray());
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
 
-        $folder->update($request->all());
+        $folder->update([
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
+            'is_public' => $request->boolean('is_public'),
+            'parent_id' => $request->parent_id,
+        ]);
+
+        $folder->refresh();
+        $folder->loadCount('files');
 
         return response()->json([
             'success' => true,
@@ -110,7 +173,7 @@ class DokumenController extends Controller
 
     public function destroyFolder($id)
     {
-        $folder = DokumenFolder::with('files')->find($id);
+        $folder = DokumenFolder::find($id);
         
         if (!$folder) {
             return response()->json([
@@ -119,11 +182,8 @@ class DokumenController extends Controller
             ], 404);
         }
 
-        foreach ($folder->files as $file) {
-            if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
-                Storage::disk('public')->delete($file->file_path);
-            }
-        }
+        // Recursively collect all file paths from this folder and its descendants
+        $this->deleteAllFilesRecursive($folder);
 
         $folder->delete();
 
@@ -131,6 +191,24 @@ class DokumenController extends Controller
             'success' => true,
             'message' => 'Folder deleted successfully'
         ]);
+    }
+
+    /**
+     * Recursively delete all physical files from a folder and its child folders.
+     */
+    private function deleteAllFilesRecursive(DokumenFolder $folder)
+    {
+        // Delete files in this folder
+        foreach ($folder->files as $file) {
+            if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
+                Storage::disk('public')->delete($file->file_path);
+            }
+        }
+
+        // Recursively process child folders
+        foreach ($folder->children as $child) {
+            $this->deleteAllFilesRecursive($child);
+        }
     }
 
     public function toggleFolderPublic($id)
@@ -174,8 +252,9 @@ class DokumenController extends Controller
             $validator = Validator::make($request->all(), [
                 'files' => 'required|array',
                 'files.*' => 'required|file|max:51200', // Ukuran dinaikkan hingga 50 MB per file
-                'is_public' => 'boolean'
-            ]);
+                'deskripsi' => 'nullable|string',
+            'is_public' => 'boolean'
+        ]);
 
             if ($validator->fails()) {
                 return response()->json([
@@ -198,6 +277,7 @@ class DokumenController extends Controller
                     'file_path' => $path,
                     'file_type' => $file->getMimeType(),
                     'file_size' => $file->getSize(),
+                    'deskripsi' => $request->deskripsi,
                     'is_public' => $isPublic
                 ]);
             }
@@ -213,6 +293,7 @@ class DokumenController extends Controller
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|max:51200', // Maksimal 50 MB
             'nama' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
             'is_public' => 'boolean'
         ]);
 
@@ -233,6 +314,7 @@ class DokumenController extends Controller
             'file_path' => $path,
             'file_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
+            'deskripsi' => $request->deskripsi,
             'is_public' => $request->boolean('is_public')
         ]);
 
@@ -256,6 +338,7 @@ class DokumenController extends Controller
 
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
             'is_public' => 'boolean'
         ]);
 
@@ -268,8 +351,11 @@ class DokumenController extends Controller
 
         $file->update([
             'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
             'is_public' => $request->boolean('is_public')
         ]);
+
+        $file->refresh();
 
         return response()->json([
             'success' => true,

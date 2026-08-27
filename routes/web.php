@@ -109,6 +109,7 @@ Route::prefix('api')->group(function () {
             Route::put('/dokumen/files/{id}', [DokumenController::class, 'updateFile']);
             Route::delete('/dokumen/files/{id}', [DokumenController::class, 'destroyFile']);
             Route::patch('/dokumen/files/{id}/toggle-public', [DokumenController::class, 'toggleFilePublic']);
+            Route::get('/dokumen/resolve-path', [DokumenController::class, 'resolveBySlugPath']);
         });
     });
 });

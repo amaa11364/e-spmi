@@ -4,11 +4,41 @@
       <!-- Header -->
       <div class="page-header">
         <div class="header-info">
-          <!-- Breadcrumb Global -->
+          <!-- Breadcrumb Global Dinamis -->
           <div class="global-breadcrumb">
-            <span><i class="fas fa-home"></i> Manajemen</span>
+            <span @click="navigateToRoot" class="breadcrumb-link">
+              <i class="fas fa-home"></i> Manajemen
+            </span>
             <i class="fas fa-chevron-right separator"></i>
-            <span class="active">Kelola Dokumen</span>
+            <span
+              v-if="!currentFolder"
+              class="active"
+            >Kelola Dokumen</span>
+            <span
+              v-else
+              @click="navigateToRoot"
+              class="breadcrumb-link"
+            >Kelola Dokumen</span>
+
+            <!-- Ancestor trail -->
+            <template v-if="currentFolder">
+              <template v-for="(ancestor, idx) in folderBreadcrumbs" :key="'bc-' + idx">
+                <i class="fas fa-chevron-right separator"></i>
+                <span
+                  v-if="idx === folderBreadcrumbs.length - 1"
+                  class="active"
+                >
+                  <i class="fas fa-folder-open"></i> {{ ancestor.nama }}
+                </span>
+                <span
+                  v-else
+                  @click="navigateToAncestor(idx)"
+                  class="breadcrumb-link"
+                >
+                  <i class="fas fa-folder"></i> {{ ancestor.nama }}
+                </span>
+              </template>
+            </template>
           </div>
         </div>
         <div class="header-actions">
@@ -21,14 +51,17 @@
           <button class="btn-primary-gold" @click="openFolderModal()">
             <i class="fas fa-folder-plus"></i> Tambah Folder
           </button>
+          <button v-if="currentFolder" class="btn-primary-gold" @click="openFileModal()">
+            <i class="fas fa-cloud-upload-alt"></i> Tambah File
+          </button>
         </div>
       </div>
 
-      <!-- Stats Bar (Compact) -->
+      <!-- Stats Bar (Dinamis & Real-time) -->
       <div class="stats-row">
         <div class="stat-card">
           <div class="stat-icon folders"><i class="fas fa-folder"></i></div>
-          <div class="stat-info"><span class="stat-num">{{ folders.length }}</span><span class="stat-lbl">Folder</span></div>
+          <div class="stat-info"><span class="stat-num">{{ totalFoldersCount }}</span><span class="stat-lbl">Folder</span></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon files"><i class="fas fa-file-alt"></i></div>
@@ -40,79 +73,89 @@
         </div>
       </div>
 
-      <!-- Search -->
-      <div class="search-bar">
-        <i class="fas fa-search"></i>
-        <input 
-          type="text" 
-          v-model="searchQuery" 
-          placeholder="Cari folder atau dokumen..."
-          @input="handleSearchInput"
-          @focus="showSearchDropdown = true"
-        >
-        <button v-if="searchQuery" class="btn-clear" @click="clearSearch">
-          <i class="fas fa-times"></i>
-        </button>
+      <!-- Toolbar -->
+      <div class="toolbar-section">
+        <!-- Search -->
+        <div class="search-bar-wrapper">
+          <div class="search-bar inline-search">
+            <i class="fas fa-search"></i>
+            <input 
+              type="text" 
+              v-model="searchQuery" 
+              placeholder="Cari folder atau dokumen..."
+              @input="handleSearchInput"
+              @focus="showSearchDropdown = true"
+            >
+            <button v-if="searchQuery" class="btn-clear" @click="clearSearch">
+              <i class="fas fa-times"></i>
+            </button>
 
-        <!-- Autocomplete Dropdown -->
-        <div v-if="showSearchDropdown && searchQuery && (isSearching || searchResults.folders.length > 0 || searchResults.files.length > 0)" class="search-dropdown-overlay" @click.stop>
-          
-          <div v-if="isSearching" class="search-loading">
-            <i class="fas fa-spinner fa-spin"></i> Mencari...
+            <!-- Autocomplete Dropdown -->
+            <div v-if="showSearchDropdown && searchQuery && (isSearching || searchResults.folders.length > 0 || searchResults.files.length > 0)" class="search-dropdown-overlay" @click.stop>
+              <div v-if="isSearching" class="search-loading">
+                <i class="fas fa-spinner fa-spin"></i> Mencari...
+              </div>
+              <template v-else>
+                <div v-if="searchResults.folders.length > 0" class="search-group">
+                  <div class="search-group-title">Folder</div>
+                  <div class="search-item" v-for="folder in searchResults.folders" :key="'sf-'+folder.id" @click="openFolderFromSearch(folder)">
+                    <div class="search-item-icon"><i class="fas fa-folder"></i></div>
+                    <div class="search-item-info">
+                      <span class="search-item-name">{{ folder.nama }}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div v-if="searchResults.files.length > 0" class="search-group">
+                  <div class="search-group-title">File Dokumen</div>
+                  <div class="search-item" v-for="file in searchResults.files" :key="'sfi-'+file.id" @click="downloadFileFromSearch(file)">
+                    <div class="search-item-icon" :class="getFileClass(file.file_type)"><i :class="getFileIcon(file.file_type)"></i></div>
+                    <div class="search-item-info">
+                      <span class="search-item-name">{{ file.nama }}</span>
+                      <span class="search-item-meta" v-if="file.folder">di dalam {{ file.folder.nama }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div v-if="searchResults.folders.length === 0 && searchResults.files.length === 0" class="search-empty">
+                  Tidak ada hasil yang ditemukan untuk "{{ searchQuery }}"
+                </div>
+              </template>
+            </div>
           </div>
-          
-          <template v-else>
-            <div v-if="searchResults.folders.length > 0" class="search-group">
-              <div class="search-group-title">Folder</div>
-              <div class="search-item" v-for="folder in searchResults.folders" :key="'sf-'+folder.id" @click="openFolderFromSearch(folder)">
-                <div class="search-item-icon"><i class="fas fa-folder"></i></div>
-                <div class="search-item-info">
-                  <span class="search-item-name">{{ folder.nama }}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div v-if="searchResults.files.length > 0" class="search-group">
-              <div class="search-group-title">File Dokumen</div>
-              <div class="search-item" v-for="file in searchResults.files" :key="'sfi-'+file.id" @click="downloadFileFromSearch(file)">
-                <div class="search-item-icon" :class="getFileClass(file.file_type)"><i :class="getFileIcon(file.file_type)"></i></div>
-                <div class="search-item-info">
-                  <span class="search-item-name">{{ file.nama }}</span>
-                  <span class="search-item-meta" v-if="file.folder">di dalam {{ file.folder.nama }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="searchResults.folders.length === 0 && searchResults.files.length === 0" class="search-empty">
-              Tidak ada hasil yang ditemukan untuk "{{ searchQuery }}"
-            </div>
-          </template>
         </div>
-      </div>
 
-      <!-- Folder Inner Breadcrumb -->
-      <div v-if="currentFolder" class="breadcrumb-bar">
-        <button class="breadcrumb-item" @click="backToFolders">
-          <i class="fas fa-folder"></i> Semua Folder
-        </button>
-        <i class="fas fa-chevron-right breadcrumb-sep"></i>
-        <span class="breadcrumb-current">
-          <i class="fas fa-folder-open"></i> {{ currentFolder.nama }}
-        </span>
-        <button class="btn-upload-file" @click="openFileModal()">
-          <i class="fas fa-cloud-upload-alt"></i> Tambah File
-        </button>
-      </div>
+        <div class="toolbar-actions">
+          <!-- Filter IKU -->
+          <div class="filter-box integrated-filter" v-if="availableIkus.length > 0">
+            <i class="fas fa-tags filter-icon-left"></i>
+            <select v-model="filterIku" class="filter-select-clean">
+              <option value="all">Semua Kategori</option>
+              <option v-for="iku in availableIkus" :key="iku" :value="iku">{{ iku }}</option>
+            </select>
+          </div>
 
-      <!-- View Controls (Toggle Table/Grid) -->
-      <div class="view-controls" v-if="!currentFolder && folders.length > 0">
-        <div class="view-toggle">
-          <button :class="{ active: viewMode === 'table' }" @click="viewMode = 'table'" title="Tampilan Tabel">
-            <i class="fas fa-list"></i>
-          </button>
-          <button :class="{ active: viewMode === 'grid' }" @click="viewMode = 'grid'" title="Tampilan Grid">
-            <i class="fas fa-th-large"></i>
-          </button>
+          <!-- Filter Status -->
+          <div class="filter-box integrated-filter">
+            <i class="fas fa-filter filter-icon-left"></i>
+            <select v-model="filterStatus" class="filter-select-clean">
+              <option value="all">Semua Status</option>
+              <option value="public">Publik</option>
+              <option value="private">Privat</option>
+            </select>
+          </div>
+
+          <!-- View Controls -->
+          <div class="view-controls">
+            <div class="view-toggle">
+              <button :class="{ active: viewMode === 'table' }" @click="viewMode = 'table'" title="Tampilan Tabel">
+                <i class="fas fa-list"></i>
+              </button>
+              <button :class="{ active: viewMode === 'grid' }" @click="viewMode = 'grid'" title="Tampilan Grid">
+                <i class="fas fa-th-large"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -122,7 +165,7 @@
         <p>Memuat data...</p>
       </div>
 
-      <!-- Folder List (when no folder is selected) -->
+      <!-- Folder List Root -->
       <template v-else-if="!currentFolder">
         <div v-if="folders.length === 0" class="empty-state">
           <div class="empty-icon"><i class="fas fa-folder-plus"></i></div>
@@ -139,41 +182,71 @@
             <table class="folders-table">
               <thead>
                 <tr>
-                  <th>Nama Folder</th>
-                  <th>Jumlah File</th>
-                  <th>Status Akses</th>
-                  <th>Tanggal Diubah</th>
+                  <th @click="toggleSort('nama')" class="sortable">Nama Folder <i :class="getSortIcon('nama')"></i></th>
+                  <th @click="toggleSort('kategori_iku')" class="sortable">IKU <i :class="getSortIcon('kategori_iku')"></i></th>
+                  <th @click="toggleSort('deskripsi')" class="sortable">Desk File <i :class="getSortIcon('deskripsi')"></i></th>
+                  <th @click="toggleSort('files_count')" class="sortable">Folder <i :class="getSortIcon('files_count')"></i></th>
+                  <th @click="toggleSort('updated_at')" class="sortable">User Update &amp; Tanggal <i :class="getSortIcon('updated_at')"></i></th>
+                  <th @click="toggleSort('is_public')" class="sortable">Status Akses <i :class="getSortIcon('is_public')"></i></th>
                   <th style="text-align:center;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="folder in folders" :key="folder.id" @click="openFolder(folder)" class="clickable-row">
+                <tr v-for="folder in filteredAndSortedFolders" :key="folder.id" @click="openFolder(folder)" class="clickable-row">
                   <td>
                     <div class="folder-cell">
                       <div class="folder-icon-sm"><i class="fas fa-folder"></i></div>
                       <div class="folder-info-sm">
-                        <span class="folder-name-sm">{{ folder.nama }}</span>
-                        <span class="folder-desc-sm" v-if="folder.deskripsi">{{ folder.deskripsi }}</span>
+                        <template v-if="inlineEditId === folder.id && inlineEditType === 'folder'">
+                          <input type="text" v-model="inlineEditValue" class="inline-input" @click.stop @keyup.enter="saveInlineEdit(folder, 'folder')" @keyup.esc="cancelInlineEdit" @blur="saveInlineEdit(folder, 'folder')">
+                        </template>
+                        <template v-else>
+                          <div class="inline-edit-wrap">
+                            <span class="folder-name-sm">{{ folder.nama }}</span>
+                            <button v-if="userCanEdit" class="btn-inline-edit" @click.stop="startInlineEdit(folder, 'folder')" title="Edit nama"><i class="fas fa-pen"></i></button>
+                          </div>
+                        </template>
                       </div>
                     </div>
                   </td>
-                  <td><span class="text-muted">{{ folder.files_count || 0 }} File</span></td>
                   <td>
-                    <span class="status-badge" :class="folder.is_public ? 'public' : 'private'">
-                      <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
-                      {{ folder.is_public ? 'Publik' : 'Privat' }}
+                    <span class="badge kode-badge" v-if="getIkuFromFolderName(folder.nama)">{{ getIkuFromFolderName(folder.nama) }}</span>
+                    <span class="text-muted" v-else>-</span>
+                  </td>
+                  <td>
+                    <template v-if="inlineEditId === folder.id && inlineEditType === 'folder_desc'">
+                      <input type="text" v-model="inlineEditValue" class="inline-input" @click.stop @keyup.enter="saveInlineEditDesc(folder, 'folder')" @keyup.esc="cancelInlineEdit" @blur="saveInlineEditDesc(folder, 'folder')">
+                    </template>
+                    <template v-else>
+                      <div class="inline-edit-wrap">
+                        <span class="text-muted desk-text">{{ folder.deskripsi || '-' }}</span>
+                        <button v-if="userCanEdit" class="btn-inline-edit" @click.stop="startInlineEdit(folder, 'folder_desc')" title="Edit deskripsi"><i class="fas fa-pen"></i></button>
+                      </div>
+                    </template>
+                  </td>
+                  <td>
+                    <span class="text-muted">{{ getFolderContentText(folder) }}</span>
+                  </td>
+                  <td>
+                    <div class="user-update-info">
+                      <span class="text-muted user-update-name" v-if="getLastUpdater(folder)">
+                        <i class="fas fa-user-circle"></i> {{ getLastUpdater(folder) }}
+                      </span>
+                      <span class="text-muted">{{ formatDate(folder.updated_at || folder.created_at) }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge status-badge-clickable" :class="getFolderAccessClass(folder)" @click.stop="toggleFolderPublic(folder)" :title="folder.is_public ? 'Klik untuk ubah ke Privat' : 'Klik untuk ubah ke Publik'">
+                      <i :class="getFolderAccessIcon(folder)"></i>
+                      {{ getFolderAccessLabel(folder) }}
                     </span>
                   </td>
-                  <td><span class="text-muted">{{ formatDate(folder.updated_at || folder.created_at) }}</span></td>
                   <td @click.stop style="text-align:center;">
                     <div class="table-actions">
-                      <button class="btn-action toggle" :class="{ active: folder.is_public }" @click.stop="toggleFolderPublic(folder)" :title="folder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'">
-                        <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                      <button class="btn-action view" @click.stop="openFolder(folder)" title="Lihat Detail Folder">
+                        <i class="fas fa-eye"></i>
                       </button>
-                      <button class="btn-action edit" @click.stop="openFolderModal(folder)" title="Edit Folder">
-                        <i class="fas fa-pen"></i>
-                      </button>
-                      <button class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
+                      <button v-if="userCanDelete" class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
                         <i class="fas fa-trash-alt"></i>
                       </button>
                     </div>
@@ -186,7 +259,7 @@
           <!-- Grid View -->
           <div v-else class="folder-grid">
             <div 
-              v-for="folder in folders" 
+              v-for="folder in filteredAndSortedFolders" 
               :key="folder.id"
               class="folder-card"
             >
@@ -198,29 +271,19 @@
                   <h4>{{ folder.nama }}</h4>
                   <p v-if="folder.deskripsi">{{ folder.deskripsi }}</p>
                   <div class="folder-meta">
-                    <span class="meta-badge">
-                      <i class="fas fa-file"></i> {{ folder.files_count || 0 }} File
-                    </span>
-                    <span class="status-badge" :class="folder.is_public ? 'public' : 'private'">
-                      <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
-                      {{ folder.is_public ? 'Publik' : 'Privat' }}
+                    <span class="meta-badge">{{ getFolderContentText(folder) }}</span>
+                    <span class="status-badge status-badge-clickable" :class="getFolderAccessClass(folder)" @click.stop="toggleFolderPublic(folder)" :title="folder.is_public ? 'Klik untuk ubah ke Privat' : 'Klik untuk ubah ke Publik'">
+                      <i :class="getFolderAccessIcon(folder)"></i>
+                      {{ getFolderAccessLabel(folder) }}
                     </span>
                   </div>
                 </div>
               </div>
               <div class="folder-card-actions">
-                <button 
-                  class="btn-action toggle"
-                  :class="{ active: folder.is_public }"
-                  @click.stop="toggleFolderPublic(folder)"
-                  :title="folder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'"
-                >
-                  <i :class="folder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                <button class="btn-action view" @click.stop="openFolder(folder)" title="Lihat Detail Folder">
+                  <i class="fas fa-eye"></i>
                 </button>
-                <button class="btn-action edit" @click.stop="openFolderModal(folder)" title="Edit Folder">
-                  <i class="fas fa-pen"></i>
-                </button>
-                <button class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
+                <button v-if="userCanDelete" class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </div>
@@ -229,15 +292,15 @@
         </div>
       </template>
 
-      <!-- File List (when folder is selected) -->
+      <!-- Subfolders & File List (In Subfolder View) -->
       <template v-else>
-        
         <!-- Sub-folders Section -->
         <div v-if="currentFolder.children && currentFolder.children.length > 0" class="subfolders-section" style="margin-bottom: 24px;">
           <h4 style="margin-bottom: 12px; color: #1e293b; font-size: 1.05rem;"><i class="fas fa-folder-open" style="color: #92400e; margin-right: 6px;"></i> Sub-Folder</h4>
-          <div class="folder-grid">
+          
+          <div v-if="viewMode === 'grid'" class="folder-grid">
             <div 
-              v-for="subFolder in currentFolder.children" 
+              v-for="subFolder in filteredAndSortedChildren" 
               :key="subFolder.id"
               class="folder-card"
             >
@@ -249,10 +312,8 @@
                   <h4>{{ subFolder.nama }}</h4>
                   <p v-if="subFolder.deskripsi">{{ subFolder.deskripsi }}</p>
                   <div class="folder-meta">
-                    <span class="meta-badge">
-                      <i class="fas fa-file"></i> {{ subFolder.files_count || 0 }} File
-                    </span>
-                    <span class="status-badge" :class="subFolder.is_public ? 'public' : 'private'">
+                    <span class="meta-badge">{{ getFolderContentText(subFolder) }}</span>
+                    <span class="status-badge status-badge-clickable" :class="subFolder.is_public ? 'public' : 'private'" @click.stop="toggleFolderPublic(subFolder)" :title="subFolder.is_public ? 'Klik untuk ubah ke Privat' : 'Klik untuk ubah ke Publik'">
                       <i :class="subFolder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
                       {{ subFolder.is_public ? 'Publik' : 'Privat' }}
                     </span>
@@ -260,22 +321,90 @@
                 </div>
               </div>
               <div class="folder-card-actions">
-                <button 
-                  class="btn-action toggle"
-                  :class="{ active: subFolder.is_public }"
-                  @click.stop="toggleFolderPublic(subFolder)"
-                  :title="subFolder.is_public ? 'Jadikan Privat' : 'Jadikan Publik'"
-                >
-                  <i :class="subFolder.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                <button class="btn-action view" @click.stop="openFolder(subFolder)" title="Lihat Detail Folder">
+                  <i class="fas fa-eye"></i>
                 </button>
-                <button class="btn-action edit" @click.stop="openFolderModal(subFolder)" title="Edit Folder">
-                  <i class="fas fa-pen"></i>
-                </button>
-                <button class="btn-action delete" @click.stop="confirmDeleteFolder(subFolder)" title="Hapus Folder">
+                <button v-if="userCanDelete" class="btn-action delete" @click.stop="confirmDeleteFolder(subFolder)" title="Hapus Folder">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </div>
             </div>
+          </div>
+
+          <div v-if="viewMode === 'table'" class="folders-table-wrapper">
+            <table class="folders-table">
+              <thead>
+                <tr>
+                  <th @click="toggleSort('nama')" class="sortable">Nama Folder <i :class="getSortIcon('nama')"></i></th>
+                  <th @click="toggleSort('kategori_iku')" class="sortable">IKU <i :class="getSortIcon('kategori_iku')"></i></th>
+                  <th @click="toggleSort('deskripsi')" class="sortable">Desk File <i :class="getSortIcon('deskripsi')"></i></th>
+                  <th @click="toggleSort('files_count')" class="sortable">Folder <i :class="getSortIcon('files_count')"></i></th>
+                  <th @click="toggleSort('updated_at')" class="sortable">User Update &amp; Tanggal <i :class="getSortIcon('updated_at')"></i></th>
+                  <th @click="toggleSort('is_public')" class="sortable">Status Akses <i :class="getSortIcon('is_public')"></i></th>
+                  <th style="text-align:center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="folder in filteredAndSortedChildren" :key="folder.id" @click="openFolder(folder)" class="clickable-row">
+                  <td>
+                    <div class="folder-cell">
+                      <div class="folder-icon-sm"><i class="fas fa-folder"></i></div>
+                      <div class="folder-info-sm">
+                        <template v-if="inlineEditId === folder.id && inlineEditType === 'folder'">
+                          <input type="text" v-model="inlineEditValue" class="inline-input" @click.stop @keyup.enter="saveInlineEdit(folder, 'folder')" @keyup.esc="cancelInlineEdit" @blur="saveInlineEdit(folder, 'folder')">
+                        </template>
+                        <template v-else>
+                          <div class="inline-edit-wrap">
+                            <span class="folder-name-sm">{{ folder.nama }}</span>
+                            <button v-if="userCanEdit" class="btn-inline-edit" @click.stop="startInlineEdit(folder, 'folder')" title="Edit nama"><i class="fas fa-pen"></i></button>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge kode-badge" v-if="getIkuFromFolderName(folder.nama)">{{ getIkuFromFolderName(folder.nama) }}</span>
+                    <span class="text-muted" v-else>-</span>
+                  </td>
+                  <td>
+                    <template v-if="inlineEditId === folder.id && inlineEditType === 'folder_desc'">
+                      <input type="text" v-model="inlineEditValue" class="inline-input" @click.stop @keyup.enter="saveInlineEditDesc(folder, 'folder')" @keyup.esc="cancelInlineEdit" @blur="saveInlineEditDesc(folder, 'folder')">
+                    </template>
+                    <template v-else>
+                      <div class="inline-edit-wrap">
+                        <span class="text-muted desk-text">{{ folder.deskripsi || '-' }}</span>
+                        <button v-if="userCanEdit" class="btn-inline-edit" @click.stop="startInlineEdit(folder, 'folder_desc')" title="Edit deskripsi"><i class="fas fa-pen"></i></button>
+                      </div>
+                    </template>
+                  </td>
+                  <td><span class="text-muted">{{ getFolderContentText(folder) }}</span></td>
+                  <td>
+                    <div class="user-update-info">
+                      <span class="text-muted user-update-name" v-if="getLastUpdater(folder)">
+                        <i class="fas fa-user-circle"></i> {{ getLastUpdater(folder) }}
+                      </span>
+                      <span class="text-muted">{{ formatDate(folder.updated_at || folder.created_at) }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge status-badge-clickable" :class="getFolderAccessClass(folder)" @click.stop="toggleFolderPublic(folder)" :title="folder.is_public ? 'Klik untuk ubah ke Privat' : 'Klik untuk ubah ke Publik'">
+                      <i :class="getFolderAccessIcon(folder)"></i>
+                      {{ getFolderAccessLabel(folder) }}
+                    </span>
+                  </td>
+                  <td @click.stop style="text-align:center;">
+                    <div class="table-actions">
+                      <button class="btn-action view" @click.stop="openFolder(folder)" title="Lihat Detail Folder">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button v-if="userCanDelete" class="btn-action delete" @click.stop="confirmDeleteFolder(folder)" title="Hapus Folder">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -293,61 +422,108 @@
           </div>
         </div>
 
-        <div v-if="currentFolder.files && currentFolder.files.length > 0" class="files-table-wrapper">
+        <div v-if="currentFolder.files && currentFolder.files.length > 0" class="files-section">
           <h4 style="padding: 16px 24px 0; margin-bottom: 8px; color: #1e293b; font-size: 1.05rem;"><i class="fas fa-file-alt" style="color: #1d4ed8; margin-right: 6px;"></i> File</h4>
-          <table class="files-table">
-            <thead>
-              <tr>
-                <th>File</th>
-                <th>Ukuran</th>
-                <th>Tanggal</th>
-                <th>Status Akses</th>
-                <th style="text-align:center;">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="file in currentFolder.files" :key="file.id">
-                <td>
-                  <div class="file-cell">
-                    <div class="file-type-icon" :class="getFileClass(file.file_type)">
-                      <i :class="getFileIcon(file.file_type)"></i>
+          
+          <div v-if="viewMode === 'table'" class="files-table-wrapper">
+            <table class="files-table">
+              <thead>
+                <tr>
+                  <th @click="toggleSort('nama')" class="sortable">File <i :class="getSortIcon('nama')"></i></th>
+                  <th @click="toggleSort('file_size')" class="sortable">Ukuran <i :class="getSortIcon('file_size')"></i></th>
+                  <th @click="toggleSort('created_at')" class="sortable">User Update &amp; Tanggal <i :class="getSortIcon('created_at')"></i></th>
+                  <th @click="toggleSort('is_public')" class="sortable">Status Akses <i :class="getSortIcon('is_public')"></i></th>
+                  <th style="text-align:center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="file in filteredAndSortedFiles" :key="file.id">
+                  <td>
+                    <div class="file-cell">
+                      <div class="file-type-icon" :class="getFileClass(file.file_type)">
+                        <i :class="getFileIcon(file.file_type)"></i>
+                      </div>
+                      <div>
+                        <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="file-name-link">{{ file.nama }}</a>
+                        <span class="file-ext">{{ getFileExt(file.file_path) }}</span>
+                      </div>
                     </div>
-                    <div>
-                      <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="file-name-link">{{ file.nama }}</a>
-                      <span class="file-ext">{{ getFileExt(file.file_path) }}</span>
+                  </td>
+                  <td><span class="text-muted">{{ formatSize(file.file_size) }}</span></td>
+                  <td>
+                    <div class="user-update-info">
+                      <span class="text-muted user-update-name" v-if="file.uploader">
+                        <i class="fas fa-user-circle"></i> {{ file.uploader.name }}
+                      </span>
+                      <span class="text-muted">{{ formatDate(file.created_at) }}</span>
                     </div>
-                  </div>
-                </td>
-                <td><span class="text-muted">{{ formatSize(file.file_size) }}</span></td>
-                <td><span class="text-muted">{{ formatDate(file.created_at) }}</span></td>
-                <td>
-                  <span class="status-badge" :class="file.is_public ? 'public' : 'private'">
-                    <i :class="file.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
-                    {{ file.is_public ? 'Publik' : 'Privat' }}
-                  </span>
-                </td>
-                <td @click.stop style="text-align:center;">
-                  <div class="table-actions">
-                    <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="btn-action view" title="Lihat File">
-                      <i class="fas fa-eye"></i>
-                    </a>
-                    <button class="btn-action toggle" :class="{ active: file.is_public }" @click.stop="toggleFilePublic(file)" :title="file.is_public ? 'Jadikan Privat' : 'Jadikan Publik'">
+                  </td>
+                  <td>
+                    <span class="status-badge status-badge-clickable" :class="file.is_public ? 'public' : 'private'" @click.stop="toggleFilePublic(file)" :title="file.is_public ? 'Klik untuk ubah ke Privat' : 'Klik untuk ubah ke Publik'">
                       <i :class="file.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
-                    </button>
-                    <a :href="'/dokumen/files/' + file.id + '/download'" target="_blank" class="btn-action download" title="Download File">
-                      <i class="fas fa-download"></i>
-                    </a>
-                    <button class="btn-action edit" @click.stop="openFileModal(file)" title="Edit File">
-                      <i class="fas fa-pen"></i>
-                    </button>
-                    <button class="btn-action delete" @click.stop="confirmDeleteFile(file)" title="Hapus File">
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
+                      {{ file.is_public ? 'Publik' : 'Privat' }}
+                    </span>
+                  </td>
+                  <td @click.stop style="text-align:center;">
+                    <div class="table-actions">
+                      <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="btn-action view" title="Lihat File">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <a :href="'/dokumen/files/' + file.id + '/download'" target="_blank" class="btn-action download" title="Download File">
+                        <i class="fas fa-download"></i>
+                      </a>
+                      <button v-if="userCanEdit" class="btn-action edit" @click.stop="openFileModal(file)" title="Edit File">
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <button v-if="userCanDelete" class="btn-action delete" @click.stop="confirmDeleteFile(file)" title="Hapus File">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div v-if="viewMode === 'grid'" class="folder-grid">
+            <div 
+              v-for="file in filteredAndSortedFiles" 
+              :key="file.id"
+              class="folder-card file-card"
+            >
+              <div class="folder-card-header">
+                <div class="folder-icon-box" :class="getFileClass(file.file_type)">
+                  <i :class="getFileIcon(file.file_type)"></i>
+                </div>
+                <div class="folder-card-info">
+                  <h4><a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" style="color: inherit; text-decoration: none;">{{ file.nama }}</a></h4>
+                  <div class="folder-meta">
+                    <span class="meta-badge">{{ formatSize(file.file_size) }}</span>
+                    <span class="meta-badge">{{ formatDate(file.created_at) }}</span>
+                    <span class="status-badge status-badge-clickable" :class="file.is_public ? 'public' : 'private'" @click.stop="toggleFilePublic(file)" :title="file.is_public ? 'Klik untuk ubah ke Privat' : 'Klik untuk ubah ke Publik'">
+                      <i :class="file.is_public ? 'fas fa-globe' : 'fas fa-lock'"></i>
+                      {{ file.is_public ? 'Publik' : 'Privat' }}
+                    </span>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+              </div>
+              <div class="folder-card-actions">
+                <a :href="file.file_url || ('/dokumen/files/' + file.id + '/download')" target="_blank" class="btn-action view" title="Lihat File">
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a :href="'/dokumen/files/' + file.id + '/download'" target="_blank" class="btn-action download" title="Download File">
+                  <i class="fas fa-download"></i>
+                </a>
+                <button v-if="userCanEdit" class="btn-action edit" @click.stop="openFileModal(file)" title="Edit File">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button v-if="userCanDelete" class="btn-action delete" @click.stop="confirmDeleteFile(file)" title="Hapus File">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </template>
 
@@ -531,14 +707,28 @@ export default {
       searchTimeout: null,
       isSearching: false,
       showSearchDropdown: false,
+      filterStatus: 'all',
+      filterIku: 'all',
       searchResults: {
         folders: [],
         files: []
       },
       
-      // New layout properties
+      // Filter & Sorting
+      sortKey: 'nama',
+      sortOrder: 'asc',
+      
+      // Layout properties
       viewMode: 'table',
       activeDropdown: null,
+
+      // User / permission
+      currentUser: null,
+
+      // Inline edit
+      inlineEditId: null,
+      inlineEditType: null,
+      inlineEditValue: '',
 
       // Folder modal
       showFolderModal: false,
@@ -565,21 +755,114 @@ export default {
       // Toast
       toast: { show: false, message: '', type: 'success' },
       
-      // Keep track of event listener
       clickListener: null
     }
   },
   computed: {
+    availableIkus() {
+      const ikuSet = new Set();
+      const processItem = (item) => {
+        if (item.file_type) {
+           if (item.iku && item.iku.kode) ikuSet.add(item.iku.kode);
+        } else {
+           const folderIku = this.getIkuFromFolderName(item.nama);
+           if (folderIku) ikuSet.add(folderIku);
+        }
+      };
+      
+      this.folders.forEach(processItem);
+      
+      if (this.currentFolder) {
+         if (this.currentFolder.children) this.currentFolder.children.forEach(processItem);
+         if (this.currentFolder.files) this.currentFolder.files.forEach(processItem);
+      }
+      
+      return Array.from(ikuSet).sort();
+    },
+    filteredAndSortedFolders() {
+      return this.applyFilterAndSort(this.folders, 'folder');
+    },
+    filteredAndSortedChildren() {
+      if (!this.currentFolder || !this.currentFolder.children) return [];
+      return this.applyFilterAndSort(this.currentFolder.children, 'folder');
+    },
+    filteredAndSortedFiles() {
+      if (!this.currentFolder || !this.currentFolder.files) return [];
+      return this.applyFilterAndSort(this.currentFolder.files, 'file');
+    },
+    
+    // Perbaikan Statistik Real-time & Komprehensif
+    totalFoldersCount() {
+      const countFolders = (folderList) => {
+        if (!Array.isArray(folderList)) return 0;
+        return folderList.reduce((acc, folder) => {
+          const children = folder.children || [];
+          return acc + 1 + countFolders(children);
+        }, 0);
+      };
+      return countFolders(this.folders);
+    },
     totalFiles() {
-      return this.folders.reduce((sum, f) => sum + (f.files_count || 0), 0)
+      const countFiles = (folderList) => {
+        if (!Array.isArray(folderList)) return 0;
+        return folderList.reduce((acc, folder) => {
+          const directFiles = (folder.files && Array.isArray(folder.files)) 
+            ? folder.files.length 
+            : (folder.files_count || 0);
+          const childFiles = countFiles(folder.children || []);
+          return acc + directFiles + childFiles;
+        }, 0);
+      };
+      return countFiles(this.folders);
     },
     publicCount() {
-      return this.folders.filter(f => f.is_public).length
+      const countPublic = (folderList) => {
+        if (!Array.isArray(folderList)) return 0;
+        return folderList.reduce((acc, folder) => {
+          let currentCount = 0;
+          if (Boolean(folder.is_public)) {
+            currentCount++;
+          }
+          
+          if (folder.files && Array.isArray(folder.files)) {
+            currentCount += folder.files.filter(file => Boolean(file.is_public)).length;
+          } else if (folder.public_files_count) {
+            currentCount += folder.public_files_count;
+          }
+          
+          return acc + currentCount + countPublic(folder.children || []);
+        }, 0);
+      };
+      return countPublic(this.folders);
+    },
+
+    folderBreadcrumbs() {
+      const crumbs = []
+      for (const f of this.folderHistory) {
+        crumbs.push({ id: f.id, nama: f.nama, slug: f.slug, full_slug_path: f.full_slug_path })
+      }
+      if (this.currentFolder) {
+        crumbs.push({ 
+          id: this.currentFolder.id, 
+          nama: this.currentFolder.nama, 
+          slug: this.currentFolder.slug,
+          full_slug_path: this.currentFolder.full_slug_path 
+        })
+      }
+      return crumbs
+    },
+    userCanEdit() {
+      if (!this.currentUser) return false
+      return this.currentUser.is_admin || this.currentUser.role === 'verifikator'
+    },
+    userCanDelete() {
+      if (!this.currentUser) return false
+      return this.currentUser.is_admin === true
     }
   },
   mounted() {
-    this.fetchFolders()
-    // Setup global click listener for dropdowns
+    this.loadCurrentUser()
+    this.initializeFromRoute()
     this.clickListener = (e) => {
       if (!e.target.closest('.action-dropdown')) {
         this.closeDropdown()
@@ -590,31 +873,193 @@ export default {
     }
     document.addEventListener('click', this.clickListener)
   },
-  unmounted() { // or beforeDestroy for Vue 2
-    if (this.clickListener) {
-      document.removeEventListener('click', this.clickListener)
+  watch: {
+    '$route'(to, from) {
+      if (to.name === 'pengelola.dokumen') {
+        this.initializeFromRoute()
+      }
     }
   },
-  beforeDestroy() {
-    // For Vue 2 compatibility just in case
+  unmounted() {
     if (this.clickListener) {
       document.removeEventListener('click', this.clickListener)
     }
   },
   methods: {
-    // ===== Dropdown Methods =====
-    toggleDropdown(id) {
-      if (this.activeDropdown === id) {
-        this.activeDropdown = null;
+    async initializeFromRoute() {
+      let slug = this.$route.params.slugPath;
+      if (Array.isArray(slug)) slug = slug.join('/');
+      
+      if (slug) {
+        await this.resolvePath(slug);
       } else {
-        this.activeDropdown = id;
+        this.currentFolder = null;
+        this.folderHistory = [];
+        await this.fetchFolders();
       }
+    },
+    async resolvePath(slug) {
+      this.loading = true;
+      try {
+        const res = await axios.get('/dokumen/resolve-path', { params: { path: slug } });
+        if (res.data.success) {
+          this.currentFolder = res.data.data;
+          let currentPath = '';
+          this.folderHistory = (res.data.ancestors || []).map(anc => {
+            currentPath = currentPath ? currentPath + '/' + anc.slug : anc.slug;
+            return { ...anc, full_slug_path: currentPath };
+          });
+        }
+      } catch (err) {
+        this.showToast('Gagal memuat folder dari URL', 'error');
+        this.$router.push('/pengelola/dokumen');
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    loadCurrentUser() {
+      try {
+        const userData = localStorage.getItem('user')
+        if (userData) {
+          this.currentUser = JSON.parse(userData)
+        }
+      } catch (e) {
+        console.warn('Gagal memuat data user dari localStorage:', e)
+      }
+      axios.get('/user').then(res => {
+        if (res.data && res.data.data) {
+          this.currentUser = res.data.data
+          localStorage.setItem('user', JSON.stringify(this.currentUser))
+        }
+      }).catch(() => {})
+    },
+
+    toggleDropdown(id) {
+      this.activeDropdown = this.activeDropdown === id ? null : id;
     },
     closeDropdown() {
       this.activeDropdown = null;
     },
 
-    // ===== Search Autocomplete Methods =====
+    startInlineEdit(item, type) {
+      this.inlineEditId = item.id
+      this.inlineEditType = type
+      if (type === 'folder') {
+        this.inlineEditValue = item.nama
+      } else if (type === 'folder_desc') {
+        this.inlineEditValue = item.deskripsi || ''
+      }
+    },
+    cancelInlineEdit() {
+      this.inlineEditId = null
+      this.inlineEditType = null
+      this.inlineEditValue = ''
+    },
+    async saveInlineEdit(item, type) {
+      if (!this.inlineEditValue.trim()) {
+        this.cancelInlineEdit()
+        return
+      }
+      try {
+        const data = {
+          nama: type === 'folder' ? this.inlineEditValue : item.nama,
+          deskripsi: item.deskripsi || '',
+          is_public: item.is_public
+        }
+        const res = await axios.put(`/dokumen/folders/${item.id}`, data)
+        if (res.data.success) {
+          item.nama = data.nama
+          this.showToast('Nama folder berhasil diperbarui!')
+        }
+      } catch (err) {
+        this.showToast('Gagal memperbarui nama folder', 'error')
+      } finally {
+        this.cancelInlineEdit()
+      }
+    },
+    async saveInlineEditDesc(item, type) {
+      try {
+        const data = {
+          nama: item.nama,
+          deskripsi: this.inlineEditValue,
+          is_public: item.is_public
+        }
+        const res = await axios.put(`/dokumen/folders/${item.id}`, data)
+        if (res.data.success) {
+          item.deskripsi = data.deskripsi
+          this.showToast('Deskripsi folder berhasil diperbarui!')
+        }
+      } catch (err) {
+        this.showToast('Gagal memperbarui deskripsi folder', 'error')
+      } finally {
+        this.cancelInlineEdit()
+      }
+    },
+
+    applyFilterAndSort(items, type) {
+      if (!items) return [];
+      
+      let result = items.filter(item => {
+        const isPub = Boolean(item.is_public);
+        if (this.filterStatus === 'public' && !isPub) return false;
+        if (this.filterStatus === 'private' && isPub) return false;
+        
+        if (this.filterIku !== 'all') {
+           const iku = item.file_type 
+               ? (item.iku ? item.iku.kode : null) 
+               : this.getIkuFromFolderName(item.nama);
+           if (iku !== this.filterIku) return false;
+        }
+        
+        return true;
+      });
+      
+      result = result.sort((a, b) => {
+        let valA = a[this.sortKey];
+        let valB = b[this.sortKey];
+        
+        if (this.sortKey === 'files_count') {
+           valA = a.children ? a.children.length : (a.children_count || 0);
+           valB = b.children ? b.children.length : (b.children_count || 0);
+        } else if (this.sortKey === 'file_size') {
+           valA = a.file_size || 0;
+           valB = b.file_size || 0;
+        } else if (this.sortKey === 'updated_at' || this.sortKey === 'created_at') {
+           valA = new Date(a.updated_at || a.created_at).getTime();
+           valB = new Date(b.updated_at || b.created_at).getTime();
+        } else if (this.sortKey === 'kategori_iku') {
+           valA = this.getIkuFromFolderName(a.nama) || '';
+           valB = this.getIkuFromFolderName(b.nama) || '';
+        } else {
+           if (typeof valA === 'string') valA = valA.toLowerCase();
+           if (typeof valB === 'string') valB = valB.toLowerCase();
+        }
+        
+        if (valA < valB) return this.sortOrder === 'asc' ? -1 : 1;
+        if (valA > valB) return this.sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+      
+      return result;
+    },
+    toggleSort(key) {
+      if (this.sortKey === key) {
+        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.sortKey = key;
+        this.sortOrder = 'asc';
+      }
+    },
+    getSortIcon(key) {
+      if (this.sortKey !== key) return 'fas fa-sort text-muted-light sort-icon';
+      const isNumericOrDate = ['files_count', 'file_size', 'updated_at', 'created_at'].includes(key);
+      if (isNumericOrDate) {
+        return this.sortOrder === 'asc' ? 'fas fa-sort-numeric-down sort-icon active' : 'fas fa-sort-numeric-up sort-icon active';
+      }
+      return this.sortOrder === 'asc' ? 'fas fa-sort-alpha-down sort-icon active' : 'fas fa-sort-alpha-up sort-icon active';
+    },
+
     handleSearchInput() {
       this.showSearchDropdown = true;
       if (this.searchTimeout) clearTimeout(this.searchTimeout);
@@ -651,7 +1096,10 @@ export default {
       try {
          await this.fetchFolders();
          const fullFolder = this.folders.find(f => f.id === folder.id);
-         if (fullFolder) this.currentFolder = fullFolder;
+         if (fullFolder) {
+           const path = fullFolder.full_slug_path || fullFolder.slug;
+           this.$router.push('/pengelola/dokumen/' + path);
+         }
       } catch (err) {}
     },
     downloadFileFromSearch(file) {
@@ -659,8 +1107,15 @@ export default {
       window.open('/dokumen/files/' + file.id + '/download', '_blank');
     },
 
+    navigateToRoot() {
+      this.$router.push('/pengelola/dokumen');
+    },
+    navigateToAncestor(idx) {
+      const targetFolder = this.folderBreadcrumbs[idx]
+      const path = targetFolder.full_slug_path || targetFolder.slug;
+      this.$router.push('/pengelola/dokumen/' + path);
+    },
 
-    // ===== Data Fetching =====
     async fetchFolders() {
       this.loading = true
       try {
@@ -677,41 +1132,28 @@ export default {
       }
     },
 
-    // ===== Folder Operations =====
     async openFolder(folder) {
-      if (this.currentFolder) {
-        this.folderHistory.push(this.currentFolder)
+      this.closeDropdown();
+      let path = folder.full_slug_path;
+      if (!path) {
+         path = this.currentFolder ? this.currentFolder.full_slug_path + '/' + folder.slug : folder.slug;
       }
-      this.closeDropdown()
-      await this.fetchSingleFolder(folder.id)
+      this.$router.push('/pengelola/dokumen/' + path);
     },
     async backToFolders() {
       if (this.folderHistory.length > 0) {
-        const parent = this.folderHistory.pop()
-        await this.fetchSingleFolder(parent.id)
+        const parent = this.folderHistory[this.folderHistory.length - 1];
+        const path = parent.full_slug_path || parent.slug;
+        this.$router.push('/pengelola/dokumen/' + path);
       } else {
-        this.currentFolder = null
-        this.fetchFolders()
-      }
-    },
-    async fetchSingleFolder(id) {
-      this.loading = true
-      try {
-        const res = await axios.get('/dokumen/folders/' + id)
-        if (res.data.success) {
-          this.currentFolder = res.data.data
-        }
-      } catch (err) {
-        this.showToast('Gagal memuat detail folder', 'error')
-      } finally {
-        this.loading = false
+        this.$router.push('/pengelola/dokumen');
       }
     },
     openFolderModal(folder = null, parentId = null) {
       this.editingFolder = folder
       this.folderErrors = {}
       if (folder) {
-        this.folderForm = { nama: folder.nama, deskripsi: folder.deskripsi || '', is_public: folder.is_public, parent_id: folder.parent_id }
+        this.folderForm = { nama: folder.nama, deskripsi: folder.deskripsi || '', is_public: Boolean(folder.is_public), parent_id: folder.parent_id }
       } else {
         this.folderForm = { nama: '', deskripsi: '', is_public: false, parent_id: parentId }
       }
@@ -721,19 +1163,23 @@ export default {
       this.savingFolder = true
       this.folderErrors = {}
       try {
+        const payload = {
+          ...this.folderForm,
+          is_public: this.folderForm.is_public ? 1 : 0
+        };
         if (this.editingFolder) {
-          const res = await axios.put(`/dokumen/folders/${this.editingFolder.id}`, this.folderForm)
+          const res = await axios.put(`/dokumen/folders/${this.editingFolder.id}`, payload)
           if (res.data.success) {
             this.showToast('Folder berhasil diperbarui!')
             this.showFolderModal = false
-            this.fetchFolders()
+            this.refreshCurrentFolder()
           }
         } else {
-          const res = await axios.post('/dokumen/folders', this.folderForm)
+          const res = await axios.post('/dokumen/folders', payload)
           if (res.data.success) {
             this.showToast('Folder berhasil dibuat!')
             this.showFolderModal = false
-            this.fetchFolders()
+            this.refreshCurrentFolder()
           }
         }
       } catch (err) {
@@ -753,7 +1199,7 @@ export default {
           const res = await axios.delete(`/dokumen/folders/${folder.id}`)
           if (res.data.success) {
             this.showToast('Folder berhasil dihapus!')
-            this.fetchFolders()
+            this.refreshCurrentFolder()
           }
         } catch (err) {
           this.showToast('Gagal menghapus folder', 'error')
@@ -761,6 +1207,8 @@ export default {
       }
       this.showDeleteModal = true
     },
+    
+    // Toggle Status Folder Public/Private
     async toggleFolderPublic(folder) {
       try {
         const res = await axios.patch(`/dokumen/folders/${folder.id}/toggle-public`)
@@ -773,13 +1221,12 @@ export default {
       }
     },
 
-    // ===== File Operations =====
     openFileModal(file = null) {
       this.editingFile = file
       this.fileErrors = {}
       this.selectedFiles = []
       if (file) {
-        this.fileForm = { nama: file.nama, is_public: file.is_public }
+        this.fileForm = { nama: file.nama, is_public: Boolean(file.is_public) }
       } else {
         this.fileForm = { nama: '', is_public: false }
       }
@@ -874,6 +1321,8 @@ export default {
       }
       this.showDeleteModal = true
     },
+
+    // Toggle Status File Public/Private
     async toggleFilePublic(file) {
       try {
         const res = await axios.patch(`/dokumen/files/${file.id}/toggle-public`)
@@ -886,14 +1335,9 @@ export default {
       }
     },
     async refreshCurrentFolder() {
-      if (this.currentFolder) {
-        await this.fetchSingleFolder(this.currentFolder.id)
-      } else {
-        await this.fetchFolders()
-      }
+      await this.initializeFromRoute()
     },
 
-    // ===== Delete Execute =====
     async executeDelete() {
       this.deleting = true
       if (this.deleteCallback) await this.deleteCallback()
@@ -901,12 +1345,10 @@ export default {
       this.showDeleteModal = false
     },
 
-    // ===== Export & Print =====
     exportCSV() {
       let csvContent = "data:text/csv;charset=utf-8,";
       
       if (this.currentFolder) {
-        // Export files
         csvContent += "Tipe,Nama File,Ukuran,Status,Tanggal Dibuat\n";
         if (this.currentFolder.files) {
           this.currentFolder.files.forEach(f => {
@@ -918,7 +1360,6 @@ export default {
           });
         }
       } else {
-        // Export folders
         csvContent += "Tipe,Nama Folder,Deskripsi,Jumlah File,Status,Tanggal Dibuat\n";
         if (this.folders) {
           this.folders.forEach(f => {
@@ -945,7 +1386,51 @@ export default {
       window.print();
     },
 
-    // ===== Helpers =====
+    getIkuFromFolderName(name) {
+      if (!name) return null;
+      const kriteriaMatch = name.match(/(?:Kriteria\s+)?(C[\d\.]+)/i);
+      if (kriteriaMatch) {
+        let val = kriteriaMatch[1].toUpperCase();
+        if (val.endsWith('.')) val = val.slice(0, -1);
+        return val;
+      }
+      const ikuMatch = name.match(/IKU[\s\-]?(\d+)/i);
+      if (ikuMatch) {
+        return 'IKU-' + ikuMatch[1];
+      }
+      return null;
+    },
+    getLastUpdater(folder) {
+      if (folder.files && folder.files.length > 0) {
+        const sorted = [...folder.files]
+          .filter(f => f.uploader)
+          .sort((a, b) => new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at))
+        if (sorted.length > 0 && sorted[0].uploader) {
+          return sorted[0].uploader.name
+        }
+      }
+      return null
+    },
+    getFolderAccessClass(folder) {
+      return Boolean(folder.is_public) ? 'public' : 'private'
+    },
+    getFolderAccessIcon(folder) {
+      return Boolean(folder.is_public) ? 'fas fa-globe' : 'fas fa-lock'
+    },
+    getFolderAccessLabel(folder) {
+      return Boolean(folder.is_public) ? 'Public' : 'Private'
+    },
+    getFolderContentText(folder) {
+      const folders = folder.children ? folder.children.length : (folder.children_count || 0);
+      const files = folder.files ? folder.files.length : (folder.files_count || 0);
+      
+      let text = [];
+      if (folders > 0) text.push(`${folders} Folder`);
+      if (files > 0) text.push(`${files} File`);
+      
+      if (text.length === 0) return 'Kosong';
+      return text.join(', ');
+    },
     getFileIcon(type) {
       if (!type) return 'fas fa-file'
       if (type.includes('pdf')) return 'fas fa-file-pdf'
@@ -996,7 +1481,7 @@ export default {
 <style scoped>
 .dokumen-admin { max-width: 100%; }
 
-/* ===== BREADCRUMB GLOBAL ===== */
+/* ===== BREADCRUMB GLOBAL DINAMIS ===== */
 .global-breadcrumb {
   font-size: 0.85rem;
   color: #64748b;
@@ -1004,14 +1489,30 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .global-breadcrumb .active {
   color: #996600;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 .global-breadcrumb .separator {
   font-size: 0.7rem;
   color: #cbd5e1;
+}
+.global-breadcrumb .breadcrumb-link {
+  cursor: pointer;
+  color: #64748b;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.global-breadcrumb .breadcrumb-link:hover {
+  color: #996600;
+  text-decoration: underline;
 }
 
 /* ===== HEADER ===== */
@@ -1038,6 +1539,7 @@ export default {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .btn-outline-gold {
   display: inline-flex;
@@ -1121,147 +1623,191 @@ export default {
 .stat-num { font-size: 1.25rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
 .stat-lbl { font-size: 0.78rem; color: #94a3b8; }
 
-/* ===== SEARCH ===== */
-.search-bar {
-  position: relative;
-  margin-bottom: 20px;
+/* ===== TOOLBAR & SEARCH BAR BARU ===== */
+.toolbar-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.search-bar i.fa-search {
-  position: absolute;
-  left: 16px; top: 50%;
-  transform: translateY(-50%);
+.search-bar-wrapper {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0 16px;
+  height: 42px;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.search-bar:focus-within {
+  border-color: #996600;
+  box-shadow: 0 0 0 3px rgba(153, 102, 0, 0.1);
+}
+.search-bar i {
   color: #94a3b8;
+  margin-right: 12px;
 }
 .search-bar input {
-  width: 100%;
-  padding: 12px 16px 12px 44px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-  background: white;
-}
-.search-bar input:focus {
+  border: none;
   outline: none;
-  border-color: #cc9900;
-  box-shadow: 0 0 0 3px rgba(204, 153, 0, 0.1);
+  width: 100%;
+  font-size: 0.95rem;
+  color: #334155;
+  background: transparent;
+  padding: 0;
 }
-.btn-clear {
-  position: absolute;
-  right: 12px; top: 50%;
-  transform: translateY(-50%);
-  background: none; border: none;
-  color: #94a3b8; cursor: pointer;
-  font-size: 0.9rem;
+.search-bar .btn-clear {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+}
+.search-bar .btn-clear:hover {
+  color: #ef4444;
 }
 
-/* Autocomplete Dropdown */
+/* ===== AUTOCOMPLETE DROPDOWN OVERLAY ===== */
 .search-dropdown-overlay {
   position: absolute;
-  top: 100%; left: 0; right: 0;
-  margin-top: 8px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
-  max-height: 380px;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  max-height: 320px;
   overflow-y: auto;
-  z-index: 1000;
-}
-.search-loading, .search-empty {
-  padding: 24px;
-  text-align: center;
-  color: #64748b;
-  font-size: 0.95rem;
-}
-.search-group {
   padding: 8px 0;
 }
-.search-group:not(:last-child) {
-  border-bottom: 1px solid #f1f5f9;
+.search-loading, .search-empty {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: #64748b;
+  text-align: center;
 }
 .search-group-title {
-  padding: 8px 16px;
-  font-size: 0.72rem;
+  padding: 6px 16px;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  background: #f8fafc;
 }
 .search-item {
   display: flex;
   align-items: center;
-  gap: 12px;
   padding: 10px 16px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.15s;
+  gap: 12px;
 }
 .search-item:hover {
-  background: #f8fafc;
+  background: #f1f5f9;
 }
 .search-item-icon {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
+  color: #996600;
   font-size: 1rem;
-  background: #f1f5f9; color: #64748b;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
 }
 .search-item-info {
-  display: flex; flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .search-item-name {
-  font-weight: 600;
+  font-size: 0.875rem;
   color: #1e293b;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 .search-item-meta {
   font-size: 0.75rem;
-  color: #94a3b8;
-  margin-top: 2px;
+  color: #64748b;
 }
 
-/* ===== INNER BREADCRUMB ===== */
-.breadcrumb-bar {
+/* ===== TOOLBAR ACTIONS & FILTERS ===== */
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.integrated-filter {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 12px 16px;
   background: white;
-  border-radius: 10px;
   border: 1px solid #e2e8f0;
-  flex-wrap: wrap;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 42px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: border-color 0.2s;
 }
-.breadcrumb-item {
-  background: none; border: none;
-  color: #996600; cursor: pointer;
-  font-size: 0.9rem; font-weight: 500;
-  display: flex; align-items: center; gap: 6px;
-  padding: 4px 8px; border-radius: 6px;
+.integrated-filter:focus-within {
+  border-color: #996600;
+  box-shadow: 0 0 0 3px rgba(153, 102, 0, 0.1);
+}
+.filter-icon-left {
+  color: #94a3b8;
+  margin-right: 8px;
+  font-size: 0.9rem;
+}
+.filter-select-clean {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #334155;
+  font-size: 0.95rem;
+  padding: 8px 0;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 16px;
+}
+
+/* ===== VIEW TOGGLE ===== */
+.view-controls .view-toggle {
+  display: flex;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 42px;
+}
+.view-toggle button {
+  background: none;
+  border: none;
+  padding: 0 16px;
+  height: 100%;
+  color: #64748b;
+  cursor: pointer;
   transition: all 0.2s;
 }
-.breadcrumb-item:hover { background: #fff7ed; }
-.breadcrumb-sep { color: #cbd5e1; font-size: 0.7rem; }
-.breadcrumb-current {
-  color: #475569;
-  font-size: 0.9rem; font-weight: 600;
-  display: flex; align-items: center; gap: 6px;
+.view-toggle button:hover {
+  background: #f8fafc;
+  color: #334155;
 }
-.btn-upload-file {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #996600, #b37700);
-  color: white; border: none; border-radius: 8px;
-  font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
-}
-.btn-upload-file:hover {
-  background: linear-gradient(135deg, #7a5200, #996600);
-  transform: translateY(-1px);
+.view-toggle button.active {
+  background: #f1f5f9;
+  color: #996600;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
 
 /* ===== LOADING & EMPTY ===== */
@@ -1297,35 +1843,7 @@ export default {
 .empty-state h3 { font-size: 1.15rem; color: #334155; margin-bottom: 6px; }
 .empty-state p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; }
 
-/* ===== VIEW TOGGLE ===== */
-.view-controls {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-}
-.view-toggle {
-  display: flex;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.view-toggle button {
-  background: none;
-  border: none;
-  padding: 8px 14px;
-  color: #94a3b8;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-}
-.view-toggle button:hover { color: #64748b; background: #f8fafc; }
-.view-toggle button.active {
-  background: #fffbeb;
-  color: #996600;
-}
-
-/* ===== FOLDERS TABLE (NEW) ===== */
+/* ===== FOLDERS TABLE ===== */
 .folders-table-wrapper {
   background: white;
   border-radius: 12px;
@@ -1333,6 +1851,10 @@ export default {
   overflow: visible; 
   margin-bottom: 24px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.sortable {
+  cursor: pointer;
+  user-select: none;
 }
 .folders-table { width: 100%; border-collapse: separate; border-spacing: 0; }
 .folders-table th {
@@ -1345,6 +1867,7 @@ export default {
   background: #f8fafc;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 .folders-table th:first-child { border-top-left-radius: 12px; }
 .folders-table th:last-child { border-top-right-radius: 12px; }
@@ -1373,7 +1896,78 @@ export default {
   margin-top: 2px;
 }
 
-/* ===== FOLDER GRID (OLD) ===== */
+/* Inline Edit */
+.inline-edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-inline-edit {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0;
+}
+.inline-edit-wrap:hover .btn-inline-edit,
+.clickable-row:hover .btn-inline-edit {
+  opacity: 1;
+}
+.btn-inline-edit:hover {
+  color: #996600;
+  background: #fffbeb;
+}
+.inline-input {
+  padding: 6px 10px;
+  border: 1px solid #cc9900;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(204, 153, 0, 0.1);
+  width: 100%;
+  max-width: 250px;
+}
+
+/* Desk Text */
+.desk-text {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+/* User Update Info */
+.user-update-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.user-update-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  color: #475569 !important;
+  font-size: 0.82rem !important;
+}
+
+/* Badge IKU */
+.badge.kode-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ===== FOLDER GRID ===== */
 .folder-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -1436,6 +2030,18 @@ export default {
 }
 .status-badge.public { background: #d1fae5; color: #059669; }
 .status-badge.private { background: #f1f5f9; color: #64748b; }
+.status-badge.restricted { background: #fef3c7; color: #92400e; }
+
+/* Status Badge Clickable */
+.status-badge-clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.status-badge-clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 
 .table-actions {
   display: flex;
@@ -1467,59 +2073,12 @@ export default {
 .btn-action.edit:hover { color: #2563eb; background: #eff6ff; border-color: #bfdbfe; }
 .btn-action.delete:hover { color: #dc2626; background: #fef2f2; border-color: #fecaca; }
 
-/* ===== KEBAB DROPDOWN ===== */
-.action-dropdown { position: relative; display: inline-block; z-index: 10; }
-.action-dropdown.is-open { z-index: 1000; }
-.btn-kebab {
-  background: none; border: none;
-  color: #94a3b8; width: 34px; height: 34px;
-  border-radius: 8px; cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex; align-items: center; justify-content: center;
-}
-.btn-kebab:hover, .action-dropdown.is-open .btn-kebab {
-  background: #f1f5f9; color: #1e293b;
-}
-.dropdown-menu {
-  position: absolute; right: 0; top: 100%;
-  background: white; border: 1px solid #e2e8f0;
-  border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  min-width: 190px; z-index: 9999;
-  padding: 8px 0; margin-top: 4px;
-  pointer-events: auto;
-}
-.dropdown-menu-right {
-  right: 0; left: auto;
-}
-.dropdown-menu button, .dropdown-item-link {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; text-align: left; padding: 10px 18px;
-  background: none; border: none; cursor: pointer;
-  font-size: 0.85rem; color: #475569; transition: all 0.2s;
-  text-decoration: none; box-sizing: border-box;
-  pointer-events: auto;
-  position: relative;
-  z-index: 1;
-}
-.dropdown-menu button i, .dropdown-item-link i {
-  font-size: 0.9rem; color: #94a3b8; width: 16px; text-align: center;
-}
-.dropdown-menu button:hover, .dropdown-item-link:hover { 
-  background: #f8fafc; color: #1e293b; 
-}
-.dropdown-menu button:hover i, .dropdown-item-link:hover i {
-  color: #1e293b;
-}
-.dropdown-menu button.text-danger { color: #dc2626; }
-.dropdown-menu button.text-danger i { color: #dc2626; }
-.dropdown-menu button.text-danger:hover { background: #fef2f2; color: #b91c1c; }
-
-/* ===== FILES TABLE (UPDATED SPACING) ===== */
+/* ===== FILES TABLE ===== */
 .files-table-wrapper {
   background: white;
   border-radius: 14px;
   border: 1px solid #e2e8f0;
-  overflow: visible; /* changed from auto to visible for dropdowns */
+  overflow: visible;
 }
 .files-table {
   width: 100%;
@@ -1527,7 +2086,7 @@ export default {
 }
 .files-table th {
   text-align: left;
-  padding: 16px 24px; /* More padding */
+  padding: 16px 24px;
   font-size: 0.78rem;
   font-weight: 600;
   color: #94a3b8;
@@ -1537,18 +2096,17 @@ export default {
   white-space: nowrap;
 }
 .files-table td {
-  padding: 18px 24px; /* More padding */
+  padding: 18px 24px;
   border-bottom: 1px solid #f8fafc;
   vertical-align: middle;
 }
 .files-table tr:hover td { background: #fefce8; }
 .files-table tr:last-child td { border-bottom: none; }
-.files-table tr.row-dropdown-open { position: relative; z-index: 100; }
 .file-cell {
-  display: flex; align-items: center; gap: 14px; /* increased gap */
+  display: flex; align-items: center; gap: 14px;
 }
 .file-type-icon {
-  width: 42px; height: 42px; /* slightly larger */
+  width: 42px; height: 42px;
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.15rem;
@@ -1765,6 +2323,19 @@ export default {
 .btn-danger:hover:not(:disabled) { background: #b91c1c; }
 .btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
 
+/* ===== SORTING & AUXILIARY ===== */
+.sort-icon {
+  margin-left: 4px;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+.sort-icon.active {
+  color: #996600;
+}
+.text-muted-light {
+  color: #cbd5e1;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .page-header { flex-direction: column; }
@@ -1772,23 +2343,25 @@ export default {
   .stats-row { flex-direction: column; }
   .files-table th:nth-child(3),
   .files-table td:nth-child(3) { display: none; }
-  .folders-table th:nth-child(4),
-  .folders-table td:nth-child(4) { display: none; }
+  .folders-table th:nth-child(3),
+  .folders-table td:nth-child(3),
+  .folders-table th:nth-child(5),
+  .folders-table td:nth-child(5) { display: none; }
 }
 @media (max-width: 480px) {
-  .breadcrumb-bar { flex-direction: column; align-items: flex-start; }
-  .btn-upload-file { margin-left: 0; width: 100%; justify-content: center; }
+  .global-breadcrumb { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .header-actions { flex-direction: column; width: 100%; }
+  .header-actions button { width: 100%; justify-content: center; }
 }
 
 @media print {
   .admin-layout > .sidebar,
   .admin-layout > .topbar,
-  .search-bar,
+  .toolbar-section,
   .header-actions,
   .btn-upload-file,
   .folder-card-actions,
   .action-dropdown,
-  .view-controls,
   .stats-row {
     display: none !important;
   }

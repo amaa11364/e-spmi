@@ -5,66 +5,117 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\DokumenFolder;
 use App\Models\DokumenFile;
+use App\Models\Iku;
+use App\Models\UnitKerja;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class ImportDokumenFolder extends Command
 {
-    protected $signature = 'dokumen:import {path : Path folder di komputer}';
-    protected $description = 'Otomatis membuat folder dan memasukkan file PDF ke database';
+    protected $signature = 'dokumen:import {json_path : Path file JSON pemetaan}';
+    protected $description = 'Import dan kelompokkan dokumen akreditasi secara otomatis berdasarkan data JSON';
 
     public function handle()
     {
-        $sourcePath = $this->argument('path');
+        $jsonPath = $this->argument('json_path');
 
-        if (!File::isDirectory($sourcePath)) {
-            $this->error("Folder tidak ditemukan di lokasi: " . $sourcePath);
+        if (!File::exists($jsonPath)) {
+            $this->error("File JSON tidak ditemukan di lokasi: " . $jsonPath);
             return;
         }
 
-        $this->info("Memulai proses impor dari folder: " . $sourcePath);
-        $this->processDirectory($sourcePath, null);
-        $this->info("SELESAI! Semua folder dan file PDF berhasil dimigrasikan.");
-    }
+        $jsonData = json_decode(File::get($jsonPath), true);
+        if (!$jsonData) {
+            $this->error("Format JSON tidak valid!");
+            return;
+        }
 
-    private function processDirectory($dirPath, $parentId = null)
-    {
-        $items = File::files($dirPath);
-        $directories = File::directories($dirPath);
+        $this->info("Memulai impor otomatis berdasarkan metadata: " . $jsonData['metadata']['judul']);
 
-        foreach ($items as $file) {
-            if (strtolower($file->getExtension()) === 'pdf') {
-                $fileName = $file->getFilename();
-                $fileTitle = pathinfo($fileName, PATHINFO_FILENAME);
+        $admin = User::first() ?? User::factory()->create();
+        $unit  = UnitKerja::firstOrCreate(['kode' => 'LPMI'], ['nama' => 'LPMI', 'status' => true]);
 
-                $storagePath = 'dokumen_akreditasi/' . uniqid() . '_' . $fileName;
-                Storage::disk('public')->put($storagePath, File::get($file->getPathname()));
+        $totalFile = 0;
 
-                DokumenFile::create([
-                    'dokumen_folder_id' => $parentId,
-                    'nama'              => str_replace(['_', '-'], ' ', $fileTitle),
-                    'file_path'         => $storagePath,
-                    'file_type'         => 'application/pdf',
-                    'file_size'         => $file->getSize(),
-                    'is_public'         => true,
-                ]);
+        // Loop Kriteria C1 - C9 dari JSON
+        foreach ($jsonData['kriteria'] as $kriteria) {
+            $kodeIku = $kriteria['kode'];
+            $namaIku = $kriteria['nama'];
 
-                $this->info(" -> File diimpor: " . $fileName);
+            // 1. Buat Data IKU
+            $iku = Iku::firstOrCreate(
+                ['kode' => $kodeIku],
+                ['nama' => $namaIku, 'deskripsi' => $kriteria['deskripsi'] ?? $namaIku, 'status' => true]
+            );
+
+            // 2. Buat Folder Main Kriteria
+            $folderIku = DokumenFolder::firstOrCreate([
+                'nama' => "Kriteria {$kodeIku} - {$namaIku}",
+                'parent_id' => null
+            ]);
+
+            // 3. Loop Sub Kriteria (C.1.1, C.1.2, dst)
+            if (isset($kriteria['sub_kriteria'])) {
+                foreach ($kriteria['sub_kriteria'] as $sub) {
+                    $folderSub = DokumenFolder::firstOrCreate([
+                        'nama' => "{$sub['kode']} {$sub['nama']}",
+                        'parent_id' => $folderIku->id
+                    ]);
+
+                    // 4. Loop Dokumen di dalam Sub Kriteria
+                    foreach ($sub['dokumen'] as $doc) {
+                        $filesToProcess = [];
+
+                        if (isset($doc['versi'])) {
+                            foreach ($doc['versi'] as $v) {
+                                // Penanganan dinamis untuk key 'tahun' atau 'unit' pada versi
+                                $label = isset($v['tahun']) ? " ({$v['tahun']})" : (isset($v['unit']) ? " ({$v['unit']})" : "");
+
+                                $filesToProcess[] = [
+                                    'judul' => $doc['judul'] . $label, 
+                                    'file'  => $v['file']
+                                ];
+                            }
+                        } elseif (isset($doc['file'])) {
+                            $filesToProcess[] = [
+                                'judul' => $doc['judul'], 
+                                'file'  => $doc['file']
+                            ];
+                        }
+
+                        foreach ($filesToProcess as $item) {
+                            $fileName = $item['file'];
+                            
+                            // Cari lokasi file asli di disk
+                            $possiblePath = storage_path("app/public/dokumen-akreditasi/2024-08/{$fileName}");
+
+                            if (File::exists($possiblePath)) {
+                                $storagePath = 'dokumen_akreditasi/' . $fileName;
+                                Storage::disk('public')->put($storagePath, File::get($possiblePath));
+
+                                DokumenFile::updateOrCreate([
+                                    'file_path' => $storagePath,
+                                ], [
+                                    'dokumen_folder_id' => $folderSub->id,
+                                    'iku_id'            => $iku->id,
+                                    'unit_kerja_id'     => $unit->id,
+                                    'user_id'           => $admin->id,
+                                    'nama'              => $item['judul'],
+                                    'file_type'         => 'application/pdf',
+                                    'file_size'         => File::size($possiblePath),
+                                    'is_public'         => true,
+                                ]);
+
+                                $this->info("[{$kodeIku}] Berhasil mengelompokkan: {$item['judul']}");
+                                $totalFile++;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        foreach ($directories as $subDir) {
-            $folderName = basename($subDir);
-
-            $newFolder = DokumenFolder::create([
-                'nama'      => str_replace(['_', '-'], ' ', $folderName),
-                'parent_id' => $parentId,
-                'is_public' => true,
-            ]);
-
-            $this->info("[FOLDER] Membuat folder: " . $folderName);
-
-            $this->processDirectory($subDir, $newFolder->id);
-        }
+        $this->info("SELESAI! Total {$totalFile} file berhasil dirapikan dan dikelompokkan otomatis.");
     }
 }

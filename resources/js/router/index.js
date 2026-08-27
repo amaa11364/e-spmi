@@ -78,7 +78,7 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/pengelola/dokumen',
+    path: '/pengelola/dokumen/:slugPath*',
     name: 'pengelola.dokumen',
     component: () => import('@/Views/Pengelola/DokumenIndex.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
