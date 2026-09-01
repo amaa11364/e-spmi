@@ -135,45 +135,7 @@
             </router-link>
           </li>
         </template>
-
-        <!-- Menu SPMI PPEPP (Berlaku Semua Akses) -->
-        <li class="nav-section" v-if="!isCollapsed">SIKLUS PPEPP</li>
-
-        <li class="nav-item">
-          <router-link to="/spmi/penetapan" class="nav-link" active-class="active">
-            <i class="fas fa-pen-fancy"></i>
-            <span v-if="!isCollapsed">Penetapan</span>
-          </router-link>
-        </li>
-
-        <li class="nav-item">
-          <router-link to="/spmi/pelaksanaan" class="nav-link" active-class="active">
-            <i class="fas fa-play"></i>
-            <span v-if="!isCollapsed">Pelaksanaan</span>
-          </router-link>
-        </li>
-
-        <li class="nav-item">
-          <router-link to="/spmi/evaluasi" class="nav-link" active-class="active">
-            <i class="fas fa-chart-line"></i>
-            <span v-if="!isCollapsed">Evaluasi</span>
-          </router-link>
-        </li>
-
-        <li class="nav-item">
-          <router-link to="/spmi/pengendalian" class="nav-link" active-class="active">
-            <i class="fas fa-sliders-h"></i>
-            <span v-if="!isCollapsed">Pengendalian</span>
-          </router-link>
-        </li>
-
-        <li class="nav-item">
-          <router-link to="/spmi/peningkatan" class="nav-link" active-class="active">
-            <i class="fas fa-arrow-up"></i>
-            <span v-if="!isCollapsed">Peningkatan</span>
-          </router-link>
-        </li>
-      </ul>
+      </ul> 
     </nav>
 
     <!-- Sidebar Footer -->

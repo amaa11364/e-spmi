@@ -1,57 +1,11 @@
-<!-- src/views/LandingPage.vue -->
+<!-- src/components/LandingPage.vue -->
 <template> 
   <div id="app">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-          <img
-            :src="'/images/photos/logo-ikipsiliwangi.png'"
-            alt="Logo E-SPMI"
-            width="40"
-            height="40"
-            class="me-2"
-            @error="handleImageError"
-          >
-          <span>E-SPMI</span>
-        </a>
-        <button 
-          class="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#home">Beranda</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#about">Tentang LPMI</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#features">Fitur</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#programs">Program</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#contact">Kontak</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
 
     <!-- Main Content -->
-    <main style="padding-top: 0px;">
-      <!-- Hero Section -->
-      <section id="home" class="hero-section" :style="heroStyle">
+    <main>
+      <!-- 1. HERO SECTION -->
+      <section id="home" class="hero-section" :style="[heroStyle, { marginTop: '-76px' }]">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-6 col-md-12 position-relative text-center text-lg-start">
@@ -69,10 +23,9 @@
         </div>
       </section>
 
-      <!-- Profil & Tentang LPMI Section -->
+      <!-- SEKSI TENTANG (Profil, Siklus & Visi Misi) -->
       <section id="about" class="about-section py-5 bg-light position-relative animate-on-scroll">
         <div class="container py-4">
-          <!-- Header Section -->
           <div class="text-center mb-5">
             <span class="badge bg-gold-subtle text-gold px-3 py-2 rounded-pill fw-semibold mb-2">
               <i class="fas fa-university me-1"></i> Profil Institusi
@@ -86,7 +39,6 @@
             <div class="divider-line mx-auto mt-3"></div>
           </div>
 
-          <!-- Deskripsi Utama dalam Card Modern -->
           <div class="row justify-content-center mb-5">
             <div class="col-lg-10">
               <div class="about-card p-4 p-md-5 bg-white rounded-4 shadow-sm border-0 position-relative">
@@ -101,8 +53,7 @@
                     Berdasarkan amanat tersebut, maka pada kesempatan ini IKIP Siliwangi menyusun sistem penjaminan mutu sesuai dengan standar nasional pendidikan. Dengan harapan pengelolaan dan pelaksanaan pendidikan di IKIP Siliwangi berdasarkan pada standar nasional pendidikan dengan tujuan menjadi perguruan tinggi yang bermutu.
                   </p>
                   
-                  <!-- Highlight Box PPEPP -->
-                  <div class="ppepp-box mt-4 p-4 rounded-3 border-start border-4 border-gold bg-light-brown">
+                  <div id="about-ppepp" class="ppepp-box mt-4 p-4 rounded-3 border-start border-4 border-gold bg-light-brown">
                     <div class="d-flex align-items-start">
                       <div class="icon-circle bg-gold text-white me-3 mt-1">
                         <i class="fas fa-sync-alt fa-lg"></i>
@@ -120,9 +71,7 @@
             </div>
           </div>
 
-          <!-- Visi & Misi Section -->
-          <div class="row g-4 justify-content-center">
-            <!-- Card Visi -->
+          <div id="about-visi-misi" class="row g-4 justify-content-center">
             <div class="col-lg-5 col-md-6">
               <div class="vision-mission-card visi-card h-100 p-4 p-lg-5 bg-white rounded-4 shadow-sm border-0 position-relative overflow-hidden">
                 <div class="card-accent-bar bg-gold"></div>
@@ -141,7 +90,6 @@
               </div>
             </div>
 
-            <!-- Card Misi -->
             <div class="col-lg-7 col-md-6">
               <div class="vision-mission-card misi-card h-100 p-4 p-lg-5 bg-white rounded-4 shadow-sm border-0 position-relative overflow-hidden">
                 <div class="card-accent-bar bg-primary-brown"></div>
@@ -183,15 +131,15 @@
         </div>
       </section>
 
-      <!-- Berita & Jadwal -->
-      <div class="container">
+      <!-- 2. BERITA TERBARU & 3. JADWAL KEGIATAN -->
+      <div class="container py-4">
         <div class="row">
-          <!-- Berita Section (Left Column) -->
+          <!-- Berita Section -->
           <div class="col-lg-8 mt-4">
             <div class="berita-section">
               <div class="section-header">
                 <h2 class="section-title">
-                  <i class="fas fa-newspaper"></i>Berita Terbaru
+                  <i class="fas fa-newspaper me-2"></i>Berita Terbaru
                 </h2>
                 <p class="text-muted mb-0">Informasi dan kegiatan terbaru dari SPMI</p>
               </div>
@@ -226,12 +174,12 @@
             </div>
           </div>
           
-          <!-- Jadwal Sidebar (Right Column) -->
-          <div class="col-lg-4">
+          <!-- Jadwal Sidebar -->
+          <div class="col-lg-4 mt-4">
             <div class="jadwal-sidebar">
               <div class="jadwal-header">
                 <h2 class="section-title mb-0">
-                  <i class="fas fa-calendar-alt"></i>Jadwal Kegiatan
+                  <i class="fas fa-calendar-alt me-2"></i>Jadwal Kegiatan
                 </h2>
                 <p class="text-muted mb-0 mt-1">Jadwal mendatang</p>
               </div>
@@ -268,204 +216,7 @@
         </div>
       </div>
 
-      <!-- Dokumen Publik Section -->
-      <section class="dokumen-section animate-on-scroll">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-8">
-              <h3 class="fw-bold mb-3">
-                <i class="fas fa-globe me-2 text-warning"></i>Dokumen Publik SPMI
-              </h3>
-              <p class="text-muted mb-4">
-                Akses dokumen SPMI yang tersedia untuk umum. Lihat berbagai dokumen, 
-                laporan, dan informasi sistem penjaminan mutu internal kami.
-              </p>
-              <router-link to="/dokumen-publik" class="btn btn-warning btn-lg">
-                <i class="fas fa-external-link-alt me-2"></i>Lihat Dokumen Publik
-              </router-link>
-            </div>
-            <div class="col-md-4 text-center">
-              <i class="fas fa-folder-open fa-6x text-muted opacity-50"></i>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Features Section -->
-      <section id="features" class="py-5 animate-on-scroll">
-        <div class="container">
-          <div class="text-center mb-5">
-            <h2 class="section-title display-5 fw-bold">Fitur Unggulan SPMI</h2>
-            <p class="lead text-muted">Solusi lengkap untuk manajemen mutu pendidikan</p>
-          </div>
-          <div class="row g-4">
-            <div class="col-lg-4 col-md-6">
-              <div class="program-card p-4 h-100 text-center">
-                <div class="program-icon program-1 mx-auto mb-3">
-                  <i class="fas fa-tasks fa-2x"></i>
-                </div>
-                <h4 class="fw-semibold mb-3">Manajemen Standar</h4>
-                <p class="text-muted">
-                  Kelola 12 standar mutu dengan sistem terstruktur untuk penjaminan kualitas pendidikan
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-              <div class="program-card p-4 h-100 text-center">
-                <div class="program-icon program-2 mx-auto mb-3">
-                  <i class="fas fa-clipboard-check fa-2x"></i>
-                </div>
-                <h4 class="fw-semibold mb-3">Audit Digital</h4>
-                <p class="text-muted">
-                  Lakukan 8 audit internal dengan tools lengkap dan pelaporan otomatis
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-              <div class="program-card p-4 h-100 text-center">
-                <div class="program-icon program-3 mx-auto mb-3">
-                  <i class="fas fa-chart-pie fa-2x"></i>
-                </div>
-                <h4 class="fw-semibold mb-3">Analisis Data</h4>
-                <p class="text-muted">
-                  Dashboard analitik untuk monitoring 6 program studi secara real-time
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-              <div class="program-card p-4 h-100 text-center">
-                <div class="program-icon program-4 mx-auto mb-3">
-                  <i class="fas fa-file-contract fa-2x"></i>
-                </div>
-                <h4 class="fw-semibold mb-3">Dokumen Mutu</h4>
-                <p class="text-muted">
-                  Kelola 24 dokumen mutu secara terpusat dengan version control yang aman
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-              <div class="program-card p-4 h-100 text-center">
-                <div class="program-icon program-5 mx-auto mb-3">
-                  <i class="fas fa-university fa-2x"></i>
-                </div>
-                <h4 class="fw-semibold mb-3">Program Studi</h4>
-                <p class="text-muted">
-                  Monitor 6 program studi termasuk Pascasarjana dan pendidikan khusus
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-              <div class="program-card p-4 h-100 text-center">
-                <div class="program-icon program-6 mx-auto mb-3">
-                  <i class="fas fa-laptop-code fa-2x"></i>
-                </div>
-                <h4 class="fw-semibold mb-3">LPM Smart Sistem</h4>
-                <p class="text-muted">
-                  Sistem terintegrasi untuk Lembaga Penjaminan Mutu yang efisien
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Program Studi Preview Section -->
-      <section id="programs" class="py-5 bg-light animate-on-scroll">
-        <div class="container">
-          <div class="text-center mb-5">
-            <h2 class="section-title display-5 fw-bold">Program Studi Tersedia</h2>
-            <p class="lead text-muted">Kelola berbagai program studi dalam satu sistem terpadu</p>
-          </div>
-          <div class="row g-4 justify-content-center">
-            <div class="col-lg-2 col-md-4 col-6">
-              <div class="text-center">
-                <div class="program-icon-sm program-1">
-                  <i class="fas fa-graduation-cap"></i>
-                </div>
-                <small class="fw-semibold">Ilmu Pendidikan</small>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-              <div class="text-center">
-                <div class="program-icon-sm program-2">
-                  <i class="fas fa-language"></i>
-                </div>
-                <small class="fw-semibold">Pendidikan Bahasa</small>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-              <div class="text-center">
-                <div class="program-icon-sm program-3">
-                  <i class="fas fa-calculator"></i>
-                </div>
-                <small class="fw-semibold">Matematika & Sains</small>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-              <div class="text-center">
-                <div class="program-icon-sm program-4">
-                  <i class="fas fa-user-graduate"></i>
-                </div>
-                <small class="fw-semibold">Program Khusus</small>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-              <div class="text-center">
-                <div class="program-icon-sm program-5">
-                  <i class="fas fa-user-tie"></i>
-                </div>
-                <small class="fw-semibold">Pascasarjana</small>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-              <div class="text-center">
-                <div class="program-icon-sm program-6">
-                  <i class="fas fa-laptop-code"></i>
-                </div>
-                <small class="fw-semibold">LPM Smart Sistem</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Stats Preview Section -->
-      <section class="py-5 animate-on-scroll">
-        <div class="container">
-          <div class="row text-center">
-            <div class="col-md-3 col-6 mb-4">
-              <div class="p-3">
-                <h3 class="fw-bold text-primary">12</h3>
-                <p class="text-muted mb-0">Standar Mutu</p>
-                <small class="text-primary">Terintegrasi</small>
-              </div>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-              <div class="p-3">
-                <h3 class="fw-bold text-success">8</h3>
-                <p class="text-muted mb-0">Audit Internal</p>
-                <small class="text-success">Terselesaikan</small>
-              </div>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-              <div class="p-3">
-                <h3 class="fw-bold text-warning">24</h3>
-                <p class="text-muted mb-0">Dokumen</p>
-                <small class="text-warning">Terkelola</small>
-              </div>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-              <div class="p-3">
-                <h3 class="fw-bold text-info">6</h3>
-                <p class="text-muted mb-0">Program Studi</p>
-                <small class="text-info">Aktif</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Team Section -->
+      <!-- 4. TIM KAMI -->
       <section id="team" class="py-5 animate-on-scroll">
         <div class="container">
           <div class="text-center mb-5">
@@ -494,7 +245,7 @@
         </div>
       </section>
 
-      <!-- Documentation Section -->
+      <!-- 5. DOKUMENTASI KEGIATAN -->
       <section id="documentation" class="py-5 bg-light animate-on-scroll">
         <div class="container">
           <div class="text-center mb-5">
@@ -521,55 +272,6 @@
           </div>
           <div v-else class="text-center text-muted">
             <p>Belum ada dokumentasi kegiatan.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- CTA Section -->
-      <section class="py-5 cta-section animate-on-scroll">
-        <div class="container text-center">
-          <h2 class="display-6 fw-bold mb-4">Siap Transformasi Digital SPMI?</h2>
-          <p class="lead mb-4 opacity-90">
-            Bergabung dengan institusi pendidikan yang telah mempercayai SPMI 
-            untuk transformasi digital sistem penjaminan mutu mereka.
-          </p>
-          <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="#contact" class="btn btn-outline-light btn-lg">
-              <i class="fas fa-phone me-2"></i>Hubungi Kami
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contact Section -->
-      <section id="contact" class="py-5 bg-light animate-on-scroll">
-        <div class="container">
-          <div class="text-center mb-5">
-            <h2 class="section-title display-5 fw-bold">Hubungi Kami</h2>
-            <p class="lead text-muted">Butuh informasi lebih lanjut? Tim kami siap membantu</p>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <div class="program-card p-5">
-                <div class="row text-center">
-                  <div class="col-md-4 mb-4">
-                    <i class="fas fa-envelope fa-2x text-primary mb-3"></i>
-                    <h5>Email</h5>
-                    <p class="text-muted">lpmi@ikipsiliwangi.ac.id</p>
-                  </div>
-                  <div class="col-md-4 mb-4">
-                    <i class="fas fa-phone fa-2x text-primary mb-3"></i>
-                    <h5>Telepon</h5>
-                    <p class="text-muted">+62 21 1234 5678</p>
-                  </div>
-                  <div class="col-md-4 mb-4">
-                    <i class="fas fa-clock fa-2x text-primary mb-3"></i>
-                    <h5>Jam Operasional</h5>
-                    <p class="text-muted">Senin - Jumat, 08:00 - 17:00</p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -633,97 +335,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Footer Kustom Modern -->
-    <footer class="footer-modern text-white">
-      <div class="footer-top py-5">
-        <div class="container">
-          <div class="row g-4 align-items-start">
-            <!-- Kolom 1: Profil Brand & Lokasi -->
-            <div class="col-lg-4 col-md-6">
-              <div class="d-flex align-items-start mb-3">
-                <img 
-                  :src="'/images/photos/logo-ikipsiliwangi.png'" 
-                  alt="Logo IKIP Siliwangi" 
-                  class="footer-logo me-3" 
-                  @error="handleImageError"
-                />
-                <div>
-                  <h5 class="fw-bold mb-1 text-gold-light fs-6">Lembaga Penjaminan Mutu Internal</h5>
-                  <p class="text-gold-light opacity-75 small mb-0">IKIP Siliwangi Cimahi</p>
-                </div>
-              </div>
-              <div class="address-box ps-2 border-start border-2 border-gold opacity-90 small">
-                <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-gold"></i> Ruang A4, Gedung A, Kampus IKIP Siliwangi Cimahi</p>
-                <p class="mb-0"><i class="fas fa-envelope me-2 text-gold"></i> <a href="mailto:lpmi@ikipsiliwangi.ac.id" class="text-white text-decoration-none hover-gold">lpmi@ikipsiliwangi.ac.id</a></p>
-              </div>
-            </div>
-
-            <!-- Kolom 2: Tautan Resmi -->
-            <div class="col-lg-3 col-md-6">
-              <h6 class="fw-bold text-gold mb-3 text-uppercase tracking-wider small">Link Terkait</h6>
-              <ul class="list-unstyled footer-links small">
-                <li class="mb-2">
-                  <a href="https://ikipsiliwangi.ac.id" target="_blank" class="d-flex align-items-center text-white-50 text-decoration-none hover-white">
-                    <i class="fas fa-chevron-right text-gold me-2 small"></i> Situs Resmi IKIP Siliwangi
-                  </a>
-                </li>
-                <li class="mb-2">
-                  <a href="#" class="d-flex align-items-center text-white-50 text-decoration-none hover-white">
-                    <i class="fas fa-chevron-right text-gold me-2 small"></i> Pendaftaran Mahasiswa Baru
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Kolom 3: Arsip Lama -->
-            <div class="col-lg-2 col-md-6">
-              <h6 class="fw-bold text-gold mb-3 text-uppercase tracking-wider small">Arsip Lama</h6>
-              <ul class="list-unstyled footer-links small">
-                <li>
-                  <a href="#" class="d-flex align-items-center text-white-50 text-decoration-none hover-white">
-                    <i class="fas fa-archive text-gold me-2 small"></i> LPMI
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Kolom 4: Widget Pengunjung Otomatis (Opsi 1) -->
-            <div class="col-lg-3 col-md-6">
-              <h6 class="fw-bold text-gold mb-3 text-uppercase tracking-wider small">Pengunjung</h6>
-              <div class="visitor-card bg-white text-dark rounded-3 p-3 shadow-sm">
-                <div class="visitor-row d-flex justify-content-between align-items-center py-1 border-bottom">
-                  <span class="text-muted small"><i class="fas fa-user-clock me-1 text-gold"></i> Hari Ini</span>
-                  <span class="fw-bold badge bg-light text-dark border">{{ visitorStats.today }}</span>
-                </div>
-                <div class="visitor-row d-flex justify-content-between align-items-center py-1 border-bottom">
-                  <span class="text-muted small"><i class="fas fa-history me-1 text-gold"></i> Kemarin</span>
-                  <span class="fw-bold badge bg-light text-dark border">{{ visitorStats.yesterday }}</span>
-                </div>
-                <div class="visitor-row d-flex justify-content-between align-items-center py-1 border-bottom">
-                  <span class="text-muted small"><i class="fas fa-users me-1 text-gold"></i> Total</span>
-                  <span class="fw-bold badge bg-gold text-white">{{ visitorStats.total }}</span>
-                </div>
-                <div class="visitor-row d-flex justify-content-between align-items-center py-1 pt-2">
-                  <span class="text-muted small"><i class="fas fa-globe me-1 text-success"></i> Berada di Web</span>
-                  <span class="fw-bold text-success"><i class="fas fa-circle fa-xs me-1"></i> {{ visitorStats.online }}</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer Bottom Copyright -->
-      <div class="footer-bottom py-3 bg-white text-center text-dark border-top">
-        <div class="container">
-          <p class="mb-0 small text-muted">
-            Lembaga Penjaminan Mutu Internal <strong class="text-dark">IKIP Siliwangi</strong> &copy; 2026 | Hak Cipta Dilindungi
-          </p>
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -735,6 +346,7 @@ export default {
   name: 'LandingPage',
   setup() {
     const store = useLandingStore()
+    const logoUrl = ref('/images/photos/logo-ikipsiliwangi.png')
 
     // State Reactive untuk Modal Jadwal
     const showJadwalModal = ref(false)
@@ -750,17 +362,9 @@ export default {
       showJadwalModal.value = false
       setTimeout(() => {
         selectedJadwal.value = null
-      }, 300) // wait for animation
+      }, 300)
       document.body.classList.remove('modal-open')
     }
-
-    // State Reactive untuk Statistik Pengunjung
-    const visitorStats = ref({
-      today: 0,
-      yesterday: 0,
-      total: 0,
-      online: 1
-    })
 
     const heroContent = computed(() => {
       const h = store.heroContent
@@ -769,7 +373,7 @@ export default {
         subtitle: h.subtitle || 'Mewujudkan Budaya Mutu di Lingkungan Akademik',
         description: h.description || 'E-SPMI Digital membantu institusi pendidikan dalam mengelola, memantau, dan meningkatkan mutu secara berkelanjutan.',
         ctaText: h.cta_text || 'Mulai Sekarang',
-        ctaLink: h.cta_link || '#features'
+        ctaLink: h.cta_link || '#about'
       }
     })
 
@@ -789,53 +393,6 @@ export default {
     const jadwals = computed(() => store.jadwals)
     const team = computed(() => store.team)
     const documentations = computed(() => store.documentations)
-
-    // LOGIC RECORD & HITUNG PENGUNJUNG OTOMATIS
-    const recordAndFetchVisitors = async () => {
-      try {
-        // PERHATIAN: Jika backend (Laravel/Express) Anda sudah punya API visitor,
-        // hilangkan comment baris berikut dan sesuaikan endpoint-nya:
-        /*
-        const response = await axios.post('/api/visitors/record')
-        visitorStats.value = response.data
-        return
-        */
-
-        // FALLBACK AUTOMATIC LOCAL STORAGE LOGIC:
-        const todayStr = new Date().toISOString().slice(0, 10)
-        const lastVisitDate = localStorage.getItem('site_last_visit_date')
-
-        let totalVisits = parseInt(localStorage.getItem('site_total_visits') || '1250')
-        let todayVisits = parseInt(localStorage.getItem('site_today_visits') || '24')
-        let yesterdayVisits = parseInt(localStorage.getItem('site_yesterday_visits') || '18')
-
-        // Jika berganti hari, reset hitungan hari ini
-        if (lastVisitDate !== todayStr) {
-          yesterdayVisits = todayVisits
-          todayVisits = 0
-          localStorage.setItem('site_yesterday_visits', yesterdayVisits)
-          localStorage.setItem('site_last_visit_date', todayStr)
-        }
-
-        // Jika pengguna baru pertama kali masuk di sesi browser ini
-        if (!sessionStorage.getItem('visited_session')) {
-          totalVisits += 1
-          todayVisits += 1
-          localStorage.setItem('site_total_visits', totalVisits)
-          localStorage.setItem('site_today_visits', todayVisits)
-          sessionStorage.setItem('visited_session', 'true')
-        }
-
-        visitorStats.value = {
-          today: todayVisits,
-          yesterday: yesterdayVisits,
-          total: totalVisits,
-          online: Math.floor(Math.random() * 6) + 2 // Simulasi pengguna aktif
-        }
-      } catch (error) {
-        console.error('Gagal mencatat statistik pengunjung:', error)
-      }
-    }
 
     const handleImageError = (event) => {
       event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%237a5200" stroke-width="2"%3E%3Cpath d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"%3E%3C/path%3E%3C/svg%3E'
@@ -887,15 +444,6 @@ export default {
     }
 
     onMounted(() => {
-      if (typeof window !== 'undefined') {
-        import('bootstrap/dist/js/bootstrap.bundle.min.js').catch(() => {
-          console.warn('Bootstrap JS not loaded')
-        })
-      }
-
-      // Jalankan fungsi pencatat pengunjung otomatis
-      recordAndFetchVisitors()
-
       store.fetchLandingContent()
       store.fetchBeritas()
       store.fetchJadwals()
@@ -927,11 +475,11 @@ export default {
     })
 
     return {
+      logoUrl,
       showJadwalModal,
       selectedJadwal,
       openJadwalModal,
       closeJadwalModal,
-      visitorStats,
       heroContent,
       heroStyle,
       beritas,
@@ -952,7 +500,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<!-- Non-scoped style block for CSS variables and navbar -->
+<style>
 /* ===== COLOR PALETTE & VARIABLES ===== */
 :root {
   --primary-brown: #7a5200;
@@ -963,6 +512,37 @@ export default {
   --gold-subtle: #fef3d6;
 }
 
+/* ===== NAVBAR ===== */
+.navbar.navbar-expand-lg.fixed-top {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1050 !important;
+}
+
+.navbar .navbar-brand {
+  font-weight: 700;
+  color: #7a5200 !important;
+  font-size: 1.5rem;
+}
+
+.navbar .nav-link {
+  font-weight: 500;
+  color: #374151 !important;
+  margin: 0 10px;
+}
+
+.navbar .nav-link:hover {
+  color: #7a5200 !important;
+}
+
+.navbar .dropdown-item:hover {
+  background-color: #fef3d6;
+  color: #7a5200;
+}
+</style>
+
+<style scoped>
 /* Color Classes */
 .bg-gold { background-color: var(--secondary-brown) !important; }
 .bg-gold-subtle { background-color: var(--gold-subtle) !important; }
@@ -971,29 +551,6 @@ export default {
 .text-gold-light { color: #ffe6a3 !important; }
 .text-primary-brown { color: var(--primary-brown) !important; }
 .border-gold { border-color: var(--secondary-brown) !important; }
-
-/* ===== NAVBAR ===== */
-.navbar {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.navbar-brand {
-  font-weight: 700;
-  color: var(--primary-brown) !important;
-  font-size: 1.5rem;
-}
-
-.nav-link {
-  font-weight: 500;
-  color: #374151 !important;
-  margin: 0 10px;
-}
-
-.nav-link:hover {
-  color: var(--primary-brown) !important;
-}
 
 /* ===== HERO SECTION ===== */
 .hero-section {
@@ -1070,77 +627,6 @@ export default {
   margin-top: 2px;
 }
 
-/* ===== FOOTER MODERN STYLING ===== */
-.footer-modern {
-  background-color: var(--dark-brown);
-  position: relative;
-}
-
-.footer-logo {
-  max-width: 65px;
-  height: auto;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-.hover-gold:hover {
-  color: var(--accent-gold) !important;
-}
-
-.hover-white:hover {
-  color: #ffffff !important;
-}
-
-.visitor-card {
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255, 255, 255, 0.96) !important;
-}
-
-/* ===== PROGRAM & OTHER CARDS ===== */
-.program-card {
-  background: white;
-  border-radius: 15px;
-  padding: 2rem;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
-  height: 100%;
-  border: 1px solid #e9ecef;
-}
-
-.program-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-.program-icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-  font-size: 2rem;
-  color: white;
-}
-
-.program-icon-sm {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin: 0 auto 10px;
-}
-
-.program-1 { background: linear-gradient(135deg, #7a5200 0%, #996600 100%); }
-.program-2 { background: linear-gradient(135deg, #8c5d00 0%, #b37400 100%); }
-.program-3 { background: linear-gradient(135deg, #a06a00 0%, #cc8800 100%); }
-.program-4 { background: linear-gradient(135deg, #b37400 0%, #dd9900 100%); }
-.program-5 { background: linear-gradient(135deg, #c68100 0%, #eeaa00 100%); }
-.program-6 { background: linear-gradient(135deg, #d98e00 0%, #ffbb00 100%); color: #333 !important; }
-
 /* ===== SECTION TITLE ===== */
 .section-title {
   color: var(--dark-brown);
@@ -1149,9 +635,6 @@ export default {
 }
 
 .text-primary { color: var(--primary-brown) !important; }
-.text-success { color: #2e7d32 !important; }
-.text-warning { color: #b37400 !important; }
-.text-info { color: #0288d1 !important; }
 
 /* ===== BERITA SECTION ===== */
 .berita-section {
@@ -1307,29 +790,6 @@ export default {
   color: #dee2e6;
 }
 
-/* ===== DOKUMEN SECTION ===== */
-.dokumen-section {
-  background: #f8f9fa;
-  padding: 80px 0;
-  margin-top: 40px;
-}
-
-.btn-warning {
-  background: linear-gradient(135deg, var(--secondary-brown), var(--primary-brown));
-  border: none;
-  color: white;
-  padding: 10px 25px;
-  font-weight: 600;
-  border-radius: 8px;
-}
-
-.btn-warning:hover {
-  background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(122, 82, 0, 0.3);
-  color: white;
-}
-
 /* ===== TEAM SECTION ===== */
 .team-card {
   background: white;
@@ -1411,12 +871,6 @@ export default {
   padding: 4px 10px;
   border-radius: 20px;
   display: inline-block;
-}
-
-/* ===== CTA SECTION ===== */
-.cta-section {
-  background: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
-  color: white;
 }
 
 /* ===== ANIMATIONS ===== */

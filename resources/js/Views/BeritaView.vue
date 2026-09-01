@@ -1,49 +1,5 @@
 <template>
   <div id="berita-page">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
-      <div class="container">
-        <router-link class="navbar-brand d-flex align-items-center" to="/">
-          <img
-            :src="'/images/photos/logo-ikipsiliwangi.png'"
-            alt="Logo E-SPMI"
-            width="40"
-            height="40"
-            class="me-2"
-            @error="handleLogoError"
-          >
-          <span>E-SPMI</span>
-        </router-link>
-
-        <button 
-          class="navbar-toggler border-0 shadow-none p-1" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto align-items-lg-center">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/">Beranda</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link active" to="/berita">Berita</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/dokumen-publik">Dokumen Publik</router-link>
-            </li>
-            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-              <router-link to="/" class="btn btn-outline-brown text-nowrap">
-                <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
 
     <!-- Main Content -->
     <main class="content-wrapper">
@@ -234,12 +190,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="py-4 mt-5">
-      <div class="container text-center">
-        <p class="mb-0 small">&copy; 2026 E-SPMI Digital. All rights reserved.</p>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -347,9 +297,6 @@ export default {
     handleImageError(e) {
       e.target.src = this.defaultImage
     },
-    handleLogoError(e) {
-      e.target.src = this.defaultImage
-    }
   }
 }
 </script>
@@ -358,24 +305,6 @@ export default {
 /* CSS bawaan kamu tetap sama */
 .bg-brown { background-color: #996600 !important; }
 .text-brown { color: #996600 !important; }
-.navbar {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-.navbar-brand {
-  font-weight: 700;
-  color: #996600 !important;
-  font-size: 1.5rem;
-}
-.nav-link {
-  font-weight: 500;
-  color: #374151 !important;
-  margin: 0 10px;
-}
-.nav-link.active, .nav-link:hover {
-  color: #996600 !important;
-}
 .btn-outline-brown {
   border: 1px solid #996600;
   color: #996600;
@@ -401,7 +330,7 @@ export default {
   color: white;
 }
 .content-wrapper {
-  padding-top: 110px;
+  padding-top: 30px;
   min-height: calc(100vh - 100px);
   background-color: #f8fafc;
 }
@@ -484,13 +413,8 @@ footer {
 .cursor-pointer {
   cursor: pointer;
 }
-@media (max-width: 991.98px) {
-  .nav-link { margin: 5px 0; }
-}
 @media (max-width: 575.98px) {
   .content-wrapper { padding-top: 90px; }
-  .navbar-brand { font-size: 1.25rem; }
-  .section-title { font-size: 1.35rem; }
   .berita-image-wrapper { height: 160px; }
 }
 </style>

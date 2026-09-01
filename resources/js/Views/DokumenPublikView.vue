@@ -1,50 +1,11 @@
 <template>
   <div id="app">
     <!-- Navbar (same as LandingPage) -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-          <img
-            :src="'/images/photos/logo-ikipsiliwangi.png'"
-            alt="Logo E-SPMI"
-            width="40"
-            height="40"
-            class="me-2"
-            @error="handleImageError"
-          >
-          <span>E-SPMI</span>
-        </a>
-        <button 
-          class="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/">Beranda</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/berita">Berita</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link active" to="/dokumen-publik">Dokumen</router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
 
     <!-- Main Content -->
-    <main style="padding-top: 0px;">
+    <main>
       <!-- Hero Section (same brown gradient as LandingPage) -->
-      <section class="hero-section">
+      <section class="hero-section" style="margin-top: -76px;">
         <div class="container">
           <router-link to="/" class="btn btn-outline-light btn-sm mb-3" style="opacity: 0.9;">
             <i class="fas fa-arrow-left me-1"></i>Kembali ke Beranda
@@ -214,12 +175,6 @@
       </section>
     </main>
 
-    <!-- Footer (same as LandingPage) -->
-    <footer class="py-4">
-      <div class="container text-center">
-        <p class="mb-0">&copy; 2024 E-SPMI Digital. All rights reserved.</p>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -269,9 +224,6 @@ export default {
     }
   },
   methods: {
-    handleImageError(event) {
-      event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%23996600" stroke-width="2"%3E%3Cpath d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"%3E%3C/path%3E%3C/svg%3E'
-    },
     async fetchDokumen() {
       this.loading = true
       try {
@@ -347,12 +299,6 @@ export default {
   --light-brown: #fff9e6;
 }
 
-/* ===== NAVBAR (identical to LandingPage) ===== */
-.navbar {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
 
 .navbar-brand {
   font-weight: 700;
@@ -811,11 +757,6 @@ export default {
   opacity: 0;
 }
 
-/* ===== FOOTER (identical to LandingPage) ===== */
-footer {
-  background: #7a5200;
-  color: white;
-}
 
 /* ===== RESPONSIVE (same breakpoints as LandingPage) ===== */
 @media (max-width: 768px) {
